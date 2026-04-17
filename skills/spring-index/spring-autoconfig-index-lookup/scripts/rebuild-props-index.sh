@@ -2,7 +2,45 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="${PROJECT_ROOT:-$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || pwd)}"
+
+find_gradle_root() {
+  local start="$1"
+  local dir="$start"
+  while [[ "$dir" != "/" ]]; do
+    if [[ -f "$dir/settings.gradle" || -f "$dir/settings.gradle.kts" || -f "$dir/build.gradle" || -f "$dir/build.gradle.kts" || -f "$dir/gradlew" ]]; then
+      printf '%s\n' "$dir"
+      return 0
+    fi
+    dir="$(dirname "$dir")"
+  done
+  return 1
+}
+
+resolve_root_dir() {
+  if [[ -n "${PROJECT_ROOT:-}" ]]; then
+    printf '%s\n' "$PROJECT_ROOT"
+    return 0
+  fi
+
+  if root="$(find_gradle_root "$PWD")"; then
+    printf '%s\n' "$root"
+    return 0
+  fi
+
+  if git_root="$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null)"; then
+    printf '%s\n' "$git_root"
+    return 0
+  fi
+
+  if git_root="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)"; then
+    printf '%s\n' "$git_root"
+    return 0
+  fi
+
+  pwd
+}
+
+ROOT_DIR="$(resolve_root_dir)"
 BASE_DIR="$ROOT_DIR/.qwen/spring-properties-index"
 CACHE_DIR="$BASE_DIR/cache"
 ARTIFACTS_JSON="$CACHE_DIR/resolved-artifacts.json"
@@ -18,6 +56,8 @@ if [[ "${1:-}" == "--force" ]]; then
 fi
 
 mkdir -p "$CACHE_DIR"
+
+echo "[props-index] project root: $ROOT_DIR"
 
 hash_files() {
   (

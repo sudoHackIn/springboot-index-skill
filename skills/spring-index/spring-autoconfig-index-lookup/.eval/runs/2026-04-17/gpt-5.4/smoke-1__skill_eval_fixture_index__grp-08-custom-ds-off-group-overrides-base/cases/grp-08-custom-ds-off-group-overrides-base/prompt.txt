@@ -1,0 +1,8 @@
+Case: grp-08-custom-ds-off-group-overrides-base
+Question: Ожидается ли стандартный DataSource без внешнего override?
+Index: /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json
+bean_name_regex: dataSource
+return_type_regex: <none>
+property_name: acme.datasource.override.enabled
+config_dir: /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group08-custom-ds-off
+active_profiles: <none>

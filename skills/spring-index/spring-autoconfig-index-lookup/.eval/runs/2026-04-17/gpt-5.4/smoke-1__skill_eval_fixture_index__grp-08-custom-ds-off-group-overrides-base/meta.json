@@ -1,0 +1,9 @@
+{
+  "date": "2026-04-17",
+  "model": "gpt-5.4",
+  "run_id": "smoke-1__skill_eval_fixture_index__grp-08-custom-ds-off-group-overrides-base",
+  "index": "/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+  "case_file": "/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/cases/skill_eval_cases_profile_groups_10.json",
+  "case_ids": ["grp-08-custom-ds-off-group-overrides-base"],
+  "summary": {"total": 1, "passed": 1}
+}
