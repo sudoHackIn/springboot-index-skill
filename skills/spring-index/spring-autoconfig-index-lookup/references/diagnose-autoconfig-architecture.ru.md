@@ -44,7 +44,8 @@
 ## 3) Сбор runtime properties
 
 `loadRuntimeProperties(...)`:
-1. Читает все `application*.properties|yaml|yml` в `configDir`.
+1. Читает все `*application*.properties|yaml|yml` в `configDir` (рекурсивно).
+   Поддерживаются и имена вроде `my-application.yaml`.
 2. Выделяет profile-зависимые документы:
    - `application-<profile>.*`,
    - `spring.config.activate.on-profile`,
@@ -56,6 +57,7 @@
 5. Раскрывает `spring.profiles.group.*` через `expandProfiles(...)`.
 6. Мержит только документы, подходящие под resolved profiles.
 7. Накладывает `--runtime-prop` последним слоем (override).
+8. Если передано несколько `--config-dir/--config-tree-dir`, объединяет их в общий источник.
 
 Особенность:
 - если контекст не задан (нет `config-dir`, профилей, runtime-prop), режим более “мягкий” для missing properties.
@@ -177,4 +179,3 @@ Debug (`--debug`):
 - требуется точное объяснение почему Spring “did not match”.
 
 Runtime-отчет считается источником истины выше статического прогноза.
-

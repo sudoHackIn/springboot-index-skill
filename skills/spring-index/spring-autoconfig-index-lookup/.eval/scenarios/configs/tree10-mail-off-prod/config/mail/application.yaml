@@ -1,0 +1,3 @@
+---
+spring.config.activate.on-profile: prod
+acme.mail.enabled: false

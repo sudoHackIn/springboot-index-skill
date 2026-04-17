@@ -132,7 +132,39 @@ jq -r '.properties[]
 jq -r '.groups[] | select(.name | startswith("spring.datasource"))' "$INDEX"
 ```
 
-### 13. Топ веток первого уровня по количеству листьев
+### 13. Join для узла дерева (`tree.full_name` -> `properties/groups`)
+```bash
+jq -r --arg key "server.ssl.client-auth" '
+  (first(.properties[] | select(.name == $key)) // first(.groups[] | select(.name == $key)))
+  | {name, kind: (if has("default_value") then "property" else "group" end), type, description, default_value, deprecation, source_artifacts, source_types, origins}
+' "$INDEX"
+```
+
+Для ветки (`server.ssl`) сначала смотри `groups`, для листа (`server.ssl.client-auth`) — `properties`.
+
+### 14. Обогатить поддерево из `tree` метаданными через join
+```bash
+jq -r '
+  INDEX(.properties[]; .name) as $props
+  | INDEX(.groups[]; .name) as $groups
+  | def enrich:
+      . as $n
+      | ($props[$n.full_name] // $groups[$n.full_name] // {}) as $m
+      | $n + {
+          kind: (if $props[$n.full_name] then "property" elif $groups[$n.full_name] then "group" else null end),
+          type: ($m.type // null),
+          description: ($m.description // null),
+          default_value: ($m.default_value // null),
+          deprecation: ($m.deprecation // null),
+          children: ($n.children | map(enrich))
+        };
+  .tree[]
+  | select(.full_name == "server")
+  | enrich
+' "$INDEX"
+```
+
+### 15. Топ веток первого уровня по количеству листьев
 ```bash
 jq -r '.prefix_index[]
   | select(.prefix | test("^[^.]+$"))
@@ -140,12 +172,12 @@ jq -r '.prefix_index[]
   | @json' "$INDEX"
 ```
 
-### 14. Найти ключ, если известен только хвост (`.url`, `.enabled`)
+### 16. Найти ключ, если известен только хвост (`.url`, `.enabled`)
 ```bash
 jq -r '.properties[] | select(.name | endswith(".enabled")) | .name' "$INDEX"
 ```
 
-### 15. Поиск по регулярке имени
+### 17. Поиск по регулярке имени
 ```bash
 jq -r '.properties[] | select(.name | test("spring\\.(datasource|jpa)\\."; "i")) | .name' "$INDEX"
 ```
@@ -160,6 +192,8 @@ jq -r '.properties[] | select(.name | test("spring\\.(datasource|jpa)\\."; "i"))
 6. `details` (если запрошены: type/default/deprecation/sources/examples)
 
 ## Ограничения
-- Источник истины по ключам: `properties[]` в индексе.
+- Источник истины для leaf-ключей: `properties[]`.
+- Источник истины для веток/префиксов: `groups[]` и `tree[]`.
+- Для запросов по `tree.full_name` всегда делай join с `properties/groups`.
 - `examples` — это observed usage, а не гарантия поддерживаемости.
 - Если ключ не найден, сначала проверь более короткий префикс и deprecated/replacement.

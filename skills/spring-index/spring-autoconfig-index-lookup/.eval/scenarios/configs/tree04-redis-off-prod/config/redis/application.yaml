@@ -1,0 +1,3 @@
+---
+spring.config.activate.on-profile: prod-redis-off
+acme.redis.enabled: false

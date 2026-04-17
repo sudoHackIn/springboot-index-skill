@@ -57,6 +57,40 @@ jq -r '.properties[]
   | {name, type, description, default_value, deprecation, source_artifacts, source_types, examples}' "$INDEX"
 ```
 
+### Join по `full_name` (для узлов из `tree`)
+
+```bash
+jq -r --arg key "server.ssl.client-auth" '
+  (first(.properties[] | select(.name == $key)) // first(.groups[] | select(.name == $key)))
+  | {name, kind: (if has("default_value") then "property" else "group" end), type, description, default_value, deprecation, source_artifacts, source_types, origins}
+' "$INDEX"
+```
+
+Для ветки (`server.ssl`) запись обычно в `groups`, для leaf (`server.ssl.client-auth`) — в `properties`.
+
+### Обогатить поддерево `tree` метаданными
+
+```bash
+jq -r '
+  INDEX(.properties[]; .name) as $props
+  | INDEX(.groups[]; .name) as $groups
+  | def enrich:
+      . as $n
+      | ($props[$n.full_name] // $groups[$n.full_name] // {}) as $m
+      | $n + {
+          kind: (if $props[$n.full_name] then "property" elif $groups[$n.full_name] then "group" else null end),
+          type: ($m.type // null),
+          description: ($m.description // null),
+          default_value: ($m.default_value // null),
+          deprecation: ($m.deprecation // null),
+          children: ($n.children | map(enrich))
+        };
+  .tree[]
+  | select(.full_name == "server")
+  | enrich
+' "$INDEX"
+```
+
 ### Ключи, наблюдавшиеся в `src/main/resources/*`
 
 ```bash

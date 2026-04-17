@@ -14,6 +14,7 @@ INIT_SCRIPT="$SCRIPT_DIR/export-resolved-artifacts.init.gradle"
 BOOT_REPO="${BOOT_REPO:-$HOME/work/spring-boot}"
 PROJECT_ROOT="${PROJECT_ROOT:-$ROOT_DIR}"
 EXTRA_ROOTS_RAW="${EXTRA_ROOTS:-}"
+RUNTIME_CONFIG_ROOTS_RAW="${RUNTIME_CONFIG_ROOTS:-}"
 SPRING_BOOT_VERSION="${SPRING_BOOT_VERSION:-unknown}"
 BASE_INDEX="${BASE_INDEX:-$SCRIPT_DIR/../assets/spring_boot_autoconfig_index.base.json}"
 OUT_PATH="${OUT_PATH:-$BASE_DIR/spring_boot_autoconfig_index.json}"
@@ -77,6 +78,19 @@ join_extra_roots() {
   done
 }
 
+join_runtime_config_roots() {
+  if [[ -z "$RUNTIME_CONFIG_ROOTS_RAW" ]]; then
+    return
+  fi
+
+  IFS=',' read -r -a roots <<< "$RUNTIME_CONFIG_ROOTS_RAW"
+  for item in "${roots[@]}"; do
+    local trimmed
+    trimmed="$(echo "$item" | xargs)"
+    [[ -n "$trimmed" ]] && printf '%s\n' "$trimmed"
+  done
+}
+
 hash_file_if_exists() {
   local file="$1"
   if [[ -f "$file" ]]; then
@@ -129,6 +143,13 @@ compute_fingerprint() {
       hash_tree_matches "$extra" \
         \( -name 'org.springframework.boot.autoconfigure.AutoConfiguration.imports' -o -name 'spring-autoconfigure-metadata.properties' -o -name 'spring-configuration-metadata.json' \)
     done < <(join_extra_roots)
+
+    while read -r cfg; do
+      [[ -z "$cfg" ]] && continue
+      printf 'RUNTIME_CONFIG_ROOT=%s\n' "$cfg"
+      hash_tree_matches "$cfg" \
+        \( -name '*application*.properties' -o -name '*application*.yaml' -o -name '*application*.yml' \)
+    done < <(join_runtime_config_roots)
   } | shasum -a 256 | awk '{print $1}'
 }
 
@@ -175,6 +196,7 @@ cat > "$STATE_JSON" <<JSON
   "project_root": "$PROJECT_ROOT",
   "base_index": "$BASE_INDEX",
   "resolved_artifacts": "$ARTIFACTS_JSON",
+  "runtime_config_roots": "$RUNTIME_CONFIG_ROOTS_RAW",
   "output": "$OUT_PATH"
 }
 JSON

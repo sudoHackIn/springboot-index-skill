@@ -20,6 +20,17 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
   --index .qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json
 ```
 
+## Example 0.2: External config tree (nested dirs + my-application)
+
+```bash
+node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+  --question "Ожидается ли DataSource в этом окружении?" \
+  --bean-regex "dataSource" \
+  --property-name "spring.datasource.enabled" \
+  --config-tree-dir ./config \
+  --config-tree-dir ./config/common/datasource
+```
+
 ## Example 1: DataSource discovery in index
 
 ```bash

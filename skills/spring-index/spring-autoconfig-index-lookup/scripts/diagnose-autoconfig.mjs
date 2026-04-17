@@ -18,7 +18,7 @@ async function main() {
   }
 
   const runtime = await loadRuntimeProperties(
-    args.configDir ? path.resolve(args.configDir) : null,
+    args.configDirs?.map((d) => path.resolve(d)) ?? [],
     args.activeProfiles ?? [],
     args.runtimeProps ?? {}
   );
@@ -375,10 +375,10 @@ function splitIdentifier(value) {
     .filter(Boolean);
 }
 
-async function loadRuntimeProperties(configDir, explicitProfiles, inlineRuntimeProps) {
+async function loadRuntimeProperties(configDirs, explicitProfiles, inlineRuntimeProps) {
   const hasInlineProps = Object.keys(inlineRuntimeProps).length > 0;
   const hasProfileContext = (explicitProfiles ?? []).length > 0;
-  if (!configDir) {
+  if (!configDirs || configDirs.length === 0) {
     return {
       properties: { ...inlineRuntimeProps },
       loadedFrom: null,
@@ -387,27 +387,37 @@ async function loadRuntimeProperties(configDir, explicitProfiles, inlineRuntimeP
     };
   }
 
-  const files = await fs.readdir(configDir, { withFileTypes: true });
-  const candidates = files
-    .filter((e) => e.isFile())
-    .map((e) => e.name)
-    .filter((name) => /^application(?:-[A-Za-z0-9_-]+)?\.(properties|ya?ml)$/i.test(name))
-    .sort((a, b) => {
-      const pa = extractProfileFromFilename(a) ? 1 : 0;
-      const pb = extractProfileFromFilename(b) ? 1 : 0;
-      if (pa !== pb) return pa - pb;
-      return a.localeCompare(b);
-    });
+  const allCandidates = [];
+  const seenAbs = new Set();
+  for (const root of configDirs) {
+    const files = await collectConfigFilesRecursive(root);
+    for (const abs of files) {
+      if (seenAbs.has(abs)) continue;
+      seenAbs.add(abs);
+      const rel = path.relative(root, abs).replace(/\\/g, "/");
+      const name = path.basename(abs);
+      allCandidates.push({ root, abs, rel, name });
+    }
+  }
+
+  allCandidates.sort((a, b) => {
+    const pa = extractProfileFromFilename(a.name) ? 1 : 0;
+    const pb = extractProfileFromFilename(b.name) ? 1 : 0;
+    if (pa !== pb) return pa - pb;
+    if (a.root !== b.root) return a.root.localeCompare(b.root);
+    return a.rel.localeCompare(b.rel);
+  });
 
   const allDocs = [];
-  for (const name of candidates) {
-    const abs = path.join(configDir, name);
+  for (const item of allCandidates) {
+    const { root, abs, rel, name } = item;
     const profileFromName = extractProfileFromFilename(name);
     const text = await fs.readFile(abs, "utf8");
+    const sourceLabel = `${root}::${rel}`;
 
     if (name.endsWith(".properties")) {
       allDocs.push({
-        source: name,
+        source: sourceLabel,
         requiredProfiles: profileFromName ? [profileFromName] : [],
         props: parsePropertiesText(text)
       });
@@ -417,7 +427,7 @@ async function loadRuntimeProperties(configDir, explicitProfiles, inlineRuntimeP
     for (const doc of splitYamlDocs(text)) {
       const props = parseSimpleYamlDoc(doc);
       allDocs.push({
-        source: name,
+        source: sourceLabel,
         requiredProfiles: profileFromName ? [profileFromName] : extractDocProfiles(props),
         props
       });
@@ -447,10 +457,29 @@ async function loadRuntimeProperties(configDir, explicitProfiles, inlineRuntimeP
 
   return {
     properties: merged,
-    loadedFrom: `${configDir} [${dedupBy(loaded, (x) => x).join(", ")}]`,
+    loadedFrom: `${configDirs.join(", ")} [${dedupBy(loaded, (x) => x).join(", ")}]`,
     activeProfilesResolved,
     hasExplicitContext: true
   };
+}
+
+async function collectConfigFilesRecursive(rootDir) {
+  const out = [];
+  async function walk(current) {
+    const entries = await fs.readdir(current, { withFileTypes: true });
+    for (const e of entries) {
+      const abs = path.join(current, e.name);
+      if (e.isDirectory()) {
+        await walk(abs);
+        continue;
+      }
+      if (!e.isFile()) continue;
+      if (!/^[A-Za-z0-9._-]*application(?:-[A-Za-z0-9_-]+)?\.(properties|ya?ml)$/i.test(e.name)) continue;
+      out.push(abs);
+    }
+  }
+  await walk(rootDir);
+  return out;
 }
 
 function buildFocus(candidates, question, propertyName) {
@@ -689,7 +718,7 @@ function escapeRegex(value) {
 }
 
 function parseArgs(argv) {
-  const args = { activeProfiles: [], runtimeProps: {} };
+  const args = { activeProfiles: [], runtimeProps: {}, configDirs: [] };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     const n = argv[i + 1];
@@ -713,7 +742,10 @@ function parseArgs(argv) {
       args.propertyName = n;
       i += 1;
     } else if (a === "--config-dir") {
-      args.configDir = n;
+      args.configDirs.push(n);
+      i += 1;
+    } else if (a === "--config-tree-dir") {
+      args.configDirs.push(n);
       i += 1;
     } else if (a === "--active-profile") {
       args.activeProfiles.push(n);
@@ -738,7 +770,8 @@ function printUsage() {
     "  --question <text>              Optional question; can be used for bean inference",
     "",
     "Runtime context:",
-    "  --config-dir <dir>             Directory with application*.properties|yaml|yml",
+    "  --config-dir <dir>             Config root directory (recursive scan for application*.properties|yaml|yml)",
+    "  --config-tree-dir <dir>        Alias of --config-dir (repeatable for multiple roots)",
     "  --active-profile <profile>     Active profile (repeatable)",
     "  --runtime-prop <k=v>           Inline runtime property override (repeatable)",
     "",

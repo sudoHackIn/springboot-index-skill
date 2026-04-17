@@ -22,7 +22,8 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 
 Необязательные параметры:
 - `--property-name <name>`: property-фокус для трассировки и фокусного verdict (например, `acme.datasource.override.enabled`).
-- `--config-dir <dir>`: директория с `application*.properties|yaml|yml`; скрипт учитывает profiles/groups и мерджит активные документы.
+- `--config-dir <dir>`: корень config-tree; скрипт рекурсивно ищет `*application*.properties|yaml|yml` (включая `my-application.yaml`) и мерджит активные документы.
+- `--config-tree-dir <dir>`: алиас `--config-dir`, можно повторять для нескольких независимых roots.
 - `--active-profile <profile>`: принудительно активный профиль (можно повторять флаг).
 - `--runtime-prop <k=v>`: инлайн override runtime-properties (можно повторять флаг).
 - `--index <path>`: путь к JSON-индексу (по умолчанию `.qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json`).
@@ -52,6 +53,13 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
   --bean-regex "dataSource|datasource" \
   --property-name "spring.datasource.enabled" \
   --config-dir ./src/main/resources
+
+# несколько внешних config-tree roots
+node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+  --question "Ожидается ли DataSource?" \
+  --bean-regex "dataSource|datasource" \
+  --config-tree-dir ./config \
+  --config-tree-dir ./config/common/datasource
 ```
 
 ## Runtime Workflow
@@ -84,6 +92,12 @@ cd skills/spring-index/spring-autoconfig-index-lookup/analyzer && npm install
 - Принудительная пересборка:
 ```bash
 ./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh --force
+```
+
+Если хотите, чтобы изменения production config-tree тоже влияли на stale-check индекса:
+```bash
+RUNTIME_CONFIG_ROOTS=\"./config,./config/common/datasource\" \
+./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh
 ```
 
 4. Запустить helper-диагностику (для сбора фактов: кандидаты, property-гейты, профильный merge, порядок):

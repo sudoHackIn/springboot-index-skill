@@ -1,0 +1,7 @@
+spring.profiles.active: local
+spring.profiles.group:
+  local:
+    - h2-mem
+---
+spring.config.activate.on-profile: local
+acme.datasource.override.enabled: false

@@ -1,0 +1,3 @@
+---
+spring.config.activate.on-profile: local-kafka
+acme.kafka.enabled: true

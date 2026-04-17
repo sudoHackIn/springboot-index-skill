@@ -1,0 +1,93 @@
+[
+  {
+    "id": "tree-01-ds-on-from-nested-group",
+    "question": "Ожидается ли DataSource в этом окружении?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "config_dir": "configs/tree01-ds-on/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "tree-02-ds-off-in-prod",
+    "question": "Почему DataSource может быть отключен?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "config_dir": "configs/tree02-ds-off-prod/config",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "tree-03-redis-on-with-my-application",
+    "question": "Ожидается ли redisClient из автоконфигурации?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "config_dir": "configs/tree03-redis-on/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "tree-04-redis-off-prod-group",
+    "question": "Почему redisClient может быть недоступен?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "config_dir": "configs/tree04-redis-off-prod/config",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "tree-05-kafka-on-via-group",
+    "question": "Ожидается ли kafkaProducer в этом окружении?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "config_dir": "configs/tree05-kafka-on-group/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "tree-06-kafka-missing-flag",
+    "question": "Почему kafkaProducer может не создаться?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "config_dir": "configs/tree06-kafka-missing/config",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "tree-07-custom-override-on",
+    "question": "Какой DataSource ожидается: внешний override или стандартный?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "config_dir": "configs/tree07-custom-override-on/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  {
+    "id": "tree-08-custom-override-off-prod",
+    "question": "Ожидается ли стандартный DataSource без внешнего override?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "config_dir": "configs/tree08-custom-override-off/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "tree-09-jpa-on-from-subdir",
+    "question": "Ожидается ли transactionManager в этом окружении?",
+    "bean_name_regex": "transactionManager",
+    "return_type_regex": "PlatformTransactionManager",
+    "property_name": "spring.jpa.enabled",
+    "config_dir": "configs/tree09-jpa-on/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "JpaTxAutoConfiguration"
+  },
+  {
+    "id": "tree-10-mail-off-prod",
+    "question": "Почему mailSender может быть отключен?",
+    "bean_name_regex": "mailSender",
+    "property_name": "acme.mail.enabled",
+    "config_dir": "configs/tree10-mail-off-prod/config",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "MailSenderAutoConfiguration"
+  }
+]

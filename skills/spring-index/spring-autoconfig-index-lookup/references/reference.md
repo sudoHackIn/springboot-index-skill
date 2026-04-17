@@ -7,7 +7,7 @@
 
 ## Input Sources
 - AutoConfig index JSON: `.qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json`
-- `application*.properties` / `application*.yaml|yml` (если нужно подтвердить property-факты)
+- `*application*.properties` / `*application*.yaml|yml` из одного или нескольких config roots (рекурсивно, включая `my-application.yaml`)
 - Optional runtime source of truth: `ConditionEvaluationReport` from app startup with `--debug`
 
 ## Supported Profile Semantics
