@@ -1,0 +1,17 @@
+{
+  "id": "props-03-regex-jpa-hibernate",
+  "pass": true,
+  "score": 1,
+  "checks": {
+    "correctness": 1,
+    "completeness": 1,
+    "hallucination": 1
+  },
+  "notes": [
+    "Оба ожидаемых ключа найдены."
+  ],
+  "evidence": {
+    "commands_log": "./cases/props-03-regex-jpa-hibernate/commands.log",
+    "output": "./cases/props-03-regex-jpa-hibernate/output.md"
+  }
+}

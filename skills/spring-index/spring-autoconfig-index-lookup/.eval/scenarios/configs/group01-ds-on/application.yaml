@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - h2-mem
+---
+spring:
+  config:
+    activate:
+      on-profile: h2-mem
+  datasource:
+    enabled: true
+    url: jdbc:h2:mem:testdb

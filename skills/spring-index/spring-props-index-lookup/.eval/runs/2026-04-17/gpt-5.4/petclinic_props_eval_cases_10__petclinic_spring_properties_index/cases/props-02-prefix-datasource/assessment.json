@@ -1,0 +1,17 @@
+{
+  "id": "props-02-prefix-datasource",
+  "pass": true,
+  "score": 1,
+  "checks": {
+    "correctness": 1,
+    "completeness": 1,
+    "hallucination": 1
+  },
+  "notes": [
+    "Минимум результатов и include/exclude проверки пройдены."
+  ],
+  "evidence": {
+    "commands_log": "./cases/props-02-prefix-datasource/commands.log",
+    "output": "./cases/props-02-prefix-datasource/output.md"
+  }
+}

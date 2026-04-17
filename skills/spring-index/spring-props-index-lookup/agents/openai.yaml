@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spring Props Index Lookup"
+  short_description: "Построение и поиск spring-пропертей по JSON-индексу"
+  default_prompt: "Используй $spring-props-index-lookup: проверь индекс в .qwen/spring-properties-index/spring_properties_index.json, при необходимости пересобери его и найди нужные проперти через jq."

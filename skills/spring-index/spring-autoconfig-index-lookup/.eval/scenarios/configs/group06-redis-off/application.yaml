@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - local-metrics
+---
+spring:
+  config:
+    activate:
+      on-profile: local-metrics
+app:
+  metrics:
+    enabled: true

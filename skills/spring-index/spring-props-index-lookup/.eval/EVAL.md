@@ -1,0 +1,76 @@
+# Skill Evaluation Guide (Manual/Subagent-Driven)
+
+This folder is developer-only.
+
+## Goal
+
+Оценивать именно поведение скилла (а не только jq-фильтры):
+- может ли агент по `SKILL.md` корректно решить пользовательский вопрос,
+- какие команды он запускал,
+- насколько вывод полный/точный,
+- где есть расхождения с ожидаемым результатом.
+
+Подход повторяет идею из `skill-creator`: realistic test prompts, запуск скилла, review результатов, итеративные улучшения.
+
+## Scenario Layout
+- `.eval/scenarios/indexes/`
+- `.eval/scenarios/cases/`
+
+## Run Outputs
+- `.eval/runs/<date>/<model>/<run-id>/meta.json`
+- `.eval/runs/<date>/<model>/<run-id>/report.md`
+- `.eval/runs/<date>/<model>/<run-id>/cases/<case-id>/prompt.txt`
+- `.eval/runs/<date>/<model>/<run-id>/cases/<case-id>/output.md`
+- `.eval/runs/<date>/<model>/<run-id>/cases/<case-id>/commands.log`
+- `.eval/runs/<date>/<model>/<run-id>/cases/<case-id>/assessment.json`
+
+## How to Run (Required Process)
+
+1. Выбрать индекс и файл сценариев (`cases` JSON).
+2. Для каждого элемента массива в `cases`:
+   - запускать **сабагента** с подключенным тестируемым скиллом,
+   - передавать ему входные данные кейса как пользовательский prompt,
+   - просить выполнить задачу по `SKILL.md` и вернуть результат.
+3. Сохранять для каждого кейса:
+   - входной prompt,
+   - финальный ответ сабагента,
+   - список выполненных команд (observable tool/command trace),
+   - краткую внешнюю диагностическую трассу (почему выбран такой путь).
+4. Выполнить оценку кейса по ожиданиям (`expected_*`) и записать verdict в `assessment.json`.
+5. Собрать общий `report.md` и `meta.json`.
+
+## Important Notes
+
+- Не использовать synthetic проверки, которые не запускают скилл.
+- Оценивать именно end-to-end поведение агента с этим скиллом.
+- Приоритет: correctness > completeness > speed.
+- Для reasoning сохранять только **external trace** (шаги/команды/проверки).
+- Не сохранять скрытые внутренние chain-of-thought.
+
+## Minimal Per-Case Assessment Schema
+
+```json
+{
+  "id": "case-id",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass|fail",
+    "completeness": "pass|fail",
+    "hallucination": "pass|fail"
+  },
+  "notes": ["short findings"],
+  "evidence": {
+    "commands_log": "./cases/case-id/commands.log",
+    "output": "./cases/case-id/output.md"
+  }
+}
+```
+
+## Iteration Loop
+
+1. Run cases with current skill.
+2. Review failures and weak spots.
+3. Improve `SKILL.md` / references / scripts.
+4. Re-run same cases in a new run directory.
+5. Compare pass rate and qualitative quality.

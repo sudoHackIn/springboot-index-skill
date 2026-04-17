@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - local-redis
+---
+spring:
+  config:
+    activate:
+      on-profile: local-redis
+acme:
+  redis:
+    enabled: true

@@ -1,0 +1,1 @@
+INDEX='skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json'; jq -r '[.properties[] | select(.name=="spring.datasource.url")] | length' "$INDEX"; jq -r '.properties[] | select(.name=="spring.datasource.url") | .name' "$INDEX"

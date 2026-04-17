@@ -1,0 +1,92 @@
+[
+  {
+    "id": "grp-01-ds-on-via-group",
+    "question": "Ожидается ли DataSource в этом окружении?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "config_dir": "configs/group01-ds-on",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "grp-02-ds-off-via-group",
+    "question": "Почему DataSource может быть отключен?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "config_dir": "configs/group02-ds-off",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "grp-03-kafka-on-via-group",
+    "question": "Ожидается ли kafkaProducer в этом окружении?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "config_dir": "configs/group03-kafka-on",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "grp-04-kafka-off-via-group",
+    "question": "Почему kafkaProducer может не создаться?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "config_dir": "configs/group04-kafka-off",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "grp-05-redis-on-via-group",
+    "question": "Ожидается ли redisClient в этом окружении?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "config_dir": "configs/group05-redis-on",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "grp-06-redis-off-no-group-target",
+    "question": "Почему redisClient может быть недоступен?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "config_dir": "configs/group06-redis-off",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "grp-07-custom-ds-on-via-group",
+    "question": "Какой источник DataSource ожидается в этом окружении?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "config_dir": "configs/group07-custom-ds-on",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  {
+    "id": "grp-08-custom-ds-off-group-overrides-base",
+    "question": "Ожидается ли стандартный DataSource без внешнего override?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "config_dir": "configs/group08-custom-ds-off",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "grp-09-jpa-on-via-group",
+    "question": "Ожидается ли transactionManager?",
+    "bean_name_regex": "transactionManager",
+    "property_name": "spring.jpa.enabled",
+    "config_dir": "configs/group09-jpa-on",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "JpaTxAutoConfiguration"
+  },
+  {
+    "id": "grp-10-mail-off-via-group",
+    "question": "Почему mailSender может быть отключен?",
+    "bean_name_regex": "mailSender",
+    "property_name": "acme.mail.enabled",
+    "config_dir": "configs/group10-mail-off",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "MailSenderAutoConfiguration"
+  }
+]

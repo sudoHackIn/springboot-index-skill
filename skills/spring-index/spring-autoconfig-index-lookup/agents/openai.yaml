@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spring Autoconfig Diagnosis"
+  short_description: "Диагностика Spring Boot автоконфигурации по индексу"
+  default_prompt: "Используй $spring-autoconfig-index-lookup: проверь индекс в .qwen/spring-autoconfig-index/, при необходимости пересобери и объясни, почему автоконфигурация или бин сработали/не сработали, с условиями, порядком и действиями."

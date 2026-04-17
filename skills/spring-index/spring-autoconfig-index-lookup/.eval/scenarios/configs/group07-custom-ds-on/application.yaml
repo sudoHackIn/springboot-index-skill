@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - local-ds
+---
+spring:
+  config:
+    activate:
+      on-profile: local-ds
+acme:
+  datasource:
+    override:
+      enabled: true

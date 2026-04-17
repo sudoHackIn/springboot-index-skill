@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - local-kafka
+---
+spring:
+  config:
+    activate:
+      on-profile: local-kafka
+acme:
+  kafka:
+    enabled: false

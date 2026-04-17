@@ -1,0 +1,449 @@
+{
+  "generated_at": "2026-04-17T10:00:00Z",
+  "spring_boot_version": "fixture-1",
+  "sources": {
+    "artifacts": [
+      "fixture:spring-autoconfigure:1"
+    ],
+    "metadata_files": [
+      "fixture"
+    ]
+  },
+  "stats": {
+    "autoconfigurations_total": 6,
+    "bean_definitions_total": 6,
+    "conditions_total": 18,
+    "properties_linked_total": 7
+  },
+  "autoconfigurations": [
+    {
+      "id": "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
+      "fqcn": "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
+      "artifact": "fixture:spring-autoconfigure:1",
+      "imports": [],
+      "order": {
+        "before": [],
+        "after": [],
+        "auto_configure_order": null
+      },
+      "class_conditions": [
+        {
+          "kind": "OnClass",
+          "scope": "class",
+          "inputs": {
+            "value": ["javax.sql.DataSource"]
+          },
+          "negated": false,
+          "explain_hint": "класс DataSource в classpath"
+        },
+        {
+          "kind": "OnProperty",
+          "scope": "class",
+          "inputs": {
+            "name": ["spring.datasource.enabled"],
+            "havingValue": "true",
+            "matchIfMissing": true
+          },
+          "negated": false,
+          "explain_hint": "нужно spring.datasource.enabled=true"
+        }
+      ],
+      "bean_methods": [
+        {
+          "bean_name": "dataSource",
+          "factory_method": "dataSource",
+          "return_type": "javax.sql.DataSource",
+          "conditions": [
+            {
+              "kind": "OnMissingBean",
+              "scope": "bean-method",
+              "inputs": {
+                "value": ["javax.sql.DataSource"]
+              },
+              "negated": true,
+              "explain_hint": "бин DataSource должен отсутствовать"
+            }
+          ],
+          "override_points": {
+            "conditional_on_missing_bean": true,
+            "recommended_override_strategy": "user-bean"
+          },
+          "targets": {
+            "reference": "#autoconfig-datasource",
+            "examples": "#example-datasource"
+          }
+        }
+      ],
+      "linked_properties": [
+        {
+          "name": "spring.datasource.enabled",
+          "type": "java.lang.Boolean",
+          "default_value": true,
+          "deprecated": null,
+          "source_type": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+        },
+        {
+          "name": "spring.datasource.url",
+          "type": "java.lang.String",
+          "default_value": null,
+          "deprecated": null,
+          "source_type": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties"
+        }
+      ],
+      "activation_hints": [
+        "Проверьте spring.datasource.enabled=true",
+        "Убедитесь, что пользовательский DataSource бин не объявлен"
+      ]
+    },
+    {
+      "id": "com.acme.autoconfigure.RedisClientAutoConfiguration",
+      "fqcn": "com.acme.autoconfigure.RedisClientAutoConfiguration",
+      "artifact": "fixture:acme-starter:1",
+      "imports": [],
+      "order": {
+        "before": [],
+        "after": [],
+        "auto_configure_order": null
+      },
+      "class_conditions": [
+        {
+          "kind": "OnClass",
+          "scope": "class",
+          "inputs": {
+            "value": ["redis.clients.jedis.Jedis"]
+          },
+          "negated": false,
+          "explain_hint": "нужен Jedis в classpath"
+        },
+        {
+          "kind": "OnProperty",
+          "scope": "class",
+          "inputs": {
+            "name": ["acme.redis.enabled"],
+            "havingValue": "true",
+            "matchIfMissing": false
+          },
+          "negated": false,
+          "explain_hint": "включить acme.redis.enabled=true"
+        }
+      ],
+      "bean_methods": [
+        {
+          "bean_name": "redisClient",
+          "factory_method": "redisClient",
+          "return_type": "com.acme.redis.RedisClient",
+          "conditions": [
+            {
+              "kind": "OnMissingBean",
+              "scope": "bean-method",
+              "inputs": {
+                "value": ["com.acme.redis.RedisClient"]
+              },
+              "negated": true,
+              "explain_hint": "бин RedisClient должен отсутствовать"
+            }
+          ],
+          "override_points": {
+            "conditional_on_missing_bean": true,
+            "recommended_override_strategy": "user-bean"
+          },
+          "targets": {
+            "reference": "#autoconfig-redis",
+            "examples": "#example-redis"
+          }
+        }
+      ],
+      "linked_properties": [
+        {
+          "name": "acme.redis.enabled",
+          "type": "java.lang.Boolean",
+          "default_value": false,
+          "deprecated": null,
+          "source_type": "com.acme.redis.RedisProperties"
+        }
+      ],
+      "activation_hints": [
+        "Установите acme.redis.enabled=true"
+      ]
+    },
+    {
+      "id": "com.acme.autoconfigure.KafkaProducerAutoConfiguration",
+      "fqcn": "com.acme.autoconfigure.KafkaProducerAutoConfiguration",
+      "artifact": "fixture:acme-kafka:1",
+      "imports": [],
+      "order": {
+        "before": [],
+        "after": [],
+        "auto_configure_order": null
+      },
+      "class_conditions": [
+        {
+          "kind": "OnProperty",
+          "scope": "class",
+          "inputs": {
+            "name": ["acme.kafka.enabled"],
+            "havingValue": "true",
+            "matchIfMissing": false
+          },
+          "negated": false,
+          "explain_hint": "включить acme.kafka.enabled=true"
+        }
+      ],
+      "bean_methods": [
+        {
+          "bean_name": "kafkaProducer",
+          "factory_method": "kafkaProducer",
+          "return_type": "com.acme.kafka.KafkaProducer",
+          "conditions": [
+            {
+              "kind": "OnMissingBean",
+              "scope": "bean-method",
+              "inputs": {
+                "value": ["com.acme.kafka.KafkaProducer"]
+              },
+              "negated": true,
+              "explain_hint": "бин KafkaProducer должен отсутствовать"
+            }
+          ],
+          "override_points": {
+            "conditional_on_missing_bean": true,
+            "recommended_override_strategy": "user-bean"
+          },
+          "targets": {
+            "reference": "#autoconfig-kafka",
+            "examples": "#example-kafka"
+          }
+        }
+      ],
+      "linked_properties": [
+        {
+          "name": "acme.kafka.enabled",
+          "type": "java.lang.Boolean",
+          "default_value": false,
+          "deprecated": null,
+          "source_type": "com.acme.kafka.KafkaProperties"
+        }
+      ],
+      "activation_hints": [
+        "Установите acme.kafka.enabled=true"
+      ]
+    },
+    {
+      "id": "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration",
+      "fqcn": "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration",
+      "artifact": "fixture:acme-datasource-override:1",
+      "imports": [],
+      "order": {
+        "before": [
+          "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+        ],
+        "after": [],
+        "auto_configure_order": -100
+      },
+      "class_conditions": [
+        {
+          "kind": "OnClass",
+          "scope": "class",
+          "inputs": {
+            "value": ["javax.sql.DataSource"]
+          },
+          "negated": false,
+          "explain_hint": "нужен DataSource в classpath"
+        },
+        {
+          "kind": "OnProperty",
+          "scope": "class",
+          "inputs": {
+            "name": ["acme.datasource.override.enabled"],
+            "havingValue": "true",
+            "matchIfMissing": false
+          },
+          "negated": false,
+          "explain_hint": "включить acme.datasource.override.enabled=true"
+        }
+      ],
+      "bean_methods": [
+        {
+          "bean_name": "dataSource",
+          "factory_method": "dataSource",
+          "return_type": "javax.sql.DataSource",
+          "conditions": [
+            {
+              "kind": "OnMissingBean",
+              "scope": "bean-method",
+              "inputs": {
+                "value": ["javax.sql.DataSource"]
+              },
+              "negated": true,
+              "explain_hint": "бин DataSource должен отсутствовать"
+            }
+          ],
+          "override_points": {
+            "conditional_on_missing_bean": true,
+            "recommended_override_strategy": "user-bean"
+          },
+          "targets": {
+            "reference": "#autoconfig-custom-datasource",
+            "examples": "#example-custom-datasource"
+          }
+        }
+      ],
+      "linked_properties": [
+        {
+          "name": "acme.datasource.override.enabled",
+          "type": "java.lang.Boolean",
+          "default_value": false,
+          "deprecated": null,
+          "source_type": "com.acme.datasource.CustomDataSourceProperties"
+        }
+      ],
+      "activation_hints": [
+        "Установите acme.datasource.override.enabled=true"
+      ]
+    },
+    {
+      "id": "com.acme.autoconfigure.JpaTxAutoConfiguration",
+      "fqcn": "com.acme.autoconfigure.JpaTxAutoConfiguration",
+      "artifact": "fixture:acme-jpa:1",
+      "imports": [],
+      "order": {
+        "before": [],
+        "after": [
+          "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+        ],
+        "auto_configure_order": null
+      },
+      "class_conditions": [
+        {
+          "kind": "OnClass",
+          "scope": "class",
+          "inputs": {
+            "value": ["jakarta.persistence.EntityManagerFactory"]
+          },
+          "negated": false,
+          "explain_hint": "нужен JPA API в classpath"
+        },
+        {
+          "kind": "OnProperty",
+          "scope": "class",
+          "inputs": {
+            "name": ["spring.jpa.enabled"],
+            "havingValue": "true",
+            "matchIfMissing": true
+          },
+          "negated": false,
+          "explain_hint": "spring.jpa.enabled=true"
+        }
+      ],
+      "bean_methods": [
+        {
+          "bean_name": "transactionManager",
+          "factory_method": "transactionManager",
+          "return_type": "org.springframework.transaction.PlatformTransactionManager",
+          "conditions": [
+            {
+              "kind": "OnMissingBean",
+              "scope": "bean-method",
+              "inputs": {
+                "value": ["org.springframework.transaction.PlatformTransactionManager"]
+              },
+              "negated": true,
+              "explain_hint": "бин transactionManager должен отсутствовать"
+            }
+          ],
+          "override_points": {
+            "conditional_on_missing_bean": true,
+            "recommended_override_strategy": "user-bean"
+          },
+          "targets": {
+            "reference": "#autoconfig-jpa-tx",
+            "examples": "#example-jpa-tx"
+          }
+        }
+      ],
+      "linked_properties": [
+        {
+          "name": "spring.jpa.enabled",
+          "type": "java.lang.Boolean",
+          "default_value": true,
+          "deprecated": null,
+          "source_type": "com.acme.jpa.JpaTxProperties"
+        }
+      ],
+      "activation_hints": [
+        "Проверьте spring.jpa.enabled=true"
+      ]
+    },
+    {
+      "id": "com.acme.autoconfigure.MailSenderAutoConfiguration",
+      "fqcn": "com.acme.autoconfigure.MailSenderAutoConfiguration",
+      "artifact": "fixture:acme-mail:1",
+      "imports": [],
+      "order": {
+        "before": [],
+        "after": [],
+        "auto_configure_order": null
+      },
+      "class_conditions": [
+        {
+          "kind": "OnClass",
+          "scope": "class",
+          "inputs": {
+            "value": ["org.springframework.mail.javamail.JavaMailSender"]
+          },
+          "negated": false,
+          "explain_hint": "нужен JavaMailSender в classpath"
+        },
+        {
+          "kind": "OnProperty",
+          "scope": "class",
+          "inputs": {
+            "name": ["acme.mail.enabled"],
+            "havingValue": "true",
+            "matchIfMissing": false
+          },
+          "negated": false,
+          "explain_hint": "включить acme.mail.enabled=true"
+        }
+      ],
+      "bean_methods": [
+        {
+          "bean_name": "mailSender",
+          "factory_method": "mailSender",
+          "return_type": "org.springframework.mail.javamail.JavaMailSender",
+          "conditions": [
+            {
+              "kind": "OnMissingBean",
+              "scope": "bean-method",
+              "inputs": {
+                "value": ["org.springframework.mail.javamail.JavaMailSender"]
+              },
+              "negated": true,
+              "explain_hint": "бин mailSender должен отсутствовать"
+            }
+          ],
+          "override_points": {
+            "conditional_on_missing_bean": true,
+            "recommended_override_strategy": "user-bean"
+          },
+          "targets": {
+            "reference": "#autoconfig-mail",
+            "examples": "#example-mail"
+          }
+        }
+      ],
+      "linked_properties": [
+        {
+          "name": "acme.mail.enabled",
+          "type": "java.lang.Boolean",
+          "default_value": false,
+          "deprecated": null,
+          "source_type": "com.acme.mail.MailProperties"
+        }
+      ],
+      "activation_hints": [
+        "Установите acme.mail.enabled=true"
+      ]
+    }
+  ]
+}

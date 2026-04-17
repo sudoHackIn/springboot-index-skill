@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/spring_boot_autoconfig_index.schema.json",
+  "title": "Spring Boot AutoConfiguration Index v1",
+  "type": "object",
+  "required": [
+    "generated_at",
+    "spring_boot_version",
+    "sources",
+    "stats",
+    "autoconfigurations"
+  ],
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "spring_boot_version": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "object",
+      "required": ["artifacts", "metadata_files"],
+      "properties": {
+        "artifacts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "metadata_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "required": [
+        "autoconfigurations_total",
+        "bean_definitions_total",
+        "conditions_total",
+        "properties_linked_total"
+      ],
+      "properties": {
+        "autoconfigurations_total": { "type": "integer", "minimum": 0 },
+        "bean_definitions_total": { "type": "integer", "minimum": 0 },
+        "conditions_total": { "type": "integer", "minimum": 0 },
+        "properties_linked_total": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "autoconfigurations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "fqcn",
+          "artifact",
+          "imports",
+          "order",
+          "class_conditions",
+          "bean_methods",
+          "linked_properties",
+          "activation_hints"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "fqcn": { "type": "string" },
+          "artifact": { "type": "string" },
+          "imports": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "order": {
+            "type": "object",
+            "required": ["before", "after", "auto_configure_order"],
+            "properties": {
+              "before": { "type": "array", "items": { "type": "string" } },
+              "after": { "type": "array", "items": { "type": "string" } },
+              "auto_configure_order": {
+                "type": ["string", "number", "null"]
+              }
+            }
+          },
+          "class_conditions": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/condition" }
+          },
+          "bean_methods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "bean_name",
+                "factory_method",
+                "return_type",
+                "conditions",
+                "override_points",
+                "targets"
+              ],
+              "properties": {
+                "bean_name": { "type": "string" },
+                "factory_method": { "type": "string" },
+                "return_type": { "type": "string" },
+                "conditions": {
+                  "type": "array",
+                  "items": { "$ref": "#/$defs/condition" }
+                },
+                "override_points": {
+                  "type": "object",
+                  "required": [
+                    "conditional_on_missing_bean",
+                    "recommended_override_strategy"
+                  ],
+                  "properties": {
+                    "conditional_on_missing_bean": { "type": "boolean" },
+                    "recommended_override_strategy": { "type": "string" }
+                  }
+                },
+                "targets": {
+                  "type": "object",
+                  "required": ["reference", "examples"],
+                  "properties": {
+                    "reference": { "type": "string" },
+                    "examples": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "linked_properties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "default_value",
+                "deprecated",
+                "source_type"
+              ],
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "default_value": {},
+                "deprecated": {
+                  "type": ["object", "null"]
+                },
+                "source_type": { "type": "string" }
+              }
+            }
+          },
+          "activation_hints": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "condition": {
+      "type": "object",
+      "required": ["kind", "scope", "inputs", "negated", "explain_hint"],
+      "properties": {
+        "kind": { "type": "string" },
+        "scope": {
+          "type": "string",
+          "enum": ["class", "bean-method"]
+        },
+        "inputs": {
+          "type": "object"
+        },
+        "negated": { "type": "boolean" },
+        "explain_hint": { "type": "string" }
+      }
+    }
+  }
+}

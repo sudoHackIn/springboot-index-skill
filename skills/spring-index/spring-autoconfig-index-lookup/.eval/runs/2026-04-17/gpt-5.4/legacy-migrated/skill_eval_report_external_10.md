@@ -1,0 +1,285 @@
+# Spring Autoconfig Skill Evaluation Report
+
+- Index: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/skill_eval_fixture_index.json
+- Cases: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/skill_eval_cases_external_10.json
+- Report: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/skill_eval_report_external_10.md
+- Passed: 10/10
+
+## Per-case results
+
+### ext-01-ds-enabled-base-properties
+- question: DataSource должен включиться из application.properties
+- expected_verdict: likely_yes
+- actual_verdict: likely_yes
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case01-ds-enabled [application.properties]
+- active_profiles: (none)
+- runtime_properties_count: 2
+- candidate_autoconfigurations: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration
+- candidate_beans: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration#dataSource:javax.sql.DataSource, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration#dataSource:javax.sql.DataSource
+- linked_properties: spring.datasource.enabled, spring.datasource.url
+- property_gate_status:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration: pass (matched spring.datasource.enabled)
+  - com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration: blocked (acme.datasource.override.enabled missing and matchIfMissing=false)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case01-ds-enabled [application.properties].
+  - Runtime properties available: 2.
+  - Discovery by bean/type found 2 candidate bean methods.
+  - Distinct candidate autoconfigurations: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration
+  - Property check 'spring.datasource.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 2.
+  - Property gate blocked com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration: acme.datasource.override.enabled missing and matchIfMissing=false
+- blocking_signals:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration#dataSource: OnMissingBean
+  - com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration#dataSource: OnMissingBean
+
+### ext-02-ds-disabled-prod-yaml
+- question: DataSource должен отключиться в profile=prod из application.yaml
+- expected_verdict: likely_no
+- actual_verdict: likely_no
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case02-ds-prod-disabled [application.yaml]
+- active_profiles: prod
+- runtime_properties_count: 3
+- candidate_autoconfigurations: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration
+- candidate_beans: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration#dataSource:javax.sql.DataSource, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration#dataSource:javax.sql.DataSource
+- linked_properties: spring.datasource.enabled, spring.datasource.url
+- property_gate_status:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration: blocked (spring.datasource.enabled=false, expected true)
+  - com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration: blocked (acme.datasource.override.enabled missing and matchIfMissing=false)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case02-ds-prod-disabled [application.yaml].
+  - Active profiles: prod.
+  - Runtime properties available: 3.
+  - Discovery by bean/type found 2 candidate bean methods.
+  - Distinct candidate autoconfigurations: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration
+  - Property check 'spring.datasource.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 2.
+  - Property gate blocked org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration: spring.datasource.enabled=false, expected true
+  - Property gate blocked com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration: acme.datasource.override.enabled missing and matchIfMissing=false
+- blocking_signals:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration#dataSource: OnMissingBean
+  - com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration#dataSource: OnMissingBean
+
+### ext-03-redis-dev-profile-on
+- question: redisClient должен включиться в profile=dev
+- expected_verdict: likely_yes
+- actual_verdict: likely_yes
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case03-redis-dev [application.properties, application-dev.properties]
+- active_profiles: dev
+- runtime_properties_count: 1
+- candidate_autoconfigurations: com.acme.autoconfigure.RedisClientAutoConfiguration
+- candidate_beans: com.acme.autoconfigure.RedisClientAutoConfiguration#redisClient:com.acme.redis.RedisClient
+- linked_properties: acme.redis.enabled
+- property_gate_status:
+  - com.acme.autoconfigure.RedisClientAutoConfiguration: pass (matched acme.redis.enabled)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case03-redis-dev [application.properties, application-dev.properties].
+  - Active profiles: dev.
+  - Runtime properties available: 1.
+  - Discovery by bean/type found 1 candidate bean methods.
+  - Distinct candidate autoconfigurations: com.acme.autoconfigure.RedisClientAutoConfiguration
+  - Property check 'acme.redis.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 1.
+- blocking_signals:
+  - com.acme.autoconfigure.RedisClientAutoConfiguration#redisClient: OnMissingBean
+
+### ext-04-redis-prod-profile-off
+- question: redisClient должен отключиться в profile=prod
+- expected_verdict: likely_no
+- actual_verdict: likely_no
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case04-redis-prod [application.properties, application-prod.properties]
+- active_profiles: prod
+- runtime_properties_count: 1
+- candidate_autoconfigurations: com.acme.autoconfigure.RedisClientAutoConfiguration
+- candidate_beans: com.acme.autoconfigure.RedisClientAutoConfiguration#redisClient:com.acme.redis.RedisClient
+- linked_properties: acme.redis.enabled
+- property_gate_status:
+  - com.acme.autoconfigure.RedisClientAutoConfiguration: blocked (acme.redis.enabled=false, expected true)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case04-redis-prod [application.properties, application-prod.properties].
+  - Active profiles: prod.
+  - Runtime properties available: 1.
+  - Discovery by bean/type found 1 candidate bean methods.
+  - Distinct candidate autoconfigurations: com.acme.autoconfigure.RedisClientAutoConfiguration
+  - Property check 'acme.redis.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 1.
+  - Property gate blocked com.acme.autoconfigure.RedisClientAutoConfiguration: acme.redis.enabled=false, expected true
+- blocking_signals:
+  - com.acme.autoconfigure.RedisClientAutoConfiguration#redisClient: OnMissingBean
+
+### ext-05-kafka-yaml-group-on
+- question: kafkaProducer должен включиться по grouped yaml properties
+- expected_verdict: likely_yes
+- actual_verdict: likely_yes
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case05-kafka-yaml-group [application.yaml]
+- active_profiles: (none)
+- runtime_properties_count: 3
+- candidate_autoconfigurations: com.acme.autoconfigure.KafkaProducerAutoConfiguration
+- candidate_beans: com.acme.autoconfigure.KafkaProducerAutoConfiguration#kafkaProducer:com.acme.kafka.KafkaProducer
+- linked_properties: acme.kafka.enabled
+- property_gate_status:
+  - com.acme.autoconfigure.KafkaProducerAutoConfiguration: pass (matched acme.kafka.enabled)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case05-kafka-yaml-group [application.yaml].
+  - Runtime properties available: 3.
+  - Discovery by bean/type found 1 candidate bean methods.
+  - Distinct candidate autoconfigurations: com.acme.autoconfigure.KafkaProducerAutoConfiguration
+  - Property check 'acme.kafka.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 1.
+- blocking_signals:
+  - com.acme.autoconfigure.KafkaProducerAutoConfiguration#kafkaProducer: OnMissingBean
+
+### ext-06-kafka-missing-property-off
+- question: kafkaProducer не должен включиться, если acme.kafka.enabled отсутствует
+- expected_verdict: likely_no
+- actual_verdict: likely_no
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case06-kafka-missing [application.properties]
+- active_profiles: (none)
+- runtime_properties_count: 1
+- candidate_autoconfigurations: com.acme.autoconfigure.KafkaProducerAutoConfiguration
+- candidate_beans: com.acme.autoconfigure.KafkaProducerAutoConfiguration#kafkaProducer:com.acme.kafka.KafkaProducer
+- linked_properties: acme.kafka.enabled
+- property_gate_status:
+  - com.acme.autoconfigure.KafkaProducerAutoConfiguration: blocked (acme.kafka.enabled missing and matchIfMissing=false)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case06-kafka-missing [application.properties].
+  - Runtime properties available: 1.
+  - Discovery by bean/type found 1 candidate bean methods.
+  - Distinct candidate autoconfigurations: com.acme.autoconfigure.KafkaProducerAutoConfiguration
+  - Property check 'acme.kafka.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 1.
+  - Property gate blocked com.acme.autoconfigure.KafkaProducerAutoConfiguration: acme.kafka.enabled missing and matchIfMissing=false
+- blocking_signals:
+  - com.acme.autoconfigure.KafkaProducerAutoConfiguration#kafkaProducer: OnMissingBean
+
+### ext-07-custom-ds-team-profile-on
+- question: внешний override DataSource включается в profile=team
+- expected_verdict: likely_yes
+- actual_verdict: likely_yes
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case07-custom-ds-team [application.yaml]
+- active_profiles: team
+- runtime_properties_count: 2
+- candidate_autoconfigurations: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration
+- candidate_beans: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration#dataSource:javax.sql.DataSource, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration#dataSource:javax.sql.DataSource
+- linked_properties: acme.datasource.override.enabled
+- property_gate_status:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration: pass (matched spring.datasource.enabled)
+  - com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration: pass (matched acme.datasource.override.enabled)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case07-custom-ds-team [application.yaml].
+  - Active profiles: team.
+  - Runtime properties available: 2.
+  - Discovery by bean/type found 2 candidate bean methods.
+  - Distinct candidate autoconfigurations: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration
+  - Property check 'acme.datasource.override.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 2.
+- blocking_signals:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration#dataSource: OnMissingBean
+  - com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration#dataSource: OnMissingBean
+
+### ext-08-custom-ds-prod-profile-off
+- question: внешний override DataSource выключается в profile=prod
+- expected_verdict: likely_yes
+- actual_verdict: likely_yes
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case08-custom-ds-prod-off [application.properties, application-prod.properties]
+- active_profiles: prod
+- runtime_properties_count: 1
+- candidate_autoconfigurations: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration
+- candidate_beans: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration#dataSource:javax.sql.DataSource, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration#dataSource:javax.sql.DataSource
+- linked_properties: acme.datasource.override.enabled
+- property_gate_status:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration: pass (matched spring.datasource.enabled)
+  - com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration: blocked (acme.datasource.override.enabled=false, expected true)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case08-custom-ds-prod-off [application.properties, application-prod.properties].
+  - Active profiles: prod.
+  - Runtime properties available: 1.
+  - Discovery by bean/type found 2 candidate bean methods.
+  - Distinct candidate autoconfigurations: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration
+  - Property check 'acme.datasource.override.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 2.
+  - Property gate blocked com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration: acme.datasource.override.enabled=false, expected true
+- blocking_signals:
+  - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration#dataSource: OnMissingBean
+  - com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration#dataSource: OnMissingBean
+
+### ext-09-tx-dev-profile-on
+- question: transactionManager должен включиться в profile=dev
+- expected_verdict: likely_yes
+- actual_verdict: likely_yes
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case09-tx-dev-enabled [application.yaml]
+- active_profiles: dev
+- runtime_properties_count: 2
+- candidate_autoconfigurations: com.acme.autoconfigure.JpaTxAutoConfiguration
+- candidate_beans: com.acme.autoconfigure.JpaTxAutoConfiguration#transactionManager:org.springframework.transaction.PlatformTransactionManager
+- linked_properties: spring.jpa.enabled
+- property_gate_status:
+  - com.acme.autoconfigure.JpaTxAutoConfiguration: pass (matched spring.jpa.enabled)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case09-tx-dev-enabled [application.yaml].
+  - Active profiles: dev.
+  - Runtime properties available: 2.
+  - Discovery by bean/type found 1 candidate bean methods.
+  - Distinct candidate autoconfigurations: com.acme.autoconfigure.JpaTxAutoConfiguration
+  - Property check 'spring.jpa.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 1.
+- blocking_signals:
+  - com.acme.autoconfigure.JpaTxAutoConfiguration#transactionManager: OnMissingBean
+
+### ext-10-mail-staging-profile-off
+- question: mailSender должен отключиться в profile=staging
+- expected_verdict: likely_no
+- actual_verdict: likely_no
+- expected_autoconfig_found: true
+- pass: yes
+- runtime_source: /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case10-mail-staging-off [application.properties, application-staging.yaml]
+- active_profiles: staging
+- runtime_properties_count: 1
+- candidate_autoconfigurations: com.acme.autoconfigure.MailSenderAutoConfiguration
+- candidate_beans: com.acme.autoconfigure.MailSenderAutoConfiguration#mailSender:org.springframework.mail.javamail.JavaMailSender
+- linked_properties: acme.mail.enabled
+- property_gate_status:
+  - com.acme.autoconfigure.MailSenderAutoConfiguration: blocked (acme.mail.enabled=false, expected true)
+- trace:
+  - Loaded index with 6 autoconfigurations.
+  - Loaded runtime properties from /Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/configs/case10-mail-staging-off [application.properties, application-staging.yaml].
+  - Active profiles: staging.
+  - Runtime properties available: 1.
+  - Discovery by bean/type found 1 candidate bean methods.
+  - Distinct candidate autoconfigurations: com.acme.autoconfigure.MailSenderAutoConfiguration
+  - Property check 'acme.mail.enabled' matched 1 autoconfigurations.
+  - Blocking/override signals found: 1.
+  - Property gate blocked com.acme.autoconfigure.MailSenderAutoConfiguration: acme.mail.enabled=false, expected true
+- blocking_signals:
+  - com.acme.autoconfigure.MailSenderAutoConfiguration#mailSender: OnMissingBean
+
+## Notes
+- This report includes external diagnostic trace only (queries, matches, rule outcomes).
+- It does not include hidden internal reasoning.
+

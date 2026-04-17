@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-04-17T10:07:19.179Z",
+  "model": "gpt-5.4",
+  "skill_path": "/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+  "skill_version": "0.2.0",
+  "run_date": "2026-04-17",
+  "run_id": "skill_eval_cases__skill_eval_fixture_index",
+  "index_path": "/Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/scenarios/indexes/skill_eval_fixture_index.json",
+  "cases_path": "/Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/scenarios/cases/skill_eval_cases.json",
+  "report_path": "/Users/vladislav/projects/springboot-index-skill/scripts/spring-index/eval/runs/2026-04-17/gpt-5.4/skill_eval_cases__skill_eval_fixture_index/report.md",
+  "total": 4,
+  "passed": 3,
+  "failed": 1
+}

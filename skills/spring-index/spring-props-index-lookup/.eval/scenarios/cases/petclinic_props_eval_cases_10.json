@@ -1,0 +1,97 @@
+[
+  {
+    "id": "props-01-exact-datasource-url",
+    "question": "Какой ключ отвечает за JDBC URL datasource?",
+    "exact_name": "spring.datasource.url",
+    "expected_include_names": ["spring.datasource.url"],
+    "min_results": 1,
+    "max_results": 1
+  },
+  {
+    "id": "props-02-prefix-datasource",
+    "question": "Покажи все ключи по префиксу spring.datasource.",
+    "name_prefix": "spring.datasource.",
+    "expected_include_names": [
+      "spring.datasource.url",
+      "spring.datasource.username",
+      "spring.datasource.password",
+      "spring.datasource.enabled"
+    ],
+    "expected_exclude_names": ["server.port"],
+    "min_results": 50
+  },
+  {
+    "id": "props-03-regex-jpa-hibernate",
+    "question": "Какие есть ключи по spring.jpa.hibernate?",
+    "name_regex": "^spring\\.jpa\\.hibernate\\.",
+    "expected_include_names": [
+      "spring.jpa.hibernate.ddl-auto",
+      "spring.jpa.hibernate.naming.physical-strategy"
+    ],
+    "min_results": 2
+  },
+  {
+    "id": "props-04-prefix-sql-init",
+    "question": "Какие свойства у spring.sql.init?",
+    "name_prefix": "spring.sql.init.",
+    "expected_include_names": [
+      "spring.sql.init.mode",
+      "spring.sql.init.data-locations",
+      "spring.sql.init.schema-locations"
+    ],
+    "min_results": 5
+  },
+  {
+    "id": "props-05-observed-src-main-resources",
+    "question": "Какие ключи реально наблюдались в src/main/resources?",
+    "observed_file_prefix": "src/main/resources/",
+    "expected_include_names": [
+      "spring.datasource.url",
+      "spring.messages.basename"
+    ],
+    "min_results": 5
+  },
+  {
+    "id": "props-06-exact-management-exposure",
+    "question": "Какой ключ включает web exposure для actuator endpoints?",
+    "exact_name": "management.endpoints.web.exposure.include",
+    "expected_include_names": ["management.endpoints.web.exposure.include"],
+    "min_results": 1,
+    "max_results": 1
+  },
+  {
+    "id": "props-07-description-jdbc",
+    "question": "Найди свойства по описанию JDBC/database.",
+    "description_regex": "jdbc|database|datasource",
+    "expected_include_names": ["spring.datasource.url"],
+    "min_results": 10
+  },
+  {
+    "id": "props-08-artifact-spring-boot-jdbc",
+    "question": "Какие ключи приходят из артефакта spring-boot-jdbc?",
+    "source_artifact_regex": "spring-boot-jdbc",
+    "expected_include_names": [
+      "spring.datasource.url",
+      "spring.datasource.username"
+    ],
+    "min_results": 3
+  },
+  {
+    "id": "props-09-deprecated",
+    "question": "Покажи deprecated свойства.",
+    "has_deprecation": true,
+    "expected_include_names": ["logging.file"],
+    "min_results": 10
+  },
+  {
+    "id": "props-10-group-prefix",
+    "question": "Какие группы есть у datasource?",
+    "group_prefix": "spring.datasource",
+    "expected_group_include": [
+      "spring.datasource",
+      "spring.datasource.hikari",
+      "spring.datasource.tomcat"
+    ],
+    "min_group_results": 3
+  }
+]

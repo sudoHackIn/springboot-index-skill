@@ -1,0 +1,114 @@
+[
+  {
+    "id": "extra-01-datasource-enabled",
+    "question": "Ожидается ли DataSource из автоконфигурации?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "runtime_properties": {
+      "spring.datasource.enabled": "true"
+    },
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "extra-02-datasource-disabled-by-prop",
+    "question": "Почему DataSource мог не подняться?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "runtime_properties": {
+      "spring.datasource.enabled": "false"
+    },
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "extra-03-custom-datasource-override-on",
+    "question": "Какой источник DataSource ожидается в этом окружении?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "runtime_properties": {
+      "acme.datasource.override.enabled": "true"
+    },
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  {
+    "id": "extra-04-custom-datasource-override-off",
+    "question": "Будет ли активен внешний DataSource override?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "runtime_properties": {
+      "acme.datasource.override.enabled": "false"
+    },
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  {
+    "id": "extra-05-redis-enabled",
+    "question": "Ожидается ли redisClient из автоконфигурации?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "runtime_properties": {
+      "acme.redis.enabled": "true"
+    },
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "extra-06-redis-disabled",
+    "question": "Почему redisClient может быть выключен?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "runtime_properties": {
+      "acme.redis.enabled": "false"
+    },
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "extra-07-kafka-enabled",
+    "question": "Из какой автоконфигурации должен прийти kafkaProducer?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "runtime_properties": {
+      "acme.kafka.enabled": "true"
+    },
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "extra-08-transaction-manager-enabled",
+    "question": "Ожидается ли transactionManager?",
+    "bean_name_regex": "transactionManager",
+    "return_type_regex": "PlatformTransactionManager",
+    "property_name": "spring.jpa.enabled",
+    "runtime_properties": {
+      "spring.jpa.enabled": "true"
+    },
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "JpaTxAutoConfiguration"
+  },
+  {
+    "id": "extra-09-transaction-manager-disabled",
+    "question": "Почему transactionManager может не создаться?",
+    "bean_name_regex": "transactionManager",
+    "return_type_regex": "PlatformTransactionManager",
+    "property_name": "spring.jpa.enabled",
+    "runtime_properties": {
+      "spring.jpa.enabled": "false"
+    },
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "JpaTxAutoConfiguration"
+  },
+  {
+    "id": "extra-10-mail-disabled-by-prop",
+    "question": "Ожидается ли mailSender в текущем окружении?",
+    "bean_name_regex": "mailSender",
+    "property_name": "acme.mail.enabled",
+    "runtime_properties": {
+      "acme.mail.enabled": "false"
+    },
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "MailSenderAutoConfiguration"
+  }
+]

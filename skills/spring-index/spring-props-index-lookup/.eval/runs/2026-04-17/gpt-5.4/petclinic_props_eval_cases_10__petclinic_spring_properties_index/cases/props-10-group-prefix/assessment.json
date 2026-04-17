@@ -1,0 +1,17 @@
+{
+  "id": "props-10-group-prefix",
+  "pass": true,
+  "score": 1,
+  "checks": {
+    "correctness": 1,
+    "completeness": 1,
+    "hallucination": 1
+  },
+  "notes": [
+    "Порог `min_group_results=3` выполнен."
+  ],
+  "evidence": {
+    "commands_log": "./cases/props-10-group-prefix/commands.log",
+    "output": "./cases/props-10-group-prefix/output.md"
+  }
+}

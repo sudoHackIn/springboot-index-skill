@@ -1,0 +1,13 @@
+acme:
+  datasource:
+    override:
+      enabled: false
+---
+spring:
+  config:
+    activate:
+      on-profile: team
+acme:
+  datasource:
+    override:
+      enabled: true

@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    enabled: false
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    enabled: true

@@ -1,0 +1,17 @@
+{
+  "id": "props-01-exact-datasource-url",
+  "pass": true,
+  "score": 1,
+  "checks": {
+    "correctness": 1,
+    "completeness": 1,
+    "hallucination": 1
+  },
+  "notes": [
+    "Ожидания exact match выполнены (1 результат)."
+  ],
+  "evidence": {
+    "commands_log": "./cases/props-01-exact-datasource-url/commands.log",
+    "output": "./cases/props-01-exact-datasource-url/output.md"
+  }
+}

@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/app
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    enabled: false

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "ext-01-ds-enabled-base-properties",
+    "question": "Ожидается ли DataSource в этом окружении?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "config_dir": "configs/case01-ds-enabled",
+    "active_profiles": [],
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "ext-02-ds-disabled-prod-yaml",
+    "question": "Почему DataSource может быть отключен?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "config_dir": "configs/case02-ds-prod-disabled",
+    "active_profiles": ["prod"],
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "ext-03-redis-dev-profile-on",
+    "question": "Ожидается ли redisClient из автоконфигурации?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "config_dir": "configs/case03-redis-dev",
+    "active_profiles": ["dev"],
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "ext-04-redis-prod-profile-off",
+    "question": "Почему redisClient может не создаться?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "config_dir": "configs/case04-redis-prod",
+    "active_profiles": ["prod"],
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "ext-05-kafka-yaml-group-on",
+    "question": "Ожидается ли kafkaProducer?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "config_dir": "configs/case05-kafka-yaml-group",
+    "active_profiles": [],
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "ext-06-kafka-missing-property-off",
+    "question": "Почему kafkaProducer может быть недоступен?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "config_dir": "configs/case06-kafka-missing",
+    "active_profiles": [],
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "ext-07-custom-ds-team-profile-on",
+    "question": "Какой DataSource ожидается: базовый или из внешней либы?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "config_dir": "configs/case07-custom-ds-team",
+    "active_profiles": ["team"],
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  {
+    "id": "ext-08-custom-ds-prod-profile-off",
+    "question": "Ожидается ли fallback на стандартный DataSource?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "config_dir": "configs/case08-custom-ds-prod-off",
+    "active_profiles": ["prod"],
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  {
+    "id": "ext-09-tx-dev-profile-on",
+    "question": "Ожидается ли transactionManager в этом окружении?",
+    "bean_name_regex": "transactionManager",
+    "property_name": "spring.jpa.enabled",
+    "config_dir": "configs/case09-tx-dev-enabled",
+    "active_profiles": ["dev"],
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "JpaTxAutoConfiguration"
+  },
+  {
+    "id": "ext-10-mail-staging-profile-off",
+    "question": "Почему mailSender может быть отключен?",
+    "bean_name_regex": "mailSender",
+    "property_name": "acme.mail.enabled",
+    "config_dir": "configs/case10-mail-staging-off",
+    "active_profiles": ["staging"],
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "MailSenderAutoConfiguration"
+  }
+]

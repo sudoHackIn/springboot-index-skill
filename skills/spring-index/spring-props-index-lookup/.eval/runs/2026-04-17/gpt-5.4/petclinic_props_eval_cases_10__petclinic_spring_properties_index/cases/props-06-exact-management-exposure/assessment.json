@@ -1,0 +1,17 @@
+{
+  "id": "props-06-exact-management-exposure",
+  "pass": true,
+  "score": 1,
+  "checks": {
+    "correctness": 1,
+    "completeness": 1,
+    "hallucination": 1
+  },
+  "notes": [
+    "Exact match и cardinality выполнены."
+  ],
+  "evidence": {
+    "commands_log": "./cases/props-06-exact-management-exposure/commands.log",
+    "output": "./cases/props-06-exact-management-exposure/output.md"
+  }
+}

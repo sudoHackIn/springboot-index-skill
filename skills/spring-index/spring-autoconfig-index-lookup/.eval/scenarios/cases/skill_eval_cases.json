@@ -1,0 +1,34 @@
+[
+  {
+    "id": "case-01-datasource-discovery",
+    "question": "Поднимется ли DataSource в этом окружении?",
+    "bean_name_regex": "datasource",
+    "return_type_regex": "DataSource",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "case-02-redis-disabled-by-prop",
+    "question": "Почему redisClient не поднялся?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "runtime_properties": {
+      "acme.redis.enabled": "false"
+    },
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "case-03-kafka-from-which-autoconfig",
+    "question": "Из какой автоконфигурации ждать kafkaProducer?",
+    "bean_name_regex": "kafkaProducer",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "case-04-no-candidate",
+    "question": "Ожидается ли mailSender из автоконфигурации?",
+    "bean_name_regex": "mailSender",
+    "expected_verdict": "likely_no"
+  }
+]

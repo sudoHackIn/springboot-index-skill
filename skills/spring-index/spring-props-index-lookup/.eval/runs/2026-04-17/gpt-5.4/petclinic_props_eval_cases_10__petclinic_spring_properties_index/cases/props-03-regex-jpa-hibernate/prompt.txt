@@ -1,0 +1,1 @@
+Какие есть ключи по spring.jpa.hibernate?

@@ -1,0 +1,17 @@
+acme:
+  mail:
+    enabled: true
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - local-mail
+---
+spring:
+  config:
+    activate:
+      on-profile: local-mail
+acme:
+  mail:
+    enabled: false

@@ -1,0 +1,17 @@
+{
+  "id": "props-09-deprecated",
+  "pass": true,
+  "score": 1,
+  "checks": {
+    "correctness": 1,
+    "completeness": 1,
+    "hallucination": 1
+  },
+  "notes": [
+    "Ожидаемый deprecated ключ найден."
+  ],
+  "evidence": {
+    "commands_log": "./cases/props-09-deprecated/commands.log",
+    "output": "./cases/props-09-deprecated/output.md"
+  }
+}

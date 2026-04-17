@@ -1,0 +1,17 @@
+{
+  "id": "props-08-artifact-spring-boot-jdbc",
+  "pass": true,
+  "score": 0.97,
+  "checks": {
+    "correctness": 1,
+    "completeness": 0.95,
+    "hallucination": 1
+  },
+  "notes": [
+    "В индексе используется поле `source_artifacts` (массив), а не `sourceArtifact`."
+  ],
+  "evidence": {
+    "commands_log": "./cases/props-08-artifact-spring-boot-jdbc/commands.log",
+    "output": "./cases/props-08-artifact-spring-boot-jdbc/output.md"
+  }
+}
