@@ -1,0 +1,25 @@
+{
+  "id": "tree-06-kafka-missing-flag",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-06-kafka-missing-flag/commands.log",
+    "output": "./cases/tree-06-kafka-missing-flag/output.md"
+  }
+}

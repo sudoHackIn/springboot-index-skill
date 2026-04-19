@@ -1,0 +1,18 @@
+{
+  "id": "case-01-datasource-discovery",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "DataSourceAutoConfiguration matches bean_name=dataSource and return_type=javax.sql.DataSource. Its spring.datasource.enabled property condition has matchIfMissing=true, so empty runtime_properties do not block it. The competing CustomDataSourceOverrideAutoConfiguration is blocked because acme.datasource.override.enabled is missing and matchIfMissing=false. Static-only OnClass and OnMissingBean checks are treated as unresolved but non-blocking by the helper.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && printf '\\n---INDEX KEYS---\\n' && jq 'keys' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Поднимется ли DataSource в этом окружении?\" --bean-regex \"datasource\" --return-type-regex \"DataSource\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"datasource\"; \"i\")) or (.return_type // \"\" | test(\"DataSource\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select((.fqcn // \"\" | test(\"DataSourceAutoConfiguration\")) or any(.bean_methods[]?; ((.bean_name // \"\" | test(\"datasource\"; \"i\")) or (.return_type // \"\" | test(\"DataSource\"; \"i\")))) ) | {fqcn, class_conditions, bean_methods}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo 'index: ok' || echo 'index: missing'",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\")) | {fqcn, on_property: [.class_conditions[] | select(.kind == \"OnProperty\")]} ' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '{spring_boot_version, stats, autoconfig_count: (.autoconfigurations | length)}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

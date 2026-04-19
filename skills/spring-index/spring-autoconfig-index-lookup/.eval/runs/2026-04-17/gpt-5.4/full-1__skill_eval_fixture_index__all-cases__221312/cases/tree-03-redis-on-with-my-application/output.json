@@ -1,0 +1,20 @@
+{
+  "id": "tree-03-redis-on-with-my-application",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Индекс содержит bean redisClient в com.acme.autoconfigure.RedisClientAutoConfiguration. Class-level OnProperty требует acme.redis.enabled=true, и внешний config-tree задает acme.redis.enabled: true. Helper-диагностика нашла одного кандидата, property gate совпал, focused_verdict и overall_verdict равны likely_yes. OnClass и OnMissingBean не являются блокирующими в статическом режиме.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo \"index: ok\" || echo \"index: missing\"",
+    "find /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree03-redis-on/config -maxdepth 3 -type f -print",
+    "test -d /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo \"analyzer deps: present\" || echo \"analyzer deps: missing\"",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли redisClient из автоконфигурации?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree03-redis-on/config\" --index \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json\"",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли redisClient из автоконфигурации?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree03-redis-on/config\" --index \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json\" --debug",
+    "sed -n '1,160p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree03-redis-on/config/application.yaml",
+    "sed -n '1,160p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree03-redis-on/config/redis/application.yaml",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"redisClient\"; \"i\")) or (.return_type // \"\" | test(\"redisClient\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.RedisClientAutoConfiguration\") | {fqcn, class_conditions, bean_methods}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

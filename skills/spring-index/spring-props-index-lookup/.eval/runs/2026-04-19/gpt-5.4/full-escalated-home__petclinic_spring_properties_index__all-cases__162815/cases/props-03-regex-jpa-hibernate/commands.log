@@ -1,0 +1,5 @@
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md"
+/bin/zsh -lc "python3 -m json.tool skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json | sed -n '1,220p'"
+/bin/zsh -lc "sed -n '220,520p' skills/spring-index/spring-props-index-lookup/SKILL.md"
+/bin/zsh -lc "INDEX=skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json
+jq --arg re '"'^spring[.]jpa[.]hibernate[.]'"' '{ generated_at, query: {name_regex: "'$re}, matches_count: ([.properties[] | select(.name | test($re))] | length), matches: [.properties[] | select(.name | test($re)) | {name, type, description, default_value, deprecation, source_artifacts, source_types, origins, examples}] }'"' \""'$INDEX"'

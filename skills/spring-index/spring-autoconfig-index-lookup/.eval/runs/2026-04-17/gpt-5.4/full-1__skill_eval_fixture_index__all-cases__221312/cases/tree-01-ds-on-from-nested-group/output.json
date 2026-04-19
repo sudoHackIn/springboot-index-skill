@@ -1,0 +1,20 @@
+{
+  "id": "tree-01-ds-on-from-nested-group",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Активный профиль local из application.yaml раскрывается через spring.profiles.group.local в h2-mem. В nested config-tree common/datasource/application.yaml для профиля h2-mem задано spring.datasource.enabled=true, поэтому OnProperty DataSourceAutoConfiguration проходит. Конкурирующая CustomDataSourceOverrideAutoConfiguration найдена по тому же bean_name, но заблокирована acme.datasource.override.enabled=false. Итоговый прогноз: бин dataSource ожидается из DataSourceAutoConfiguration.",
+  "commands": [
+    "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo 'index: ok' || echo 'index: missing'",
+    "rg --files /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree01-ds-on/config",
+    "test -d /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo 'analyzer node_modules: ok' || echo 'analyzer node_modules: missing'",
+    "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree01-ds-on/config/application.yaml",
+    "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree01-ds-on/config/common/datasource/application.yaml",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question 'Ожидается ли DataSource в этом окружении?' --bean-regex 'dataSource' --property-name 'spring.datasource.enabled' --config-dir '/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree01-ds-on/config' --index '/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"dataSource\"; \"i\")) or (.return_type // \"\" | test(\"DataSource\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\") or any(.bean_methods[]?.conditions[]?; .kind == \"OnProperty\")) | {fqcn, class_conditions, bean_methods: [.bean_methods[]? | {bean_name, conditions}]}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --debug --question 'Ожидается ли DataSource в этом окружении?' --bean-regex 'dataSource' --property-name 'spring.datasource.enabled' --config-dir '/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree01-ds-on/config' --index '/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "ext-02-ds-disabled-prod-yaml",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "При active profile prod внешний application.yaml задает spring.datasource.enabled=false. Индекс показывает, что DataSourceAutoConfiguration создает бин dataSource только при OnProperty spring.datasource.enabled=true с matchIfMissing=true. Helper-диагностика подтвердила блокировку: spring.datasource.enabled=false, expected true, поэтому DataSource через эту автоконфигурацию, вероятно, отключен.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && pwd && rg --files /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case02-ds-prod-disabled /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes",
+    "sed -n '1,200p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case02-ds-prod-disabled/application.yaml",
+    "test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo 'index: ok' || echo 'index: missing'",
+    "test -d /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo 'analyzer deps: present' || echo 'analyzer deps: missing'",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему DataSource может быть отключен?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --config-dir \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case02-ds-prod-disabled\" --active-profile prod --index \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json\" --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"dataSource\"; \"i\")) or (.return_type // \"\" | test(\"DataSource\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration\") | {fqcn, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; (.kind == \"OnProperty\") and ((.inputs.name // []) | index(\"spring.datasource.enabled\")))) | {fqcn, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

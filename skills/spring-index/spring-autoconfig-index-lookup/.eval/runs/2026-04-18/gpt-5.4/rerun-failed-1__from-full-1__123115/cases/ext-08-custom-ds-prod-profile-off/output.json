@@ -1,0 +1,21 @@
+{
+  "id": "ext-08-custom-ds-prod-profile-off",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration",
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "В application.properties override включён, но active profile prod загружает application-prod.properties и переопределяет acme.datasource.override.enabled=false. Поэтому CustomDataSourceOverrideAutoConfiguration блокируется своим OnProperty expected true. Стандартная DataSourceAutoConfiguration остаётся pass, так как spring.datasource.enabled имеет matchIfMissing=true и не отключён. Следовательно ожидается fallback на стандартный DataSource.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios | sed -n '1,160p'",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo \"index: ok\" || echo \"index: missing\"",
+    "test -d skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo \"analyzer deps: present\" || echo \"analyzer deps: missing\"",
+    "sed -n '1,120p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case08-custom-ds-prod-off/application.properties",
+    "sed -n '1,120p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case08-custom-ds-prod-off/application-prod.properties",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли fallback на стандартный DataSource?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case08-custom-ds-prod-off --active-profile prod --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"dataSource\"; \"i\")) or (.return_type // \"\" | test(\"DataSource\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration\" or .fqcn == \"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration\") | {fqcn, order, class_conditions}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\" and ((.inputs.name // []) | index(\"acme.datasource.override.enabled\")))) | {fqcn, class_conditions}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

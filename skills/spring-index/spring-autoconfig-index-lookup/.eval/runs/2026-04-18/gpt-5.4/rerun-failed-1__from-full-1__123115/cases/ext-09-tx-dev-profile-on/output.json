@@ -1,0 +1,19 @@
+{
+  "id": "ext-09-tx-dev-profile-on",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.JpaTxAutoConfiguration"
+  ],
+  "reasoning_summary": "Для активного профиля dev внешний application.yaml задает spring.jpa.enabled=true, что проходит OnProperty(havingValue=true) у com.acme.autoconfigure.JpaTxAutoConfiguration. Индекс содержит bean method transactionManager с return type org.springframework.transaction.PlatformTransactionManager; OnMissingBean в статическом режиме не блокирует прогноз.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -la /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case09-tx-dev-enabled",
+    "rg -n \"JpaTxAutoConfiguration|transactionManager|spring.jpa.enabled\" /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case09-tx-dev-enabled",
+    "cat /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case09-tx-dev-enabled/application.yaml",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли transactionManager в этом окружении?\" --bean-regex \"transactionManager\" --property-name \"spring.jpa.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case09-tx-dev-enabled --active-profile dev --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.JpaTxAutoConfiguration\") | {fqcn, class_conditions, bean_methods, properties}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли transactionManager в этом окружении?\" --bean-regex \"transactionManager\" --property-name \"spring.jpa.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case09-tx-dev-enabled --active-profile dev --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"transactionManager\"; \"i\")) or (.return_type // \"\" | test(\"transactionManager\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\" and ((.inputs.name // []) | index(\"spring.jpa.enabled\")))) | {fqcn, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

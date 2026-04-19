@@ -1,0 +1,19 @@
+{
+  "id": "ext-01-ds-enabled-base-properties",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Runtime config sets spring.datasource.enabled=true. The index contains org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration with bean dataSource of type javax.sql.DataSource and an OnProperty condition matching spring.datasource.enabled=true. A custom DataSource override candidate exists but is blocked because acme.datasource.override.enabled is missing with matchIfMissing=false, so the predicted winner is DataSourceAutoConfiguration.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && pwd && rg --files /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case01-ds-enabled /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes",
+    "sed -n '1,200p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case01-ds-enabled/application.properties",
+    "test -d skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo 'analyzer node_modules: present' || echo 'analyzer node_modules: missing'; test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo 'index: ok' || echo 'index: missing'",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"dataSource\"; \"i\")) or (.return_type // \"\" | test(\"DataSource\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, method_name: .method_name}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\")) | {fqcn, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "npm install",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли DataSource в этом окружении?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case01-ds-enabled --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли DataSource в этом окружении?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case01-ds-enabled --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration\" or .fqcn == \"com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration\") | {fqcn, order, class_conditions, bean_methods}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

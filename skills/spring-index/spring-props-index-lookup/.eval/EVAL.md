@@ -24,6 +24,10 @@ This folder is developer-only.
 - `.eval/runs/<date>/<model>/<run-id>/cases/<case-id>/commands.log`
 - `.eval/runs/<date>/<model>/<run-id>/cases/<case-id>/assessment.json`
 
+Обязательно фиксировать версию скилла (`skill_version` из `SKILL.md`) в артефактах прогона:
+- в `meta.json` (как минимум в `skill_metadata.declared_skill_version`),
+- в `report.md` (читаемым полем `skill_declared_version`).
+
 ## How to Run (Required Process)
 
 1. Выбрать индекс JSON.
@@ -41,6 +45,7 @@ This folder is developer-only.
 6. Собрать общий `report.md` и `meta.json`:
    - сводка по каждому файлу сценариев,
    - общий `overall` по всем сценариям.
+   - зафиксированная версия скилла из `SKILL.md` (`skill_version`).
 
 ## Important Notes
 

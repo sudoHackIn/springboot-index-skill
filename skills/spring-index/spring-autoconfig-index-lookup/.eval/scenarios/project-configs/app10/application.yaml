@@ -1,0 +1,3 @@
+spring.application.name: notify-service
+spring.profiles.active: prod
+acme.mail.enabled: false

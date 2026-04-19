@@ -3,6 +3,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+class DiagnoseError extends Error {
+  constructor(kind, message, detail = null) {
+    super(message);
+    this.kind = kind;
+    this.detail = detail;
+  }
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) {
@@ -11,17 +19,49 @@ async function main() {
   }
 
   const indexPath = path.resolve(args.index ?? ".qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json");
-  const index = JSON.parse(await fs.readFile(indexPath, "utf8"));
-
-  if (!args.beanRegex && !args.returnTypeRegex && !args.question) {
-    throw new Error("Provide --bean-regex and/or --return-type-regex or --question");
+  let index;
+  try {
+    index = JSON.parse(await fs.readFile(indexPath, "utf8"));
+  } catch (e) {
+    if (e && e.code === "ENOENT") {
+      throw new DiagnoseError(
+        "IndexNotFound",
+        `Index file not found: ${indexPath}`,
+        { path: indexPath, hint: "Run skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh" }
+      );
+    }
+    if (e instanceof SyntaxError) {
+      throw new DiagnoseError(
+        "IndexParseError",
+        `Index file is not valid JSON: ${indexPath}`,
+        { path: indexPath, cause: e.message }
+      );
+    }
+    throw new DiagnoseError("IndexReadError", e.message, { path: indexPath });
   }
 
-  const runtime = await loadRuntimeProperties(
-    args.configDirs?.map((d) => path.resolve(d)) ?? [],
-    args.activeProfiles ?? [],
-    args.runtimeProps ?? {}
-  );
+  if (!args.beanRegex && !args.returnTypeRegex && !args.question) {
+    throw new DiagnoseError(
+      "MissingSelector",
+      "Provide --bean-regex and/or --return-type-regex or --question"
+    );
+  }
+
+  const projectConfigDirs = normalizeProjectConfigDirs(args.projectConfigDirs ?? []);
+  const externalConfigDirs = (args.configDirs ?? []).map((d) => path.resolve(d));
+  const appName = await resolveApplicationName({
+    explicitAppName: args.appName ?? null,
+    projectConfigDirs,
+    explicitProfiles: args.activeProfiles ?? []
+  });
+
+  const runtime = await loadRuntimeProperties({
+    projectConfigDirs,
+    externalConfigDirs,
+    explicitProfiles: args.activeProfiles ?? [],
+    inlineRuntimeProps: args.runtimeProps ?? {},
+    appName
+  });
 
   const resolvedQuery = resolveQuery({
     question: args.question ?? "",
@@ -375,10 +415,22 @@ function splitIdentifier(value) {
     .filter(Boolean);
 }
 
-async function loadRuntimeProperties(configDirs, explicitProfiles, inlineRuntimeProps) {
+async function resolveApplicationName({ explicitAppName, projectConfigDirs, explicitProfiles }) {
+  if (explicitAppName && `${explicitAppName}`.trim()) return `${explicitAppName}`.trim();
+  if (!projectConfigDirs || projectConfigDirs.length === 0) return null;
+
+  const docs = await collectDocsFromRoots(projectConfigDirs, null, "application-only");
+  const merged = mergeDocsUsingProfiles(docs, explicitProfiles ?? []);
+  const appName = `${merged.properties["spring.application.name"] ?? ""}`.trim();
+  return appName || null;
+}
+
+async function loadRuntimeProperties({ projectConfigDirs, externalConfigDirs, explicitProfiles, inlineRuntimeProps, appName }) {
   const hasInlineProps = Object.keys(inlineRuntimeProps).length > 0;
   const hasProfileContext = (explicitProfiles ?? []).length > 0;
-  if (!configDirs || configDirs.length === 0) {
+  const hasProject = (projectConfigDirs ?? []).length > 0;
+  const hasExternal = (externalConfigDirs ?? []).length > 0;
+  if (!hasProject && !hasExternal) {
     return {
       properties: { ...inlineRuntimeProps },
       loadedFrom: null,
@@ -387,84 +439,115 @@ async function loadRuntimeProperties(configDirs, explicitProfiles, inlineRuntime
     };
   }
 
-  const allCandidates = [];
-  const seenAbs = new Set();
-  for (const root of configDirs) {
-    const files = await collectConfigFilesRecursive(root);
-    for (const abs of files) {
-      if (seenAbs.has(abs)) continue;
-      seenAbs.add(abs);
-      const rel = path.relative(root, abs).replace(/\\/g, "/");
-      const name = path.basename(abs);
-      allCandidates.push({ root, abs, rel, name });
-    }
+  const projectDocs = await collectDocsFromRoots(projectConfigDirs, appName, "application-and-appname");
+  const externalDocs = await collectDocsFromRoots(externalConfigDirs, appName, "application-and-appname");
+
+  const projectMerge = mergeDocsUsingProfiles(projectDocs, explicitProfiles ?? []);
+  const baseForProfiles = { ...projectMerge.baseProperties };
+  for (const doc of externalDocs) {
+    if ((doc.requiredProfiles ?? []).length === 0) mergeProps(baseForProfiles, doc.props);
   }
-
-  allCandidates.sort((a, b) => {
-    const pa = extractProfileFromFilename(a.name) ? 1 : 0;
-    const pb = extractProfileFromFilename(b.name) ? 1 : 0;
-    if (pa !== pb) return pa - pb;
-    if (a.root !== b.root) return a.root.localeCompare(b.root);
-    return a.rel.localeCompare(b.rel);
-  });
-
-  const allDocs = [];
-  for (const item of allCandidates) {
-    const { root, abs, rel, name } = item;
-    const profileFromName = extractProfileFromFilename(name);
-    const text = await fs.readFile(abs, "utf8");
-    const sourceLabel = `${root}::${rel}`;
-
-    if (name.endsWith(".properties")) {
-      allDocs.push({
-        source: sourceLabel,
-        requiredProfiles: profileFromName ? [profileFromName] : [],
-        props: parsePropertiesText(text)
-      });
-      continue;
-    }
-
-    for (const doc of splitYamlDocs(text)) {
-      const props = parseSimpleYamlDoc(doc);
-      allDocs.push({
-        source: sourceLabel,
-        requiredProfiles: profileFromName ? [profileFromName] : extractDocProfiles(props),
-        props
-      });
-    }
-  }
-
-  const baseProps = {};
-  for (const doc of allDocs) {
-    if (doc.requiredProfiles.length === 0) mergeProps(baseProps, doc.props);
-  }
-
-  const inferredActive = parseProfilesValue(baseProps["spring.profiles.active"]);
-  const initialActive = explicitProfiles.length > 0 ? explicitProfiles : inferredActive;
-  const groupMap = buildProfileGroupMap(baseProps);
-  const activeProfilesResolved = expandProfiles(initialActive, groupMap);
-  const activeSet = new Set(activeProfilesResolved);
+  const profileBase = resolveProfiles(baseForProfiles, explicitProfiles ?? []);
+  const activeSet = new Set(profileBase.activeProfilesResolved);
 
   const merged = {};
   const loaded = [];
-  for (const doc of allDocs) {
-    if (doc.requiredProfiles.length > 0 && !doc.requiredProfiles.some((p) => activeSet.has(p))) continue;
+  for (const doc of projectDocs) {
+    if ((doc.requiredProfiles ?? []).length > 0 && !doc.requiredProfiles.some((p) => activeSet.has(p))) continue;
     mergeProps(merged, doc.props);
-    loaded.push(doc.source);
+    loaded.push(`project:${doc.source}`);
+  }
+  for (const doc of externalDocs) {
+    if ((doc.requiredProfiles ?? []).length > 0 && !doc.requiredProfiles.some((p) => activeSet.has(p))) continue;
+    mergeProps(merged, doc.props);
+    loaded.push(`external:${doc.source}`);
   }
 
   mergeProps(merged, inlineRuntimeProps);
 
+  const parts = [];
+  if (hasProject) parts.push(`project_roots=[${projectConfigDirs.join(", ")}]`);
+  if (hasExternal) parts.push(`external_roots=[${externalConfigDirs.join(", ")}]`);
+
   return {
     properties: merged,
-    loadedFrom: `${configDirs.join(", ")} [${dedupBy(loaded, (x) => x).join(", ")}]`,
-    activeProfilesResolved,
+    loadedFrom: `${parts.join(" ")} [${dedupBy(loaded, (x) => x).join(", ")}]`,
+    activeProfilesResolved: profileBase.activeProfilesResolved,
     hasExplicitContext: true
   };
 }
 
-async function collectConfigFilesRecursive(rootDir) {
+async function collectDocsFromRoots(roots, appName, mode) {
+  const docs = [];
+  if (!roots || roots.length === 0) return docs;
+  const seen = new Set();
+
+  for (const root of roots) {
+    const files = await collectConfigFilesRecursive(root, appName, mode);
+    for (const file of files) {
+      if (seen.has(file.abs)) continue;
+      seen.add(file.abs);
+
+      const text = await fs.readFile(file.abs, "utf8");
+      const sourceLabel = `${root}::${file.rel}`;
+
+      if (file.name.endsWith(".properties")) {
+        docs.push({
+          source: sourceLabel,
+          requiredProfiles: file.profileFromName ? [file.profileFromName] : [],
+          props: parsePropertiesText(text)
+        });
+        continue;
+      }
+
+      for (const doc of splitYamlDocs(text)) {
+        const props = parseSimpleYamlDoc(doc);
+        docs.push({
+          source: sourceLabel,
+          requiredProfiles: file.profileFromName ? [file.profileFromName] : extractDocProfiles(props),
+          props
+        });
+      }
+    }
+  }
+
+  docs.sort((a, b) => {
+    const pa = (a.requiredProfiles ?? []).length > 0 ? 1 : 0;
+    const pb = (b.requiredProfiles ?? []).length > 0 ? 1 : 0;
+    if (pa !== pb) return pa - pb;
+    return a.source.localeCompare(b.source);
+  });
+  return docs;
+}
+
+function resolveProfiles(baseProps, explicitProfiles) {
+  const inferredActive = parseProfilesValue(baseProps["spring.profiles.active"]);
+  const initialActive = (explicitProfiles ?? []).length > 0 ? explicitProfiles : inferredActive;
+  const groupMap = buildProfileGroupMap(baseProps);
+  const activeProfilesResolved = expandProfiles(initialActive, groupMap);
+  return { activeProfilesResolved, groupMap };
+}
+
+function mergeDocsUsingProfiles(allDocs, explicitProfiles) {
+  const baseProps = {};
+  for (const doc of allDocs ?? []) {
+    if ((doc.requiredProfiles ?? []).length === 0) mergeProps(baseProps, doc.props);
+  }
+  const { activeProfilesResolved } = resolveProfiles(baseProps, explicitProfiles ?? []);
+  const activeSet = new Set(activeProfilesResolved);
+
+  const merged = {};
+  for (const doc of allDocs ?? []) {
+    if ((doc.requiredProfiles ?? []).length > 0 && !doc.requiredProfiles.some((p) => activeSet.has(p))) continue;
+    mergeProps(merged, doc.props);
+  }
+  return { properties: merged, activeProfilesResolved, baseProperties: baseProps };
+}
+
+async function collectConfigFilesRecursive(rootDir, appName, mode) {
   const out = [];
+  if (!(await dirExists(rootDir))) return out;
+
   async function walk(current) {
     const entries = await fs.readdir(current, { withFileTypes: true });
     for (const e of entries) {
@@ -474,12 +557,41 @@ async function collectConfigFilesRecursive(rootDir) {
         continue;
       }
       if (!e.isFile()) continue;
-      if (!/^[A-Za-z0-9._-]*application(?:-[A-Za-z0-9_-]+)?\.(properties|ya?ml)$/i.test(e.name)) continue;
-      out.push(abs);
+      const matched = matchConfigFilename(e.name, appName, mode);
+      if (!matched) continue;
+      out.push({
+        abs,
+        rel: path.relative(rootDir, abs).replace(/\\/g, "/"),
+        name: e.name,
+        profileFromName: matched.profile
+      });
     }
   }
+
   await walk(rootDir);
   return out;
+}
+
+function matchConfigFilename(name, appName, mode) {
+  const app = name.match(/^application(?:-([A-Za-z0-9_-]+))?\.(properties|ya?ml)$/i);
+  if (app) return { profile: app[1] ?? null };
+  if (mode === "application-only") return null;
+  if (!appName) return null;
+
+  const re = new RegExp(`^${escapeRegex(appName)}(?:-([A-Za-z0-9_-]+))?\\.(properties|ya?ml)$`, "i");
+  const custom = name.match(re);
+  if (!custom) return null;
+  return { profile: custom[1] ?? null };
+}
+
+async function dirExists(dir) {
+  if (!dir) return false;
+  try {
+    const st = await fs.stat(dir);
+    return st.isDirectory();
+  } catch {
+    return false;
+  }
 }
 
 function buildFocus(candidates, question, propertyName) {
@@ -672,9 +784,14 @@ function mergeProps(target, source) {
   for (const [k, v] of Object.entries(source)) target[k] = v;
 }
 
-function extractProfileFromFilename(name) {
-  const m = name.match(/^application-([A-Za-z0-9_-]+)\.(?:properties|ya?ml)$/i);
-  return m ? m[1] : null;
+function normalizeProjectConfigDirs(explicitDirs) {
+  const out = [];
+  for (const d of explicitDirs ?? []) {
+    const v = `${d ?? ""}`.trim();
+    if (v) out.push(path.resolve(v));
+  }
+  if (out.length > 0) return dedupBy(out, (x) => x);
+  return [path.resolve("src/main/resources")];
 }
 
 function stripQuotes(value) {
@@ -718,7 +835,7 @@ function escapeRegex(value) {
 }
 
 function parseArgs(argv) {
-  const args = { activeProfiles: [], runtimeProps: {}, configDirs: [] };
+  const args = { activeProfiles: [], runtimeProps: {}, configDirs: [], projectConfigDirs: [] };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
     const n = argv[i + 1];
@@ -747,6 +864,12 @@ function parseArgs(argv) {
     } else if (a === "--config-tree-dir") {
       args.configDirs.push(n);
       i += 1;
+    } else if (a === "--project-config-dir") {
+      args.projectConfigDirs.push(n);
+      i += 1;
+    } else if (a === "--app-name") {
+      args.appName = n;
+      i += 1;
     } else if (a === "--active-profile") {
       args.activeProfiles.push(n);
       i += 1;
@@ -770,8 +893,10 @@ function printUsage() {
     "  --question <text>              Optional question; can be used for bean inference",
     "",
     "Runtime context:",
-    "  --config-dir <dir>             Config root directory (recursive scan for application*.properties|yaml|yml)",
+    "  --project-config-dir <dir>     Main project config root (low priority, repeatable)",
+    "  --config-dir <dir>             External config root (higher priority, recursive, repeatable)",
     "  --config-tree-dir <dir>        Alias of --config-dir (repeatable for multiple roots)",
+    "  --app-name <name>              App config prefix; if omitted, inferred from spring.application.name",
     "  --active-profile <profile>     Active profile (repeatable)",
     "  --runtime-prop <k=v>           Inline runtime property override (repeatable)",
     "",
@@ -821,6 +946,20 @@ function compactResult(result) {
 }
 
 main().catch((e) => {
-  console.error(e.message);
+  const payload = {
+    verdict: "error",
+    error: {
+      kind: e instanceof DiagnoseError ? e.kind : (e && e.name) || "Unknown",
+      message: (e && e.message) || String(e)
+    }
+  };
+  if (e instanceof DiagnoseError && e.detail != null) {
+    payload.error.detail = e.detail;
+  }
+  if (e && e.stack && !(e instanceof DiagnoseError)) {
+    payload.error.stack = String(e.stack).split("\n").slice(0, 10).join("\n");
+  }
+  console.log(JSON.stringify(payload, null, 2));
+  console.error(payload.error.message);
   process.exit(1);
 });

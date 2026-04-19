@@ -1,0 +1,21 @@
+/bin/zsh -lc "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && pwd && ls -la /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes"
+/bin/zsh -lc 'test -f skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs && echo "diagnose script: ok" || echo "diagnose script: missing"'
+/bin/zsh -lc 'test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo "index: ok" || echo "index: missing"'
+/bin/zsh -lc 'jq --version'
+/bin/zsh -lc 'node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question "Ожидается ли redisClient из автоконфигурации?" --bean-regex "redisClient" --property-name "acme.redis.enabled" --runtime-prop "acme.redis.enabled=true" --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug'
+/bin/zsh -lc "INDEX=/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json
+jq -r '
+  .autoconfigurations[]
+  | .fqcn as "'$cfg
+  | .artifact as $artifact
+  | .class_conditions as $class_conditions
+  | .bean_methods[]?
+  | select((.bean_name // "" | test("redisClient"; "i")))
+  | {autoconfig: $cfg, artifact: $artifact, bean_name: .bean_name, return_type: .return_type, bean_conditions: .conditions, class_conditions: $class_conditions}
+'"' \""'$INDEX"'
+/bin/zsh -lc "INDEX=/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json
+jq -r '
+  .autoconfigurations[]
+  | select(.fqcn == \"com.acme.autoconfigure.RedisClientAutoConfiguration\")
+  | {fqcn, imports, class_conditions, bean_methods, order}
+' \""'$INDEX"'

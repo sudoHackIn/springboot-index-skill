@@ -1,0 +1,20 @@
+{
+  "id": "extra-03-custom-datasource-override-on",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "Runtime property acme.datasource.override.enabled=true satisfies the OnProperty gate of CustomDataSourceOverrideAutoConfiguration. The index contains both the custom override and standard DataSourceAutoConfiguration as dataSource candidates, but the custom one is ordered before the standard one, so it is predicted as the dataSource source.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "jq 'keys' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo \"index: ok\" || echo \"index: missing\"",
+    "test -d skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo \"analyzer deps: present\" || echo \"analyzer deps: missing\"",
+    "node --version && jq --version",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Какой источник DataSource ожидается в этом окружении?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --runtime-prop \"acme.datasource.override.enabled=true\" --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Какой источник DataSource ожидается в этом окружении?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --runtime-prop \"acme.datasource.override.enabled=true\" --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"dataSource\")) or (.return_type // \"\" | test(\"DataSource\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration\" or .fqcn == \"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration\") | {fqcn, order, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\" and ((.inputs.name // []) | index(\"acme.datasource.override.enabled\")))) | {fqcn, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

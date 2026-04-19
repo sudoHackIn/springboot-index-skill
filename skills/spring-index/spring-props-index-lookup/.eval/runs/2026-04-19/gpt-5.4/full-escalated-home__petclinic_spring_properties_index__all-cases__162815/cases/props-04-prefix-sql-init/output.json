@@ -1,0 +1,13 @@
+{
+  "id": "props-04-prefix-sql-init",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [],
+  "reasoning_summary": "По индексу properties выполнен prefix-поиск startswith(\"spring.sql.init.\"). Найдено 10 ключей, включая все expected_include_names: spring.sql.init.mode, spring.sql.init.data-locations и spring.sql.init.schema-locations. Данные приходят из org.springframework.boot:spring-boot-sql:4.0.3, source type org.springframework.boot.sql.autoconfigure.init.SqlInitializationProperties. Поле autoconfig в этом кейсе не задано, поэтому matched_autoconfigs оставлен пустым.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg prefix \"spring.sql.init.\" '{generated_at, query: {name_prefix: $prefix}, matches_count: ([.properties[] | select(.name | startswith($prefix))] | length), matches: [.properties[] | select(.name | startswith($prefix)) | .name]}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg prefix \"spring.sql.init.\" '[.properties[] | select(.name | startswith($prefix)) | {name, type, description, default_value, deprecation, source_artifacts, source_types, origins, examples}]' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq -r '.prefix_index[] | select(.prefix == \"spring.sql.init\") | .children[]?' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+  ]
+}

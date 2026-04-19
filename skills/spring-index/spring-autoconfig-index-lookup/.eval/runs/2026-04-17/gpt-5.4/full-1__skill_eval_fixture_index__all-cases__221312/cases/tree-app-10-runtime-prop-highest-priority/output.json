@@ -1,0 +1,21 @@
+{
+  "id": "tree-app-10-runtime-prop-highest-priority",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.MailSenderAutoConfiguration"
+  ],
+  "reasoning_summary": "Bean mailSender найден в com.acme.autoconfigure.MailSenderAutoConfiguration. Автоконфигурация gated через acme.mail.enabled=true. Project config и external config-tree задают false, но runtime_properties задает acme.mail.enabled=true и имеет самый высокий приоритет, поэтому OnProperty проходит; остальные статические условия не блокируют прогноз.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -la /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app10",
+    "find /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp10/config -maxdepth 3 -type f -print",
+    "sed -n '1,200p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app10/application.yaml",
+    "sed -n '1,200p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp10/config/mail/notify-service-prod.yaml",
+    "test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo 'index: ok' || echo 'index: missing'",
+    "test -d /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo 'analyzer deps: present' || echo 'analyzer deps: missing'",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли mailSender в текущем окружении?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --project-config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app10 --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp10/config --runtime-prop acme.mail.enabled=true --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"mailSender\"; \"i\")) or (.return_type // \"\" | test(\"mailSender\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\" and ((.inputs.name // []) | index(\"acme.mail.enabled\")))) | {fqcn, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли mailSender в текущем окружении?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --project-config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app10 --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp10/config --runtime-prop acme.mail.enabled=true --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

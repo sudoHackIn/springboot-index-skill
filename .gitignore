@@ -2,3 +2,15 @@ node_modules/
 generated/*.json
 /.qwen/
 /.idea/
+
+# macOS
+.DS_Store
+
+# Eval runs: keep scenarios + summaries + per-case audit trail; ignore bulk/noise
+skills/**/.eval/runs/**/run.log
+skills/**/.eval/runs/**/raw_subagent_result.json
+skills/**/.eval/runs/**/.summary_cases*.jsonl
+skills/**/.eval/runs/**/.run_dir_path.txt
+skills/**/.eval/runs/**/cases/**/events.jsonl
+skills/**/.eval/runs/**/cases/**/stderr.log
+skills/**/.eval/runs/**/cases/**/output.md

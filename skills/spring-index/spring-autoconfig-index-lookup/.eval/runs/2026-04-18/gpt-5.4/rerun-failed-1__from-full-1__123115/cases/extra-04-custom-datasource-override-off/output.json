@@ -1,0 +1,15 @@
+{
+  "id": "extra-04-custom-datasource-override-off",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "CustomDataSourceOverrideAutoConfiguration матчится по bean_name dataSource и property acme.datasource.override.enabled, но ее class-level OnProperty требует acme.datasource.override.enabled=true с matchIfMissing=false. В runtime_properties задано acme.datasource.override.enabled=false, поэтому внешний DataSource override заблокирован.",
+  "commands": [
+    "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg -n \"CustomDataSourceOverrideAutoConfiguration|acme\\.datasource\\.override\\.enabled|dataSource\" /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Будет ли активен внешний DataSource override?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --runtime-prop \"acme.datasource.override.enabled=false\" --index \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json\" --debug",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration\")' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"dataSource\")) or (.return_type // \"\" | test(\"DataSource\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

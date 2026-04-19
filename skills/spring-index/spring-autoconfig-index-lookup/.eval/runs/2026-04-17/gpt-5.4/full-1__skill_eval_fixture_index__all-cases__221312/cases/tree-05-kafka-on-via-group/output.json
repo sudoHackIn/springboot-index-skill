@@ -1,0 +1,20 @@
+{
+  "id": "tree-05-kafka-on-via-group",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper diagnosis and jq fallback both matched kafkaProducer to com.acme.autoconfigure.KafkaProducerAutoConfiguration. The autoconfiguration is gated by acme.kafka.enabled=true; config merging activates profile local, which expands via spring.profiles.group.local to local-kafka, and the local-kafka document sets acme.kafka.enabled: true. The bean method is guarded by OnMissingBean(com.acme.kafka.KafkaProducer), treated as non-blocking in static mode, so kafkaProducer is expected unless an existing KafkaProducer bean is present at runtime.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo \"index: ok\" || echo \"index: missing\"",
+    "find /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree05-kafka-on-group/config -maxdepth 4 -type f | sort",
+    "test -d /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo \"analyzer npm: installed\" || echo \"analyzer npm: missing\"",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли kafkaProducer в этом окружении?\" --bean-regex \"kafkaProducer\" --property-name \"acme.kafka.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree05-kafka-on-group/config --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли kafkaProducer в этом окружении?\" --bean-regex \"kafkaProducer\" --property-name \"acme.kafka.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree05-kafka-on-group/config --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "sed -n '1,200p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree05-kafka-on-group/config/application.yaml && sed -n '1,200p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree05-kafka-on-group/config/kafka/application.yaml",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select(.bean_name // \"\" | test(\"kafkaProducer\"; \"i\")) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.KafkaProducerAutoConfiguration\") | {fqcn, class_conditions, bean_methods}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\" and ((.inputs.name // []) | index(\"acme.kafka.enabled\")))) | {fqcn, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

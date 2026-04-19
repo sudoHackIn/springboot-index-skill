@@ -1,0 +1,15 @@
+{
+  "id": "extra-09-transaction-manager-disabled",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.JpaTxAutoConfiguration"
+  ],
+  "reasoning_summary": "transactionManager найден в com.acme.autoconfigure.JpaTxAutoConfiguration и имеет return type org.springframework.transaction.PlatformTransactionManager. Автоконфигурация заблокирована class-level OnProperty: spring.jpa.enabled=false, тогда как индекс требует spring.jpa.enabled=true с matchIfMissing=true. Поскольку property явно задана false, автоконфигурация не должна создать transactionManager.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -l /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && wc -c /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему transactionManager может не создаться?\" --bean-regex \"transactionManager\" --return-type-regex \"PlatformTransactionManager\" --property-name \"spring.jpa.enabled\" --runtime-prop \"spring.jpa.enabled=false\" --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"transactionManager\"; \"i\")) or (.return_type // \"\" | test(\"PlatformTransactionManager\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, method_name: .method_name, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select((.fqcn // \"\" | test(\"JpaTxAutoConfiguration|Transaction\"; \"i\")) or any(.class_conditions[]?; (.property_names // [] | index(\"spring.jpa.enabled\")))) | {fqcn, class_conditions, bean_methods}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "tree-app-04-redis-off-prod-by-app-file",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_appname_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-app-04-redis-off-prod-by-app-file/commands.log",
+    "output": "./cases/tree-app-04-redis-off-prod-by-app-file/output.md"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "extra-09-transaction-manager-disabled",
+  "pass": false,
+  "score": 0.0,
+  "checks": {
+    "correctness": "fail",
+    "completeness": "fail",
+    "hallucination": "pass"
+  },
+  "notes": [
+    "subagent_exit_nonzero:1",
+    "no_valid_output_json"
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": "JpaTxAutoConfiguration"
+  },
+  "actual": {
+    "verdict": ""
+  },
+  "source_case_file": "skill_eval_cases_extra_10.json",
+  "evidence": {
+    "commands_log": "./cases/extra-09-transaction-manager-disabled/commands.log",
+    "output": "./cases/extra-09-transaction-manager-disabled/output.md"
+  }
+}

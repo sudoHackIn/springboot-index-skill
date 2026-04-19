@@ -1,0 +1,36 @@
+Ты сабагент для E2E-оценки скилла.
+
+Обязательное поведение:
+1) Используй инструкции из SKILL.md:
+skills/spring-index/spring-props-index-lookup/SKILL.md
+2) Для этого кейса выполни диагностику по доступному контексту.
+3) Выполни наблюдаемые shell-команды, если они нужны для корректного вывода.
+4) Верни итог в Markdown.
+5) В КОНЦЕ добавь fenced json-блок с полями:
+{
+  "id": "...",
+  "verdict": "likely_yes|likely_no|uncertain",
+  "matched_autoconfigs": ["..."],
+  "reasoning_summary": "...",
+  "commands": ["..."]
+}
+
+Контекст кейса (known fields):
+- id: props-03-regex-jpa-hibernate
+- question: Какие есть ключи по spring.jpa.hibernate?
+- regex(bean_name): 
+- regex(return_type): 
+- property_name: 
+- project_config_dir: 
+- config_dir: 
+- app_name: 
+- active_profiles: 
+- runtime_properties: {}
+- index: skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json
+
+Контекст кейса (raw json):
+{"id":"props-03-regex-jpa-hibernate","question":"Какие есть ключи по spring.jpa.hibernate?","name_regex":"^spring\\.jpa\\.hibernate\\.","expected_include_names":["spring.jpa.hibernate.ddl-auto","spring.jpa.hibernate.naming.physical-strategy"],"min_results":2}
+
+Ожидания eval (только для ассессмента):
+- expected_verdict: 
+- expected_autoconfig_regex: 

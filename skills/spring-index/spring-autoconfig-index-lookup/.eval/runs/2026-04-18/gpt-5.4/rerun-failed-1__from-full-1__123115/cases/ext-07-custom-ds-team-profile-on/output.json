@@ -1,0 +1,21 @@
+{
+  "id": "ext-07-custom-ds-team-profile-on",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "Для active profile team внешний config-tree переопределяет acme.datasource.override.enabled в true. Property-gate CustomDataSourceOverrideAutoConfiguration проходит, эта автоконфигурация объявляет bean dataSource и упорядочена перед org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, поэтому ожидаемый DataSource приходит из внешней либы, а базовый кандидат должен отступить по OnMissingBean.",
+  "commands": [
+    "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg --files /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup",
+    "test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo 'index: ok' || echo 'index: missing'",
+    "rg --files /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case07-custom-ds-team",
+    "node --version && npm --prefix /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/analyzer ls --depth=0",
+    "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case07-custom-ds-team/application.yaml",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Какой DataSource ожидается: базовый или из внешней либы?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case07-custom-ds-team --active-profile team --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"dataSource\"; \"i\")) or (.return_type // \"\" | test(\"DataSource\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: (.conditions // [])}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration\" or .fqcn == \"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration\") | {fqcn, order, class_conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\")) | {fqcn, class_conditions: [.class_conditions[] | select(.kind == \"OnProperty\")]}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Какой DataSource ожидается: базовый или из внешней либы?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case07-custom-ds-team --active-profile team --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

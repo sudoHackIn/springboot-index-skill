@@ -1,0 +1,6 @@
+/bin/zsh -lc 'ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json'
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md"
+/bin/zsh -lc "sed -n '220,420p' skills/spring-index/spring-props-index-lookup/SKILL.md"
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/references/jq-recipes-advanced.md"
+/bin/zsh -lc "jq --arg prefix \"spring.datasource\" '{generated_at, query:{prefix_index:"'$prefix}, children:([.prefix_index[]? | select(.prefix == $prefix) | .children[]?] | unique)}'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+/bin/zsh -lc "jq --arg prefix \"spring.datasource\" '{generated_at, query:{group_prefix:"'$prefix}, matches_count:([.groups[]? | select(.name == $prefix or (.name | startswith($prefix + ".")))] | length), matches:[.groups[]? | select(.name == $prefix or (.name | startswith($prefix + "."))) | {name, type, source_artifacts, source_types}]}'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"

@@ -7,7 +7,9 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
   --question "Ожидается ли DataSource в этом окружении?" \
   --bean-regex "dataSource|datasource" \
   --property-name "spring.datasource.enabled" \
-  --config-dir ./src/main/resources
+  --project-config-dir ./src/main/resources \
+  --config-dir ./config \
+  --app-name "billing-service"
 ```
 
 Для подробного вывода добавить `--debug`.
@@ -20,15 +22,29 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
   --index .qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json
 ```
 
-## Example 0.2: External config tree (nested dirs + my-application)
+## Example 0.2: External config tree (nested dirs + app-name files)
 
 ```bash
 node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли DataSource в этом окружении?" \
   --bean-regex "dataSource" \
   --property-name "spring.datasource.enabled" \
+  --project-config-dir ./src/main/resources \
+  --app-name "billing-service" \
   --config-tree-dir ./config \
   --config-tree-dir ./config/common/datasource
+```
+
+## Example 0.3: Priority check (project < external < runtime-prop)
+
+```bash
+node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+  --question "Ожидается ли mailSender?" \
+  --bean-regex "mailSender" \
+  --property-name "acme.mail.enabled" \
+  --project-config-dir ./src/main/resources \
+  --config-dir ./config \
+  --runtime-prop acme.mail.enabled=true
 ```
 
 ## Example 1: DataSource discovery in index

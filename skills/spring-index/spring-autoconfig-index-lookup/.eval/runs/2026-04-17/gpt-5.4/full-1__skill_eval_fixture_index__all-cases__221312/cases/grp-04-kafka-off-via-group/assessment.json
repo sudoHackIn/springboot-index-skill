@@ -1,0 +1,26 @@
+{
+  "id": "grp-04-kafka-off-via-group",
+  "pass": false,
+  "score": 0.0,
+  "checks": {
+    "correctness": "fail",
+    "completeness": "fail",
+    "hallucination": "pass"
+  },
+  "notes": [
+    "subagent_exit_nonzero:1",
+    "no_valid_output_json"
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  "actual": {
+    "verdict": ""
+  },
+  "source_case_file": "skill_eval_cases_profile_groups_10.json",
+  "evidence": {
+    "commands_log": "./cases/grp-04-kafka-off-via-group/commands.log",
+    "output": "./cases/grp-04-kafka-off-via-group/output.md"
+  }
+}

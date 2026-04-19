@@ -1,0 +1,13 @@
+{
+  "id": "props-08-artifact-spring-boot-jdbc",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [],
+  "reasoning_summary": "Индекс содержит 211 property-записей с source_artifacts, точно соответствующим org.springframework.boot:spring-boot-jdbc:4.0.3. Ожидаемые ключи spring.datasource.url и spring.datasource.username найдены, оба объявлены через org.springframework.boot.jdbc.autoconfigure.DataSourceProperties. Нестрогий regex spring-boot-jdbc также матчится на spring-boot-jdbc-test и дает 212 записей, поэтому для основного артефакта использован уточненный фильтр :spring-boot-jdbc:.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "ls -lh skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg re 'spring-boot-jdbc' '{ generated_at, query: {source_artifact_regex: $re}, matches_count: ([.properties[] | select(any(.source_artifacts[]?; test($re)))] | length), matches: [.properties[] | select(any(.source_artifacts[]?; test($re))) | {name, type, default_value, source_artifacts, source_types}] }' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg re 'spring-boot-jdbc' '{ generated_at, total: ([.properties[] | select(any(.source_artifacts[]?; test($re)))] | length), expected: [.properties[] | select(any(.source_artifacts[]?; test($re)) and (.name == \"spring.datasource.url\" or .name == \"spring.datasource.username\")) | {name, type, source_artifacts, source_types}], groups: ([.properties[] | select(any(.source_artifacts[]?; test($re))) | (.name | split(\".\") | .[0:3] | join(\".\"))] | group_by(.) | map({prefix: .[0], count: length}) | sort_by(.prefix)), sample_names: [.properties[] | select(any(.source_artifacts[]?; test($re))) | .name][0:40] }' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg re ':spring-boot-jdbc:' '{ exact_artifact_regex: $re, total: ([.properties[] | select(any(.source_artifacts[]?; test($re)))] | length), top_prefixes: ([.properties[] | select(any(.source_artifacts[]?; test($re))) | (.name | split(\".\") | .[0:3] | join(\".\"))] | group_by(.) | map({prefix: .[0], count: length}) | sort_by(.prefix)), expected_names_present: [.properties[] | select(any(.source_artifacts[]?; test($re)) and (.name == \"spring.datasource.url\" or .name == \"spring.datasource.username\")) | .name] }' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "tree-02-ds-off-in-prod",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-02-ds-off-in-prod/commands.log",
+    "output": "./cases/tree-02-ds-off-in-prod/output.md"
+  }
+}

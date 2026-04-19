@@ -19,6 +19,11 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 - default: компактный ответ для обычной диагностики.
 - `--debug`: полный технический дамп (кандидаты, условия, порядок, контендеры).
 
+Перед запуском в production-кейсе обычно передают:
+- `--project-config-dir ./src/main/resources`
+- один или несколько `--config-dir ./config...`
+- при необходимости `--app-name <spring.application.name>`
+
 ## 2) Поля default-вывода
 
 Типичная структура:
@@ -94,7 +99,8 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 
 ## 7) Частые причины ложных ожиданий
 
-- Не передан `config-dir`, поэтому properties не подхватились.
+- Не передан `project-config-dir` (или путь неверный), поэтому не определился `spring.application.name`.
+- Не передан `config-dir`, поэтому внешние properties не подхватились.
 - Профиль считался активным, но не попал в resolved `active_profiles`.
 - Сравнение шло не по тому bean/type regex.
 - Вопрос фокусируется на override, а общий `overall_verdict` положительный за счет fallback-конфига.

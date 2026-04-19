@@ -1,0 +1,12 @@
+{
+  "id": "props-05-observed-src-main-resources",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [],
+  "reasoning_summary": "По инструкции SKILL.md использован индекс properties[] как источник истины, а observed usage взят из properties[].examples. Фильтр по examples[].file startswith(\"src/main/resources/\") вернул 15 уникальных ключей, включая ожидаемые spring.datasource.url и spring.messages.basename.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "INDEX=skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json\njq --arg prefix \"src/main/resources/\" '{generated_at, query:{observed_file_prefix:$prefix}, matches_count: ([.properties[] | select(any(.examples[]?; .file | startswith($prefix))) | .name] | unique | length), matches: ([.properties[] | select(any(.examples[]?; .file | startswith($prefix))) | {name, examples: [.examples[] | select(.file | startswith($prefix))]}] | sort_by(.name))}' \"$INDEX\"",
+    "INDEX=skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json\njq -r --arg prefix \"src/main/resources/\" '[.properties[] | select(any(.examples[]?; .file | startswith($prefix))) | .name] | unique | .[]' \"$INDEX\""
+  ]
+}

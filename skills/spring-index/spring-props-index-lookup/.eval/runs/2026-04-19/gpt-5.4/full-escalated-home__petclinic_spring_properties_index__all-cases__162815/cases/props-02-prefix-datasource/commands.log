@@ -1,0 +1,21 @@
+/bin/zsh -lc 'ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json'
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md"
+/bin/zsh -lc "jq --arg prefix \"spring.datasource.\" '{generated_at, query: {name_prefix: "'$prefix}, matches_count: ([.properties[] | select(.name | startswith($prefix))] | length), matches: [.properties[] | select(.name | startswith($prefix)) | .name]}'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+/bin/zsh -lc "jq --arg prefix \"spring.datasource.\" --argjson include '[\"spring.datasource.url\",\"spring.datasource.username\",\"spring.datasource.password\",\"spring.datasource.enabled\"]' --argjson exclude '[\"server.port\"]' '{matches_count: ([.properties[] | select(.name | startswith("'$prefix))] | length), included: ($include | map({name: ., present: (. as $n | any($ARGS.positional[]?; . == $n))})), excluded: ($exclude | map({name: ., present_in_prefix: (. as $n | any($ARGS.positional[]?; . == $n))}))}'"' --args "'$(jq -r --arg prefix "spring.datasource." '"'.properties[] | select(.name | startswith("'$prefix)) | .name'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json) skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+/bin/zsh -lc "jq --arg prefix \"spring.datasource.\" --argjson include '[\"spring.datasource.url\",\"spring.datasource.username\",\"spring.datasource.password\",\"spring.datasource.enabled\"]' --argjson exclude '[\"server.port\"]' '
+  ([.properties[] | select(.name | startswith("'$prefix)) | .name] | unique) as $matches
+  | {
+      matches_count: ($matches | length),
+      included: ($include | map({name: ., present: ($matches | index(.) != null)})),
+      excluded: ($exclude | map({name: ., present_in_prefix_results: ($matches | index(.) != null)}))
+    }
+'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+/bin/zsh -lc "jq --arg prefix \"spring.datasource.\" --argjson include '[\"spring.datasource.url\",\"spring.datasource.username\",\"spring.datasource.password\",\"spring.datasource.enabled\"]' --argjson exclude '[\"server.port\"]' '
+  ([.properties[] | select(.name | startswith("'$prefix)) | .name] | unique) as $matches
+  | {
+      matches_count: ($matches | length),
+      included: ($include | map(. as $name | {name: $name, present: ($matches | index($name) != null)})),
+      excluded: ($exclude | map(. as $name | {name: $name, present_in_prefix_results: ($matches | index($name) != null)}))
+    }
+'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+/bin/zsh -lc "jq -r --arg prefix \"spring.datasource.\" '[.properties[] | select(.name | startswith("'$prefix)) | .name] as $m | {direct: ($m | map(select((sub($prefix; "") | contains(".") | not)))), groups: ($m | map(sub($prefix; "") | split(".")[0]) | group_by(.) | map({group: .[0], count: length}))}'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"

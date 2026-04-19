@@ -1,0 +1,25 @@
+{
+  "id": "extra-05-redis-enabled",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases_extra_10.json",
+  "evidence": {
+    "commands_log": "./cases/extra-05-redis-enabled/commands.log",
+    "output": "./cases/extra-05-redis-enabled/output.md"
+  }
+}

@@ -1,0 +1,2 @@
+spring.application.name: crm-api
+spring.profiles.active: prod

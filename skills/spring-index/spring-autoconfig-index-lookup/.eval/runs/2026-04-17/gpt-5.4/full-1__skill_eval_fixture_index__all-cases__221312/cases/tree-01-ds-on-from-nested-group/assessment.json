@@ -1,0 +1,25 @@
+{
+  "id": "tree-01-ds-on-from-nested-group",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-01-ds-on-from-nested-group/commands.log",
+    "output": "./cases/tree-01-ds-on-from-nested-group/output.md"
+  }
+}

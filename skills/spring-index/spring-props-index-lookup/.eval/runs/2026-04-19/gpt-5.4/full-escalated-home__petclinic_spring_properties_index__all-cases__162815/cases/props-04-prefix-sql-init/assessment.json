@@ -1,0 +1,25 @@
+{
+  "id": "props-04-prefix-sql-init",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "",
+    "regex": ""
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "petclinic_props_eval_cases_10.json",
+  "evidence": {
+    "commands_log": "./cases/props-04-prefix-sql-init/commands.log",
+    "output": "./cases/props-04-prefix-sql-init/output.md"
+  }
+}

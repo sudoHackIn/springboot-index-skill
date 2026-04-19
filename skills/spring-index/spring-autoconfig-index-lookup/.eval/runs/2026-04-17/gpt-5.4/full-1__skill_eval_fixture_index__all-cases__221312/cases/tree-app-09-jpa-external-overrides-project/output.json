@@ -1,0 +1,22 @@
+{
+  "id": "tree-app-09-jpa-external-overrides-project",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.JpaTxAutoConfiguration"
+  ],
+  "reasoning_summary": "JpaTxAutoConfiguration содержит bean method transactionManager с return type org.springframework.transaction.PlatformTransactionManager. Его OnProperty gate требует spring.jpa.enabled=true, и после merge конфигов project value false переопределяется внешним config-tree jpa/ledger-service.yaml со значением true. OnClass и OnMissingBean в статической диагностике не блокируют прогноз.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo index:ok || echo index:missing",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app09 -maxdepth 3 -type f | sort",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp09/config -maxdepth 5 -type f | sort",
+    "test -d skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo analyzer:npm-installed || echo analyzer:npm-missing",
+    "sed -n '1,200p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app09/application.yaml",
+    "sed -n '1,200p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp09/config/jpa/ledger-service.yaml",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли transactionManager в этом окружении?\" --bean-regex \"transactionManager\" --return-type-regex \"PlatformTransactionManager\" --property-name \"spring.jpa.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app09 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp09/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --debug --question \"Ожидается ли transactionManager в этом окружении?\" --bean-regex \"transactionManager\" --return-type-regex \"PlatformTransactionManager\" --property-name \"spring.jpa.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app09 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp09/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"transactionManager\"; \"i\")) or (.return_type // \"\" | test(\"PlatformTransactionManager\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.JpaTxAutoConfiguration\") | {fqcn, class_conditions, bean_methods}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == \"OnProperty\" and ((.inputs.name // []) | index(\"spring.jpa.enabled\")))) | {fqcn, class_conditions}' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "tree-app-10-runtime-prop-highest-priority",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "autoconfig_regex": "MailSenderAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_appname_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-app-10-runtime-prop-highest-priority/commands.log",
+    "output": "./cases/tree-app-10-runtime-prop-highest-priority/output.md"
+  }
+}

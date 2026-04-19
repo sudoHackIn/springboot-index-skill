@@ -1,0 +1,15 @@
+{
+  "id": "extra-10-mail-disabled-by-prop",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.MailSenderAutoConfiguration"
+  ],
+  "reasoning_summary": "Индекс содержит MailSenderAutoConfiguration с bean method mailSender, но class-level OnProperty требует acme.mail.enabled=true при matchIfMissing=false. В runtime_properties задано acme.mail.enabled=false, поэтому автоконфигурация заблокирована и mailSender не ожидается.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -l /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли mailSender в текущем окружении?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --runtime-prop \"acme.mail.enabled=false\" --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"mailSender\"; \"i\")) or (.return_type // \"\" | test(\"mailSender\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, method_conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn | test(\"MailSenderAutoConfiguration\")) | {fqcn, class_conditions, bean_methods}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

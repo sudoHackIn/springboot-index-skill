@@ -1,0 +1,13 @@
+{
+  "id": "props-06-exact-management-exposure",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties$Exposure"
+  ],
+  "reasoning_summary": "В eval-индексе выполнен точный поиск по ключу management.endpoints.web.exposure.include. В properties[] найден ровно один матч; описание подтверждает, что это ключ для включения actuator endpoint IDs в web exposure, включая '*' для всех.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "INDEX=skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json\njq --arg name \"management.endpoints.web.exposure.include\" '{\n  generated_at,\n  query: {exact_name: $name},\n  matches_count: ([.properties[] | select(.name == $name)] | length),\n  matches:       [.properties[] | select(.name == $name) | .name],\n  details:       [.properties[] | select(.name == $name)]\n}' \"$INDEX\""
+  ]
+}

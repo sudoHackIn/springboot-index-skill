@@ -1,0 +1,3 @@
+spring.application.name: billing-service
+spring.profiles.active: prod
+spring.datasource.enabled: true

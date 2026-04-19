@@ -1,0 +1,33 @@
+Ты сабагент для E2E-оценки скилла spring-autoconfig-index-lookup.
+
+Обязательное поведение:
+1) Используй инструкции из SKILL.md:
+/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md
+2) Запусти диагностику по индексу и контексту кейса.
+3) Выполни команды в shell, которые считаешь нужными для корректного ответа.
+4) Верни ответ в Markdown.
+5) В КОНЦЕ обязательно добавь JSON-блок в отдельном fenced-блоке с языком json и ровно такими полями:
+{
+  "id": "...",
+  "verdict": "likely_yes|likely_no|uncertain",
+  "matched_autoconfigs": ["..."],
+  "reasoning_summary": "...",
+  "commands": ["..."]
+}
+
+Контекст кейса:
+- id: case-02-redis-disabled-by-prop
+- question: Почему redisClient не поднялся?
+- regex(bean_name): redisClient
+- regex(return_type): 
+- property_name: acme.redis.enabled
+- project_config_dir: 
+- config_dir: 
+- app_name: 
+- active_profiles: 
+- runtime_properties: {"acme.redis.enabled":"false"}
+- index: /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json
+
+Ожидания eval (для ассессмента, не как обязательный результат):
+- expected_verdict: likely_no
+- expected_autoconfig_regex: RedisClientAutoConfiguration

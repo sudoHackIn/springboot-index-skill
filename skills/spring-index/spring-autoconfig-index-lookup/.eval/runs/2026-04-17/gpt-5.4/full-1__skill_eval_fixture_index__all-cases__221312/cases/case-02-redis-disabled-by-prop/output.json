@@ -1,0 +1,19 @@
+{
+  "id": "case-02-redis-disabled-by-prop",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Единственный кандидат для bean_name=redisClient найден в RedisClientAutoConfiguration. Автоконфигурация имеет class-level OnProperty по acme.redis.enabled с havingValue=true и matchIfMissing=false, но runtime_properties задают acme.redis.enabled=false. Поэтому property-условие не проходит, автоконфигурация заблокирована, и redisClient ожидаемо не создается.",
+  "commands": [
+    "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "test -f /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && echo \"index: ok\" || echo \"index: missing\"",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs && echo \"diagnose script: ok\" || echo \"diagnose script: missing\"",
+    "jq --version",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient не поднялся?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --runtime-prop \"acme.redis.enabled=false\" --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"redisClient\"; \"i\")) or (.return_type // \"\" | test(\"redisClient\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.RedisClientAutoConfiguration\") | {fqcn, class_conditions, bean_methods}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/analyzer/package.json && echo \"analyzer package: ok\" || echo \"analyzer package: missing\"",
+    "test -d skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules && echo \"analyzer node_modules: ok\" || echo \"analyzer node_modules: missing\""
+  ]
+}

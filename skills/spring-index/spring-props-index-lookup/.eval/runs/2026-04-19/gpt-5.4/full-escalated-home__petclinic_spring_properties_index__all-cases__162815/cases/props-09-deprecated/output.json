@@ -1,0 +1,14 @@
+{
+  "id": "props-09-deprecated",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [],
+  "reasoning_summary": "В индексе найдено 357 properties с deprecation != null, что превышает min_results=10. Ожидаемое свойство logging.file присутствует и имеет deprecation {level: error, replacement: logging.file.name, since: 2.2.0}. Запрос относится к properties, а не к autoconfiguration-классам, поэтому matched_autoconfigs пуст.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "python -m json.tool skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json | sed -n '1,120p'",
+    "rg -n 'deprecated|deprecation|logging\\.file' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq '{generated_at, matches_count: ([.properties[] | select(.deprecation != null)] | length), matches: [.properties[] | select(.deprecation != null) | {name, type, deprecation, source_artifacts}] | sort_by(.name) | .[0:25]}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq '.properties[] | select(.name == \"logging.file\") | {name, type, description, default_value, deprecation, source_artifacts, origins, examples}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq -r '[.properties[] | select(.deprecation != null) | .source_artifacts[]?] | unique[]' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json | sed -n '1,80p'"
+  ]
+}

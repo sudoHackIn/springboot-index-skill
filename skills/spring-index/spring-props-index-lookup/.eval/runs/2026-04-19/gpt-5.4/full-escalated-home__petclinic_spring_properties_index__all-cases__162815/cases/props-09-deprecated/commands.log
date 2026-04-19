@@ -1,0 +1,6 @@
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md"
+/bin/zsh -lc "rg -n 'deprecated|deprecation|logging\\.file' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+/bin/zsh -lc "python -m json.tool skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json | sed -n '1,120p'"
+/bin/zsh -lc "jq '.properties[] | select(.name == \"logging.file\") | {name, type, description, default_value, deprecation, source_artifacts, origins, examples}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+/bin/zsh -lc "jq '{generated_at, matches_count: ([.properties[] | select(.deprecation "'!= null)] | length), matches: [.properties[] | select(.deprecation != null) | {name, type, deprecation, source_artifacts}] | sort_by(.name) | .[0:25]}'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+/bin/zsh -lc "jq -r '[.properties[] | select(.deprecation "'!= null) | .source_artifacts[]?] | unique[]'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json | sed -n '1,80p'"

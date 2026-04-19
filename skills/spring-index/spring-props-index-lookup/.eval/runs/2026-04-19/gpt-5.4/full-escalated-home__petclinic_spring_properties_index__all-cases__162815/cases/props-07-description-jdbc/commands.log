@@ -1,0 +1,3 @@
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md"
+/bin/zsh -lc 'ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes && wc -c skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json'
+/bin/zsh -lc "jq --arg re 'jdbc|database|datasource' '{ generated_at, query: {description_regex: "'$re}, matches_count: ([.properties[] | select((.description // "") | test($re; "i"))] | length), matches: [.properties[] | select((.description // "") | test($re; "i")) | {name, type, description, default_value, source_artifacts, source_types, origins, examples}] }'"' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"

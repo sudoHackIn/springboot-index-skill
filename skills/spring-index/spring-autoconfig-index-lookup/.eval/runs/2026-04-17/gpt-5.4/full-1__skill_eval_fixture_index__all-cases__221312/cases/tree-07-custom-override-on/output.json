@@ -1,0 +1,15 @@
+{
+  "id": "tree-07-custom-override-on",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "Внешний config-tree активирует профильную группу team -> team-ds, где задано acme.datasource.override.enabled=true. По индексу CustomDataSourceOverrideAutoConfiguration создает bean dataSource, проходит OnProperty для этого свойства и упорядочен before DataSourceAutoConfiguration с auto_configure_order -100. Стандартная DataSourceAutoConfiguration также проходит, но ее dataSource защищен OnMissingBean, поэтому ожидаемый источник бина - внешний override.",
+  "commands": [
+    "sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && pwd && rg --files /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree07-custom-override-on/config /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Какой DataSource ожидается: внешний override или стандартный?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --config-dir \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree07-custom-override-on/config\" --index \"/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json\" --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select((.bean_name // \"\" | test(\"dataSource\"; \"i\")) or (.return_type // \"\" | test(\"DataSource\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, return_type: .return_type, conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select((.fqcn // \"\" | test(\"DataSource|datasource\"; \"i\")) or any(.class_conditions[]?; ((.property_names // []) | index(\"acme.datasource.override.enabled\")))) | {fqcn, class_conditions, bean_methods}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "find /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree07-custom-override-on/config -type f -maxdepth 5 -print -exec sed -n '1,160p' {} \\;"
+  ]
+}

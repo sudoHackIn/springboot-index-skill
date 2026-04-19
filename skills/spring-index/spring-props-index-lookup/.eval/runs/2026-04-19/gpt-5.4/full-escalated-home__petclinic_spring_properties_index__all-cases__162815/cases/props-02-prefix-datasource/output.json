@@ -1,0 +1,13 @@
+{
+  "id": "props-02-prefix-datasource",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [],
+  "reasoning_summary": "Индекс доступен и содержит 203 свойства с префиксом spring.datasource., что превышает min_results=50. Все expected_include_names найдены: spring.datasource.url, spring.datasource.username, spring.datasource.password, spring.datasource.enabled. expected_exclude_names не попал в корректно проверенный результат префиксного поиска: server.port отсутствует.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg prefix \"spring.datasource.\" '{generated_at, query: {name_prefix: $prefix}, matches_count: ([.properties[] | select(.name | startswith($prefix))] | length), matches: [.properties[] | select(.name | startswith($prefix)) | .name]}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg prefix \"spring.datasource.\" --argjson include '[\"spring.datasource.url\",\"spring.datasource.username\",\"spring.datasource.password\",\"spring.datasource.enabled\"]' --argjson exclude '[\"server.port\"]' '([.properties[] | select(.name | startswith($prefix)) | .name] | unique) as $matches | {matches_count: ($matches | length), included: ($include | map(. as $name | {name: $name, present: ($matches | index($name) != null)})), excluded: ($exclude | map(. as $name | {name: $name, present_in_prefix_results: ($matches | index($name) != null)}))}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq -r --arg prefix \"spring.datasource.\" '[.properties[] | select(.name | startswith($prefix)) | .name] as $m | {direct: ($m | map(select((sub($prefix; \"\") | contains(\".\") | not)))), groups: ($m | map(sub($prefix; \"\") | split(\".\")[0]) | group_by(.) | map({group: .[0], count: length}))}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+  ]
+}

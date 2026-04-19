@@ -6,110 +6,150 @@ description: "Используй этот скилл, когда нужно ди
 # Spring AutoConfig Diagnosis
 
 ## Skill Version
-- `skill_version: 0.3.3`
+- `skill_version: 0.3.5`
 
-## Helper CLI Quick Guide
+## Prerequisites
 
-Script:
+1. **Node.js** (для запуска `.mjs`-скриптов).
+2. **Анализатор tree-sitter** — устанавливается один раз на машину:
+   ```bash
+   cd skills/spring-index/spring-autoconfig-index-lookup/analyzer && npm install
+   ```
+   Без этого `rebuild-autoconfig-index.sh` упадёт на разборе Java-аннотаций. Быстрая проверка:
+   ```bash
+   test -d skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules \
+     && echo "analyzer deps: present" || echo "analyzer deps: missing"
+   ```
+3. **`jq`** — для ручной верификации индекса.
+4. **Индекс** в `.qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json` (собирается скриптом, см. шаг 3 workflow).
+
+## Helper CLI
+
+Полный справочник по флагам, шаблоны запуска, приоритет properties — в [references/cli.md](references/cli.md).
+
+Типовой вызов:
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs [flags]
-```
-
-Обязателен хотя бы один селектор:
-- `--bean-regex <regex>`: искать кандидаты по имени бина (`bean_methods[].bean_name`).
-- `--return-type-regex <regex>`: искать кандидаты по return type (`bean_methods[].return_type`).
-- `--question <text>`: если regex не заданы, скрипт попытается вывести bean-pattern из текста вопроса.
-
-Необязательные параметры:
-- `--property-name <name>`: property-фокус для трассировки и фокусного verdict (например, `acme.datasource.override.enabled`).
-- `--config-dir <dir>`: корень config-tree; скрипт рекурсивно ищет `*application*.properties|yaml|yml` (включая `my-application.yaml`) и мерджит активные документы.
-- `--config-tree-dir <dir>`: алиас `--config-dir`, можно повторять для нескольких независимых roots.
-- `--active-profile <profile>`: принудительно активный профиль (можно повторять флаг).
-- `--runtime-prop <k=v>`: инлайн override runtime-properties (можно повторять флаг).
-- `--index <path>`: путь к JSON-индексу (по умолчанию `.qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json`).
-- `--debug`: включить подробный JSON-вывод (кандидаты/условия/ordering) для отладки.
-
-Режимы вывода:
-- По умолчанию скрипт возвращает компактный JSON (удобно для обычной диагностики).
-- Для детального разбора причин (`why not`, конфликты, порядок) запускать с `--debug`.
-
-Что писать в `--question`:
-- Обычный пользовательский вопрос на естественном языке.
-- Примеры:
-  - `"Ожидается ли DataSource?"`
-  - `"Почему redisClient может не создаться?"`
-  - `"Из какой автоконфигурации придет transactionManager?"`
-- `question` помогает фокусировать ответ и используется для inference, но для надежности лучше явно задавать `--bean-regex` и/или `--return-type-regex`.
-
-Минимальные шаблоны:
-```bash
-# только question (эвристический inference)
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
-  --question "Ожидается ли DataSource?"
-
-# надежный режим (рекомендуется)
 node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли DataSource?" \
   --bean-regex "dataSource|datasource" \
   --property-name "spring.datasource.enabled" \
-  --config-dir ./src/main/resources
-
-# несколько внешних config-tree roots
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
-  --question "Ожидается ли DataSource?" \
-  --bean-regex "dataSource|datasource" \
-  --config-tree-dir ./config \
-  --config-tree-dir ./config/common/datasource
+  --project-config-dir ./src/main/resources \
+  --config-dir ./config
 ```
 
+## Output Example
+
+Компактный режим (без `--debug`):
+
+```json
+{
+  "question": "Ожидается ли DataSource?",
+  "query": {
+    "bean_regex": "dataSource",
+    "return_type_regex": null,
+    "inferred": false,
+    "inference_notes": []
+  },
+  "verdict": "likely_yes",
+  "overall_verdict": "likely_yes",
+  "focused_verdict": "likely_yes",
+  "focus": {
+    "best_score": 2,
+    "focused_candidates": [
+      {
+        "fqcn": "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
+        "status": "pass",
+        "on_property_checks": ["matched spring.datasource.enabled"]
+      },
+      {
+        "fqcn": "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration",
+        "status": "blocked",
+        "on_property_checks": ["acme.datasource.override.enabled missing and matchIfMissing=false"]
+      }
+    ]
+  },
+  "winner_summary": [
+    { "bean_name": "dataSource", "winner_autoconfiguration": "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration" }
+  ],
+  "trace": ["Loaded index with 6 autoconfigurations.", "Runtime properties available: 0.", "Discovery found 2 candidate autoconfigurations."],
+  "runtime_source": "project_roots=[./src/main/resources] []",
+  "active_profiles": []
+}
+```
+
+Error-режим (скрипт всегда возвращает валидный JSON; exit code остаётся `1` при ошибке):
+
+```json
+{
+  "verdict": "error",
+  "error": {
+    "kind": "MissingSelector",
+    "message": "Provide --bean-regex and/or --return-type-regex or --question"
+  }
+}
+```
+
+Поля подробно, включая `--debug`-режим — см. [references/diagnose-output-guide.ru.md](references/diagnose-output-guide.ru.md).
+
 ## Runtime Workflow
+
+0. Спросить у пользователя, где лежат внешние config-tree, и сохранить в переменную:
+```bash
+# пример: пользователь дал два внешних root
+EXTERNAL_CONFIG_ROOTS="./config,./config/common/datasource"
+# если внешних конфигов нет:
+EXTERNAL_CONFIG_ROOTS=""
+```
 
 1. Проверить наличие индекса:
 ```bash
 test -f .qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json && echo "index: ok" || echo "index: missing"
 ```
 
-2. Убедиться, что подпроект анализатора установлен (один раз на машину):
-```bash
-cd skills/spring-index/spring-autoconfig-index-lookup/analyzer && npm install
-```
+2. Убедиться, что установлен анализатор (см. Prerequisites).
 
 3. Если индекса нет или он устарел, пересобрать:
 ```bash
 ./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh
 ```
 
-Как понять, что индекс устарел:
-- Самый простой и правильный способ: всегда запускать команду выше.  
-  Скрипт сам считает fingerprint и:
-  - если все актуально, пишет `fingerprint unchanged; index is up-to-date` и завершает без пересборки;
-  - если есть изменения, пересобирает индекс.
-- Fingerprint учитывает:
-  - `resolved-artifacts.json` (resolved зависимости Gradle, включая транзитивные),
-  - `build.gradle*`, `settings.gradle*`, `gradle.properties`, `libs.versions.toml`, `pom.xml`,
-  - ресурсы автоконфига (`AutoConfiguration.imports`, `spring-autoconfigure-metadata.properties`, `spring-configuration-metadata.json`),
-  - версию/базовый индекс/скрипты анализатора.
-- Принудительная пересборка:
+Скрипт сам считает fingerprint и пересобирает только при изменениях. Fingerprint учитывает:
+- `resolved-artifacts.json` (resolved зависимости Gradle, включая транзитивные),
+- `build.gradle*`, `settings.gradle*`, `gradle.properties`, `libs.versions.toml`, `pom.xml`,
+- ресурсы автоконфига (`AutoConfiguration.imports`, `spring-autoconfigure-metadata.properties`, `spring-configuration-metadata.json`),
+- версию/базовый индекс/скрипты анализатора.
+
+Принудительная пересборка:
 ```bash
 ./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh --force
 ```
 
-Если хотите, чтобы изменения production config-tree тоже влияли на stale-check индекса:
+Чтобы изменения production config-tree тоже влияли на stale-check индекса:
 ```bash
-RUNTIME_CONFIG_ROOTS=\"./config,./config/common/datasource\" \
+RUNTIME_CONFIG_ROOTS="$EXTERNAL_CONFIG_ROOTS" \
 ./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh
 ```
 
-4. Запустить helper-диагностику (для сбора фактов: кандидаты, property-гейты, профильный merge, порядок):
+4. Запустить helper-диагностику (типовой вызов см. выше в разделе Helper CLI; расширенные шаблоны — в [references/cli.md](references/cli.md)).
+
+5. Проверить и дополнить вывод helper-а вручную по индексу (`jq`) — см. раздел Fallback ниже.
+
+6. Если уверенность низкая или индекс противоречит наблюдаемому поведению, запустить `ConditionEvaluationReport`:
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
-  --question "Ожидается ли DataSource?" \
-  --bean-regex "dataSource|datasource" \
-  --property-name "spring.datasource.enabled" \
-  --config-dir ./src/main/resources
+# Gradle
+./gradlew bootRun --args='--debug' 2>&1 | tee /tmp/boot-condition-report.log
+# Maven
+./mvnw spring-boot:run -Dspring-boot.run.arguments=--debug 2>&1 | tee /tmp/boot-condition-report.log
 ```
 
-5. Проверить и дополнить вывод helper-а вручную по индексу (`jq`):
+7. При объединении источников приоритет такой:
+- `ConditionEvaluationReport` (факт runtime) > индекс (статический прогноз) > эвристики.
+- Если есть расхождения, явно показывать их в ответе: "индекс ожидал X, runtime показал Y".
+
+## Fallback (jq)
+
+`jq` — обязательный fallback и способ ручной верификации вывода helper-скрипта.
+
 ```bash
 INDEX=.qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json
 
@@ -131,38 +171,10 @@ jq -r '
 ' "$INDEX"
 ```
 
-6. Если уверенность низкая или индекс противоречит наблюдаемому поведению, запустить `ConditionEvaluationReport` и объединить факты:
-```bash
-# Gradle
-./gradlew bootRun --args='--debug' 2>&1 | tee /tmp/boot-condition-report.log
-
-# Maven
-./mvnw spring-boot:run -Dspring-boot.run.arguments=--debug 2>&1 | tee /tmp/boot-condition-report.log
-```
-
-7. При объединении источников приоритет такой:
-- `ConditionEvaluationReport` (факт runtime) > индекс (статический прогноз) > эвристики.
-- Если есть расхождения, явно показывать их в ответе: "индекс ожидал X, runtime показал Y".
-
-## Fallback (jq)
-
-`jq` — обязательный fallback и способ ручной верификации вывода helper-скрипта.
-
-Примеры:
-
-```bash
-INDEX=.qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json
-jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select(.bean_name == "dataSource") | {autoconfig: $cfg, bean: .bean_name, return_type: .return_type}' "$INDEX"
-```
-
-```bash
-INDEX=.qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json
-jq -r '.autoconfigurations[] | select(any(.class_conditions[]?; .kind == "OnProperty")) | {fqcn, class_conditions}' "$INDEX"
-```
-
 ## References
+- CLI-флаги, шаблоны, приоритет properties: [references/cli.md](references/cli.md)
+- Гайд по полям вывода и диагностике: [references/diagnose-output-guide.ru.md](references/diagnose-output-guide.ru.md)
 - Практические примеры: [references/examples.md](references/examples.md)
 - Формат ручной диагностики по индексу: [references/reference.md](references/reference.md)
-- Гайд по полям вывода и диагностике: [references/diagnose-output-guide.ru.md](references/diagnose-output-guide.ru.md)
 - Техдок по внутренней логике скрипта: [references/diagnose-autoconfig-architecture.ru.md](references/diagnose-autoconfig-architecture.ru.md)
 - Анализатор tree-sitter: [analyzer/README.md](analyzer/README.md)

@@ -1,0 +1,25 @@
+{
+  "id": "case-04-no-candidate",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": ""
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases.json",
+  "evidence": {
+    "commands_log": "./cases/case-04-no-candidate/commands.log",
+    "output": "./cases/case-04-no-candidate/output.md"
+  }
+}

@@ -1,0 +1,106 @@
+[
+  {
+    "id": "tree-app-01-ds-external-overrides-project",
+    "question": "Ожидается ли DataSource в этом окружении?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "project_config_dir": "project-configs/app01",
+    "config_dir": "configs/treeapp01/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "tree-app-02-ds-prod-profile-off",
+    "question": "Почему DataSource может быть отключен?",
+    "bean_name_regex": "dataSource",
+    "property_name": "spring.datasource.enabled",
+    "project_config_dir": "project-configs/app02",
+    "config_dir": "configs/treeapp02/config",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "DataSourceAutoConfiguration"
+  },
+  {
+    "id": "tree-app-03-redis-on-by-app-file",
+    "question": "Ожидается ли redisClient из автоконфигурации?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "project_config_dir": "project-configs/app03",
+    "config_dir": "configs/treeapp03/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "tree-app-04-redis-off-prod-by-app-file",
+    "question": "Почему redisClient может быть недоступен?",
+    "bean_name_regex": "redisClient",
+    "property_name": "acme.redis.enabled",
+    "project_config_dir": "project-configs/app04",
+    "config_dir": "configs/treeapp04/config",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "RedisClientAutoConfiguration"
+  },
+  {
+    "id": "tree-app-05-kafka-on-by-application-file",
+    "question": "Ожидается ли kafkaProducer в этом окружении?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "project_config_dir": "project-configs/app05",
+    "config_dir": "configs/treeapp05/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "tree-app-06-kafka-external-overrides-project",
+    "question": "Из какой автоконфигурации должен прийти kafkaProducer?",
+    "bean_name_regex": "kafkaProducer",
+    "property_name": "acme.kafka.enabled",
+    "project_config_dir": "project-configs/app06",
+    "config_dir": "configs/treeapp06/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  {
+    "id": "tree-app-07-custom-override-on",
+    "question": "Какой DataSource ожидается: внешний override или стандартный?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "project_config_dir": "project-configs/app07",
+    "config_dir": "configs/treeapp07/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  {
+    "id": "tree-app-08-custom-override-off",
+    "question": "Будет ли активен внешний DataSource override?",
+    "bean_name_regex": "dataSource",
+    "property_name": "acme.datasource.override.enabled",
+    "project_config_dir": "project-configs/app08",
+    "config_dir": "configs/treeapp08/config",
+    "expected_verdict": "likely_no",
+    "expected_autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  {
+    "id": "tree-app-09-jpa-external-overrides-project",
+    "question": "Ожидается ли transactionManager в этом окружении?",
+    "bean_name_regex": "transactionManager",
+    "return_type_regex": "PlatformTransactionManager",
+    "property_name": "spring.jpa.enabled",
+    "project_config_dir": "project-configs/app09",
+    "config_dir": "configs/treeapp09/config",
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "JpaTxAutoConfiguration"
+  },
+  {
+    "id": "tree-app-10-runtime-prop-highest-priority",
+    "question": "Ожидается ли mailSender в текущем окружении?",
+    "bean_name_regex": "mailSender",
+    "property_name": "acme.mail.enabled",
+    "project_config_dir": "project-configs/app10",
+    "config_dir": "configs/treeapp10/config",
+    "runtime_properties": {
+      "acme.mail.enabled": "true"
+    },
+    "expected_verdict": "likely_yes",
+    "expected_autoconfig_regex": "MailSenderAutoConfiguration"
+  }
+]

@@ -7,8 +7,20 @@
 
 ## Input Sources
 - AutoConfig index JSON: `.qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json`
-- `*application*.properties` / `*application*.yaml|yml` из одного или нескольких config roots (рекурсивно, включая `my-application.yaml`)
+- Project config roots (`--project-config-dir`, default `./src/main/resources`):
+  - `application*.properties|yaml|yml`
+- External config roots (`--config-dir` / `--config-tree-dir`):
+  - `application*.properties|yaml|yml`
+  - `<app-name>*.properties|yaml|yml`
+- `app-name` берется из `spring.application.name` project config или через `--app-name`
 - Optional runtime source of truth: `ConditionEvaluationReport` from app startup with `--debug`
+
+## Property Source Priority
+1. project config roots (`--project-config-dir`, default `./src/main/resources`)
+2. external config roots (`--config-dir` / `--config-tree-dir`)
+3. inline runtime overrides (`--runtime-prop`)
+
+Environment variables are not yet applied by this script.
 
 ## Supported Profile Semantics
 - `spring.profiles.active`

@@ -1,0 +1,25 @@
+{
+  "id": "props-06-exact-management-exposure",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "",
+    "regex": ""
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "petclinic_props_eval_cases_10.json",
+  "evidence": {
+    "commands_log": "./cases/props-06-exact-management-exposure/commands.log",
+    "output": "./cases/props-06-exact-management-exposure/output.md"
+  }
+}

@@ -1,0 +1,3 @@
+spring.application.name: payment-service
+spring.datasource.enabled: true
+acme.datasource.override.enabled: true

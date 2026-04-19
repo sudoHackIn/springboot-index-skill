@@ -1,0 +1,12 @@
+{
+  "id": "props-03-regex-jpa-hibernate",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [],
+  "reasoning_summary": "По supplied index выполнен regex-поиск в properties[] по имени ^spring[.]jpa[.]hibernate[.]. Найдено 4 leaf-ключа, включая ожидаемые spring.jpa.hibernate.ddl-auto и spring.jpa.hibernate.naming.physical-strategy; min_results=2 выполнен. Autoconfig matching в этом property lookup кейсе не применялся.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "python3 -m json.tool skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json | sed -n '1,220p'",
+    "sed -n '220,520p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "INDEX=skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json\njq --arg re '^spring[.]jpa[.]hibernate[.]' '{ generated_at, query: {name_regex: $re}, matches_count: ([.properties[] | select(.name | test($re))] | length), matches: [.properties[] | select(.name | test($re)) | {name, type, description, default_value, deprecation, source_artifacts, source_types, origins, examples}] }' \"$INDEX\""
+  ]
+}

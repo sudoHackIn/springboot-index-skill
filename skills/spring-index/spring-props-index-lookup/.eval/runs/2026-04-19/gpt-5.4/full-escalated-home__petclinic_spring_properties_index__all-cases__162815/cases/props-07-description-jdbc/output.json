@@ -1,0 +1,11 @@
+{
+  "id": "props-07-description-jdbc",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [],
+  "reasoning_summary": "По инструкции SKILL.md выполнен jq-поиск по properties[] с description_regex 'jdbc|database|datasource'. Найдено 30 свойств, что удовлетворяет min_results=10; ожидаемый ключ spring.datasource.url присутствует и имеет описание 'JDBC URL of the database.' из spring-boot-jdbc.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes && wc -c skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg re 'jdbc|database|datasource' '{ generated_at, query: {description_regex: $re}, matches_count: ([.properties[] | select((.description // \"\") | test($re; \"i\"))] | length), matches: [.properties[] | select((.description // \"\") | test($re; \"i\")) | {name, type, description, default_value, source_artifacts, source_types, origins, examples}] }' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "ext-06-kafka-missing-property-off",
+  "pass": false,
+  "score": 0.0,
+  "checks": {
+    "correctness": "fail",
+    "completeness": "fail",
+    "hallucination": "pass"
+  },
+  "notes": [
+    "subagent_exit_nonzero:1",
+    "no_valid_output_json"
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  "actual": {
+    "verdict": ""
+  },
+  "source_case_file": "skill_eval_cases_external_10.json",
+  "evidence": {
+    "commands_log": "./cases/ext-06-kafka-missing-property-off/commands.log",
+    "output": "./cases/ext-06-kafka-missing-property-off/output.md"
+  }
+}

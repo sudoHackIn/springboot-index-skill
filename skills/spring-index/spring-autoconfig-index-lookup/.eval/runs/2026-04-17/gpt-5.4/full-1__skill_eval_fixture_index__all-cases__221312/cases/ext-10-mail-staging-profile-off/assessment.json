@@ -1,0 +1,26 @@
+{
+  "id": "ext-10-mail-staging-profile-off",
+  "pass": false,
+  "score": 0.0,
+  "checks": {
+    "correctness": "fail",
+    "completeness": "fail",
+    "hallucination": "pass"
+  },
+  "notes": [
+    "subagent_exit_nonzero:1",
+    "no_valid_output_json"
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": "MailSenderAutoConfiguration"
+  },
+  "actual": {
+    "verdict": ""
+  },
+  "source_case_file": "skill_eval_cases_external_10.json",
+  "evidence": {
+    "commands_log": "./cases/ext-10-mail-staging-profile-off/commands.log",
+    "output": "./cases/ext-10-mail-staging-profile-off/output.md"
+  }
+}

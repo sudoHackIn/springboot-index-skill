@@ -9,6 +9,11 @@
   - из какого автоконфига,
   - какие условия блокируют включение.
 
+Приоритет sources (в текущей реализации):
+1. project config (`--project-config-dir`, default `./src/main/resources`)
+2. external config-tree (`--config-dir` / `--config-tree-dir`)
+3. inline runtime overrides (`--runtime-prop`)
+
 ## 1) Пайплайн верхнего уровня
 
 В `main()` выполняются этапы:
@@ -16,7 +21,8 @@
 2. Чтение index JSON (`--index` или дефолтный путь).
 3. Проверка входа: нужен хотя бы один из `--bean-regex`, `--return-type-regex`, `--question`.
 4. `loadRuntimeProperties(...)` — сбор runtime properties:
-   - из `application*.properties/yaml`,
+   - из project `application*.properties/yaml`,
+   - из external `application*` и `<app-name>*`,
    - из профилей и profile groups,
    - из `--runtime-prop`.
 5. `resolveQuery(...)` — финальные селекторы поиска (явные regex или inference из `question`).
@@ -33,7 +39,10 @@
   - `--return-type-regex`
   - `--question` (для inference)
 - runtime-контекст:
+  - `--project-config-dir`
   - `--config-dir`
+  - `--config-tree-dir`
+  - `--app-name`
   - `--active-profile` (можно много раз)
   - `--runtime-prop key=value` (можно много раз)
 - прочее:
@@ -44,23 +53,29 @@
 ## 3) Сбор runtime properties
 
 `loadRuntimeProperties(...)`:
-1. Читает все `*application*.properties|yaml|yml` в `configDir` (рекурсивно).
-   Поддерживаются и имена вроде `my-application.yaml`.
-2. Выделяет profile-зависимые документы:
+1. Читает project roots:
+   - `application*.properties|yaml|yml`.
+2. Определяет `appName`:
+   - из `--app-name`, либо
+   - из `spring.application.name` project-config.
+3. Читает external roots:
+   - `application*.properties|yaml|yml`,
+   - `<appName>*.properties|yaml|yml`.
+4. Выделяет profile-зависимые документы:
    - `application-<profile>.*`,
    - `spring.config.activate.on-profile`,
    - `spring.profiles`.
-3. Собирает base props (без required profiles).
-4. Определяет активные профили:
+5. Собирает base props (без required profiles).
+6. Определяет активные профили:
    - сначала `--active-profile`, если переданы;
    - иначе `spring.profiles.active`.
-5. Раскрывает `spring.profiles.group.*` через `expandProfiles(...)`.
-6. Мержит только документы, подходящие под resolved profiles.
-7. Накладывает `--runtime-prop` последним слоем (override).
-8. Если передано несколько `--config-dir/--config-tree-dir`, объединяет их в общий источник.
+7. Раскрывает `spring.profiles.group.*` через `expandProfiles(...)`.
+8. Мержит только документы, подходящие под resolved profiles.
+9. Применяет приоритет: project -> external.
+10. Накладывает `--runtime-prop` последним слоем (override).
 
 Особенность:
-- если контекст не задан (нет `config-dir`, профилей, runtime-prop), режим более “мягкий” для missing properties.
+- если контекст не задан (нет external config-dir, профилей, runtime-prop), режим более “мягкий” для missing properties.
 
 ## 4) Разрешение query
 

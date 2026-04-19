@@ -1,0 +1,10 @@
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md"
+/bin/zsh -lc 'ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json'
+/bin/zsh -lc "INDEX=skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json
+jq --arg name \"management.endpoints.web.exposure.include\" '{
+  generated_at,
+  query: {exact_name: "'$name},
+  matches_count: ([.properties[] | select(.name == $name)] | length),
+  matches:       [.properties[] | select(.name == $name) | .name],
+  details:       [.properties[] | select(.name == $name)]
+}'"' \""'$INDEX"'

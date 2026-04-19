@@ -1,0 +1,37 @@
+{
+  "date": "2026-04-19",
+  "model": "gpt-5.4",
+  "run_id": "full-escalated-home__petclinic_spring_properties_index__all-cases__162815",
+  "run_dir": "skills/spring-index/spring-props-index-lookup/.eval/runs/2026-04-19/gpt-5.4/full-escalated-home__petclinic_spring_properties_index__all-cases__162815",
+  "skill_root": "skills/spring-index/spring-props-index-lookup",
+  "skill_metadata": {
+    "skill_md_path": "skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "skill_md_sha256": "3a7d76f7fd35eb1641587cd4ff9e6fa09d4f637c6b8f4a856c71e6c878c144ce",
+    "declared_skill_version": "0.4.0"
+  },
+  "eval_dir": "skills/spring-index/spring-props-index-lookup/.eval",
+  "index": "skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+  "index_sha256": "26ebaccd316c72cd80cc02fc7a89d6bdd9fefc71cbad2df66f7c9c70850458dd",
+  "cases_glob": "skills/spring-index/spring-props-index-lookup/.eval/scenarios/cases/*.json",
+  "source_run": "",
+  "repo": {
+    "branch": "main",
+    "commit": "61dcfefd011738a867af2c772cd5e90a4cacbd39",
+    "dirty": true
+  },
+  "mode": "full",
+  "overall": {
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "pass_rate": 100
+  },
+  "case_files": [
+    {
+      "case_file": "petclinic_props_eval_cases_10.json",
+      "total": 10,
+      "passed": 10,
+      "failed": 0
+    }
+  ]
+}

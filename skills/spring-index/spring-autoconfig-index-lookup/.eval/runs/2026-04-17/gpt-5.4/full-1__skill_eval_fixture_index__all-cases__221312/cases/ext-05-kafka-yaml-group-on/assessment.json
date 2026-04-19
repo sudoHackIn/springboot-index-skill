@@ -1,0 +1,26 @@
+{
+  "id": "ext-05-kafka-yaml-group-on",
+  "pass": false,
+  "score": 0.0,
+  "checks": {
+    "correctness": "fail",
+    "completeness": "fail",
+    "hallucination": "pass"
+  },
+  "notes": [
+    "subagent_exit_nonzero:1",
+    "no_valid_output_json"
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "autoconfig_regex": "KafkaProducerAutoConfiguration"
+  },
+  "actual": {
+    "verdict": ""
+  },
+  "source_case_file": "skill_eval_cases_external_10.json",
+  "evidence": {
+    "commands_log": "./cases/ext-05-kafka-yaml-group-on/commands.log",
+    "output": "./cases/ext-05-kafka-yaml-group-on/output.md"
+  }
+}

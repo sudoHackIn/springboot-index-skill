@@ -1,0 +1,15 @@
+{
+  "id": "ext-04-redis-prod-profile-off",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "redisClient найден в RedisClientAutoConfiguration. Автоконфигурация требует acme.redis.enabled=true через OnProperty с matchIfMissing=false. В application.properties значение true, но при active profile prod файл application-prod.properties задает acme.redis.enabled=false, поэтому effective property не проходит условие и автоконфигурация блокируется.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && printf '\\n--- index head ---\\n' && sed -n '1,220p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && printf '\\n--- config files ---\\n' && find /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case04-redis-prod -maxdepth 3 -type f -print",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient может не создаться?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case04-redis-prod --active-profile prod --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "sed -n '1,160p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case04-redis-prod/application.properties",
+    "sed -n '1,160p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case04-redis-prod/application-prod.properties",
+    "jq -r '.autoconfigurations[] | select(any(.bean_methods[]?; (.bean_name // \"\") | test(\"redisClient\"))) | {fqcn, class_conditions, bean_methods, linked_properties}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

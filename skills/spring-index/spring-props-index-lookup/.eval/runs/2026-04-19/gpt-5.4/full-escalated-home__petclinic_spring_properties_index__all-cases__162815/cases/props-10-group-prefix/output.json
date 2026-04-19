@@ -1,0 +1,14 @@
+{
+  "id": "props-10-group-prefix",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [],
+  "reasoning_summary": "По инструкции spring-props-index-lookup группы/ветки проверены через groups[] по префиксу spring.datasource. В индексе найдено 9 групп, включая ожидаемые spring.datasource, spring.datasource.hikari и spring.datasource.tomcat; min_group_results=3 выполнен. Автоконфигурации в этом кейсе явно не запрашивались и expected_autoconfig_regex пустой, поэтому matched_autoconfigs оставлен пустым.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "ls -l skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "sed -n '220,420p' skills/spring-index/spring-props-index-lookup/SKILL.md",
+    "sed -n '1,220p' skills/spring-index/spring-props-index-lookup/references/jq-recipes-advanced.md",
+    "jq --arg prefix \"spring.datasource\" '{generated_at, query:{group_prefix:$prefix}, matches_count:([.groups[]? | select(.name == $prefix or (.name | startswith($prefix + \".\")))] | length), matches:[.groups[]? | select(.name == $prefix or (.name | startswith($prefix + \".\"))) | {name, type, source_artifacts, source_types}]}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json",
+    "jq --arg prefix \"spring.datasource\" '{generated_at, query:{prefix_index:$prefix}, children:([.prefix_index[]? | select(.prefix == $prefix) | .children[]?] | unique)}' skills/spring-index/spring-props-index-lookup/.eval/scenarios/indexes/petclinic_spring_properties_index.json"
+  ]
+}

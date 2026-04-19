@@ -1,0 +1,16 @@
+{
+  "id": "case-03-kafka-from-which-autoconfig",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "Индекс содержит единственный bean-method с bean_name kafkaProducer в com.acme.autoconfigure.KafkaProducerAutoConfiguration. При пустых runtime_properties создание бина блокируется class-level условием OnProperty acme.kafka.enabled=true с matchIfMissing=false, но вопрос про источник автоконфигурации разрешается однозначно. Контрольный запуск с --runtime-prop acme.kafka.enabled=true дает likely_yes и winner_autoconfiguration KafkaProducerAutoConfiguration.",
+  "commands": [
+    "sed -n '1,240p' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "jq 'keys' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Из какой автоконфигурации ждать kafkaProducer?\" --bean-regex \"kafkaProducer\" --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json --debug",
+    "jq -r '.autoconfigurations[] | .fqcn as $cfg | .bean_methods[]? | select(.bean_name != null and (.bean_name | test(\"kafkaProducer\"; \"i\"))) | {autoconfig: $cfg, bean_name: .bean_name, factory_method: .factory_method, return_type: .return_type, bean_conditions: .conditions}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "jq -r '.autoconfigurations[] | select(.fqcn == \"com.acme.autoconfigure.KafkaProducerAutoConfiguration\") | {fqcn, artifact, class_conditions, order, imports}' /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Из какой автоконфигурации ждать kafkaProducer?\" --bean-regex \"kafkaProducer\" --runtime-prop acme.kafka.enabled=true --index /Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

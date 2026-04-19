@@ -1,0 +1,26 @@
+{
+  "id": "extra-04-custom-datasource-override-off",
+  "pass": false,
+  "score": 0.0,
+  "checks": {
+    "correctness": "fail",
+    "completeness": "fail",
+    "hallucination": "pass"
+  },
+  "notes": [
+    "subagent_exit_nonzero:1",
+    "no_valid_output_json"
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "autoconfig_regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  "actual": {
+    "verdict": ""
+  },
+  "source_case_file": "skill_eval_cases_extra_10.json",
+  "evidence": {
+    "commands_log": "./cases/extra-04-custom-datasource-override-off/commands.log",
+    "output": "./cases/extra-04-custom-datasource-override-off/output.md"
+  }
+}
