@@ -1,0 +1,25 @@
+{
+  "id": "tree-app-08-custom-override-off",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "regex": "CustomDataSourceOverrideAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_appname_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-app-08-custom-override-off/commands.log",
+    "output": "./cases/tree-app-08-custom-override-off/output.md"
+  }
+}

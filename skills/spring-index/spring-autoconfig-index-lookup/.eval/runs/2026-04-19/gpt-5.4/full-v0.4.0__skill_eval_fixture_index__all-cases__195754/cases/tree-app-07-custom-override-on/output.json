@@ -1,0 +1,12 @@
+{
+  "id": "tree-app-07-custom-override-on",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration passed; on_property_checks: matched acme.datasource.override.enabled. Runtime trace reports acme.datasource.override.enabled=true. Active profiles: none. Runtime source includes project config app07/application.yaml and external config tree common/datasource/payment-service.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && pwd && rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios | sed -n '1,120p'",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Какой DataSource ожидается: внешний override или стандартный?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app07 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp07/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

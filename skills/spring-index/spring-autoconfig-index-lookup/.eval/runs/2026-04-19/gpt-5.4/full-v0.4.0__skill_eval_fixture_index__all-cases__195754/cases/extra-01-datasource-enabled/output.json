@@ -1,0 +1,13 @@
+{
+  "id": "extra-01-datasource-enabled",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper returned focused_verdict=likely_yes. Focused candidate org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration has status=pass and on_property_checks=['matched spring.datasource.enabled']. Runtime property spring.datasource.enabled=true was supplied via --runtime-prop. active_profiles=[]; runtime_source=project_roots=[/Users/vladislav/projects/springboot-index-skill/src/main/resources] []. winner_summary maps bean_name=dataSource to org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && printf '\\n---INDEX HEAD---\\n' && sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/references/cli.md",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли DataSource из автоконфигурации?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --runtime-prop \"spring.datasource.enabled=true\" --index \"skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json\""
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "tree-app-09-jpa-external-overrides-project",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.JpaTxAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.JpaTxAutoConfiguration has status=pass; on_property_checks: matched spring.jpa.enabled. Runtime trace reports spring.jpa.enabled=true, runtime properties available=2, active_profiles=[]. Runtime source includes project application.yaml and external config-tree jpa/ledger-service.yaml.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app09 skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp09/config",
+    "rg -n \"JpaTxAutoConfiguration|transactionManager|PlatformTransactionManager|spring\\.jpa\\.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли transactionManager в этом окружении?\" --bean-regex \"transactionManager\" --return-type-regex \"PlatformTransactionManager\" --property-name \"spring.jpa.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app09 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp09/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

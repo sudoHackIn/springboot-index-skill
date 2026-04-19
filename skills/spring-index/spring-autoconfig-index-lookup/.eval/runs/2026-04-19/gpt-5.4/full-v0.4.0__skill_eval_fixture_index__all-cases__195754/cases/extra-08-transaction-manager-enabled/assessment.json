@@ -1,0 +1,25 @@
+{
+  "id": "extra-08-transaction-manager-enabled",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "regex": "JpaTxAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases_extra_10.json",
+  "evidence": {
+    "commands_log": "./cases/extra-08-transaction-manager-enabled/commands.log",
+    "output": "./cases/extra-08-transaction-manager-enabled/output.md"
+  }
+}

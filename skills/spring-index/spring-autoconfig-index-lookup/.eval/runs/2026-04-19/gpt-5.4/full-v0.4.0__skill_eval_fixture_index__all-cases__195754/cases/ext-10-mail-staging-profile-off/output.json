@@ -1,0 +1,14 @@
+{
+  "id": "ext-10-mail-staging-profile-off",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.MailSenderAutoConfiguration"
+  ],
+  "reasoning_summary": "Для bean regex mailSender найден кандидат com.acme.autoconfigure.MailSenderAutoConfiguration. Он заблокирован OnProperty-проверкой: acme.mail.enabled=false, expected true. Активный профиль: staging. Runtime properties загружены из external config-tree case10-mail-staging-off, включая application.properties и application-staging.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case10-mail-staging-off -maxdepth 3 -type f -print | sort",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && wc -c skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему mailSender может быть отключен?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case10-mail-staging-off --active-profile staging --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

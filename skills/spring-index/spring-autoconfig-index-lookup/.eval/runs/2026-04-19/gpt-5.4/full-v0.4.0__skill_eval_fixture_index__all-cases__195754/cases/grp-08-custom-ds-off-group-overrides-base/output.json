@@ -1,0 +1,14 @@
+{
+  "id": "grp-08-custom-ds-off-group-overrides-base",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Runtime config из external config-dir содержит acme.datasource.override.enabled=false; активные профили: local, local-ds. Стандартная org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration прошла property-check matched spring.datasource.enabled и выбрана winner для bean_name=dataSource, поэтому стандартный DataSource ожидается без внешнего override.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group08-custom-ds-off -maxdepth 3 -type f -print",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && wc -c skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли стандартный DataSource без внешнего override?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group08-custom-ds-off --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

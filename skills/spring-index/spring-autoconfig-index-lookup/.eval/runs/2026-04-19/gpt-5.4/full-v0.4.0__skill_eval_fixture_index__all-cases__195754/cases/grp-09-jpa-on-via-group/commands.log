@@ -1,0 +1,4 @@
+/bin/zsh -lc 'find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group09-jpa-on -maxdepth 3 -type f -print'
+/bin/zsh -lc "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md"
+/bin/zsh -lc "rg -n \"JpaTxAutoConfiguration|transactionManager|spring\\.jpa\\.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group09-jpa-on"
+/bin/zsh -lc 'node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question "Ожидается ли transactionManager?" --bean-regex "transactionManager" --property-name "spring.jpa.enabled" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group09-jpa-on --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'

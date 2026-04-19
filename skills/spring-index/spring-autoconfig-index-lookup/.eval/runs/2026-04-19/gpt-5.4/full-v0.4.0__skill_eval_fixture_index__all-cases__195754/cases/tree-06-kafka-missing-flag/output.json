@@ -1,0 +1,14 @@
+{
+  "id": "tree-06-kafka-missing-flag",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "KafkaProducerAutoConfiguration matched by bean_name kafkaProducer and property_name acme.kafka.enabled, but is blocked: acme.kafka.enabled missing and matchIfMissing=false. Active profiles are empty. Runtime source includes external config tree application.yaml and kafka/application.yaml; helper trace says runtime property acme.kafka.enabled is not set.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree06-kafka-missing/config",
+    "rg -n \"kafkaProducer|KafkaProducerAutoConfiguration|acme\\\\.kafka\\\\.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree06-kafka-missing/config",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему kafkaProducer может не создаться?\" --bean-regex \"kafkaProducer\" --property-name \"acme.kafka.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree06-kafka-missing/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

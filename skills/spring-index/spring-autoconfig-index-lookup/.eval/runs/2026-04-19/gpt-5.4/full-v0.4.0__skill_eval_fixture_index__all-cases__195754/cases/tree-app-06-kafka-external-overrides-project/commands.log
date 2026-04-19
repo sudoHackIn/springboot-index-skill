@@ -1,0 +1,3 @@
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md"
+/bin/zsh -lc 'rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios'
+/bin/zsh -lc 'node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question "Из какой автоконфигурации должен прийти kafkaProducer?" --bean-regex "kafkaProducer" --property-name "acme.kafka.enabled" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app06 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp06/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'

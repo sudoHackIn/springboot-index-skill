@@ -1,0 +1,14 @@
+{
+  "id": "case-01-datasource-discovery",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused verdict is likely_yes. DataSourceAutoConfiguration passed because spring.datasource.enabled matched with default/matchIfMissing behavior and no runtime properties override it. CustomDataSourceOverrideAutoConfiguration was blocked because acme.datasource.override.enabled is missing and matchIfMissing=false. Active profiles: none. Runtime source: project_roots=[/Users/vladislav/projects/springboot-index-skill/src/main/resources] []; runtime properties available: 0.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Поднимется ли DataSource в этом окружении?\" --bean-regex \"datasource\" --return-type-regex \"DataSource\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

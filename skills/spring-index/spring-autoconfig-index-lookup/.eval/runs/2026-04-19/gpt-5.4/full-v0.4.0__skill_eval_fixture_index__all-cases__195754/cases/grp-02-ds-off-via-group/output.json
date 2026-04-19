@@ -1,0 +1,14 @@
+{
+  "id": "grp-02-ds-off-via-group",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "DataSourceAutoConfiguration заблокирована OnProperty-проверкой: spring.datasource.enabled=false, тогда как ожидалось true. Runtime properties были загружены из external config root group02-ds-off/application.yaml; активные профили: local, h2-mem.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group02-ds-off -maxdepth 3 -type f -print",
+    "ls -l skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему DataSource может быть отключен?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group02-ds-off --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "case-03-kafka-from-which-autoconfig",
+  "pass": false,
+  "score": 0.0,
+  "checks": {
+    "correctness": "fail",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    "verdict_mismatch:expected=likely_yes,actual=likely_no"
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "regex": "KafkaProducerAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases.json",
+  "evidence": {
+    "commands_log": "./cases/case-03-kafka-from-which-autoconfig/commands.log",
+    "output": "./cases/case-03-kafka-from-which-autoconfig/output.md"
+  }
+}

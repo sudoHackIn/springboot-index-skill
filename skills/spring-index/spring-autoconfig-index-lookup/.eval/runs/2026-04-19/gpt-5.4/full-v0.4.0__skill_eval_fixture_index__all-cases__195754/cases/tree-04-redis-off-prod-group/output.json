@@ -1,0 +1,14 @@
+{
+  "id": "tree-04-redis-off-prod-group",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "RedisClientAutoConfiguration matched bean redisClient and property acme.redis.enabled, but its OnProperty check is blocked: runtime has acme.redis.enabled=false while the autoconfiguration expects true. Active profiles resolved by the helper are prod and prod-redis-off. Runtime properties came from the external config tree application.yaml and redis/application.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree04-redis-off-prod/config",
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient может быть недоступен?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree04-redis-off-prod/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

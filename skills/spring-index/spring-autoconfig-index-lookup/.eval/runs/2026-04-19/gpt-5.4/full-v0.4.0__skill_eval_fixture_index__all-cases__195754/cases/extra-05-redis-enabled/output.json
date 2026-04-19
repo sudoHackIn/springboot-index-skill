@@ -1,0 +1,14 @@
+{
+  "id": "extra-05-redis-enabled",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper loaded the provided eval index, found one candidate for bean regex redisClient, and focused on property acme.redis.enabled. Runtime property acme.redis.enabled=true was available and matched the OnProperty check, so RedisClientAutoConfiguration passed and is the winner for bean redisClient. active_profiles=[]; runtime_source=project_roots=[/Users/vladislav/projects/springboot-index-skill/src/main/resources] [].",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "wc -c skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/references/cli.md",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли redisClient из автоконфигурации?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --runtime-prop \"acme.redis.enabled=true\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

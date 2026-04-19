@@ -31,9 +31,11 @@ Environment variables are not yet applied by this script.
 ## Output Fields
 - `question`: echoed input question
 - `query`: resolved selectors (`bean_regex`, `return_type_regex`, `inferred`)
-- `verdict`: final verdict for the asked focus
+- `verdict`: final verdict for the asked focus (evaluation semantics — under current runtime)
 - `overall_verdict`: overall yes/no by all discovered contenders
 - `focused_verdict`: yes/no for focused subset (if focus detected)
+- `discovery_verdict`: `likely_yes` iff at least one matched candidate exists (discovery semantics — is there a source?)
+- `discovery_candidates`: compact `[{fqcn, status}]` across all matched candidates (any status)
 - `focus`: chosen focused candidates and scoring reasons
 - `winner_summary`: compact winner list per bean (default mode)
 - `candidates`: full candidate autoconfig objects with evaluated conditions (`--debug`)
@@ -42,6 +44,8 @@ Environment variables are not yet applied by this script.
 - `trace`: short execution trace
 - `runtime_source`: where runtime properties were loaded from
 - `active_profiles`: resolved active profile list
+
+Use `discovery_verdict` for "which autoconfig provides X?" questions; use `verdict`/`focused_verdict` for "will X be created?" questions.
 
 ## Manual Query Strategy
 - Discovery: искать кандидатов по `bean_methods[].bean_name` и `bean_methods[].return_type`.

@@ -1,0 +1,14 @@
+{
+  "id": "grp-03-kafka-on-via-group",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.KafkaProducerAutoConfiguration has status pass. OnProperty check matched acme.kafka.enabled; runtime property acme.kafka.enabled=true. Active profiles: local, local-kafka. Runtime source: external config tree group03-kafka-on/application.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group03-kafka-on -maxdepth 3 -type f -print",
+    "python3 -m json.tool skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json | sed -n '1,260p'",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли kafkaProducer в этом окружении?\" --bean-regex \"kafkaProducer\" --property-name \"acme.kafka.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group03-kafka-on --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

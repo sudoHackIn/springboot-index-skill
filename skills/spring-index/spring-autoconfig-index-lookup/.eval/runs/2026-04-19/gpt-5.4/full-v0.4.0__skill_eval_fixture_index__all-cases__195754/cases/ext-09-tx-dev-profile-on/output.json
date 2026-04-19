@@ -1,0 +1,13 @@
+{
+  "id": "ext-09-tx-dev-profile-on",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.JpaTxAutoConfiguration"
+  ],
+  "reasoning_summary": "Для active_profiles=[\"dev\"] helper загрузил runtime properties из external config application.yaml; spring.jpa.enabled=true. Кандидат com.acme.autoconfigure.JpaTxAutoConfiguration прошел OnProperty check: matched spring.jpa.enabled, и выбран winner для bean_name=transactionManager.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -la skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case09-tx-dev-enabled && sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли transactionManager в этом окружении?\" --bean-regex \"transactionManager\" --property-name \"spring.jpa.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case09-tx-dev-enabled --active-profile dev --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

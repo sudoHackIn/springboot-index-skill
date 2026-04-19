@@ -1,0 +1,12 @@
+{
+  "id": "tree-app-03-redis-on-by-app-file",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.RedisClientAutoConfiguration has status pass. OnProperty check matched acme.redis.enabled; runtime trace reports acme.redis.enabled=true. Active profiles are empty. Runtime source includes project-configs/app03/application.yaml and external config tree redis/crm-api.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && pwd && rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios | sed -n '1,120p'",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли redisClient из автоконфигурации?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app03 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp03/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "tree-01-ds-on-from-nested-group",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper returned focused_verdict=likely_yes. Focused candidate org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration has status=pass with on_property_checks=['matched spring.datasource.enabled']. Trace reports runtime property spring.datasource.enabled=true. Active profiles resolved to ['local', 'h2-mem']. Runtime source included external config tree application.yaml and common/datasource/application.yaml.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "pwd && rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios | sed -n '1,120p'",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли DataSource в этом окружении?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree01-ds-on/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

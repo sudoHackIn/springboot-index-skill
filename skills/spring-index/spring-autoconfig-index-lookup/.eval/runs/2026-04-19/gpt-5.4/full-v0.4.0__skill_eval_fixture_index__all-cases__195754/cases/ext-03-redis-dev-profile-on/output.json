@@ -1,0 +1,13 @@
+{
+  "id": "ext-03-redis-dev-profile-on",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Для активного профиля dev runtime properties содержат acme.redis.enabled=true. Кандидат com.acme.autoconfigure.RedisClientAutoConfiguration найден по bean_regex redisClient и property_name acme.redis.enabled; OnProperty check: matched acme.redis.enabled. Winner summary связывает bean redisClient с этой автоконфигурацией.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case03-redis-dev skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли redisClient из автоконфигурации?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case03-redis-dev --active-profile dev --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

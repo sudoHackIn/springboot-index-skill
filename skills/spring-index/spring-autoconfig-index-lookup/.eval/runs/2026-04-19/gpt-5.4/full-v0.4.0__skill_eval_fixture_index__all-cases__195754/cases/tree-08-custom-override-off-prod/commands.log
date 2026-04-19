@@ -1,0 +1,4 @@
+/bin/zsh -lc 'ls -lh skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'
+/bin/zsh -lc "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md"
+/bin/zsh -lc 'ls -la skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree08-custom-override-off/config'
+/bin/zsh -lc 'node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question "Ожидается ли стандартный DataSource без внешнего override?" --bean-regex "dataSource" --property-name "acme.datasource.override.enabled" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree08-custom-override-off/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'

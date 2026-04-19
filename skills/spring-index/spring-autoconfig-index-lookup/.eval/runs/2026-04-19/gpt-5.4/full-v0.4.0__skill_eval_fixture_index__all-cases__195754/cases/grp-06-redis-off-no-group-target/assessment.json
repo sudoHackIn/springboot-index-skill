@@ -1,0 +1,25 @@
+{
+  "id": "grp-06-redis-off-no-group-target",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "regex": "RedisClientAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases_profile_groups_10.json",
+  "evidence": {
+    "commands_log": "./cases/grp-06-redis-off-no-group-target/commands.log",
+    "output": "./cases/grp-06-redis-off-no-group-target/output.md"
+  }
+}

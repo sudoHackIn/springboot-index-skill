@@ -1,0 +1,12 @@
+{
+  "id": "tree-app-04-redis-off-prod-by-app-file",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Найден кандидат com.acme.autoconfigure.RedisClientAutoConfiguration для bean regex redisClient. Он заблокирован OnProperty-проверкой: acme.redis.enabled=false, expected true. Активный профиль: prod. Runtime properties загружены из project config application.yaml и external config redis/crm-api-prod.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient может быть недоступен?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app04 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp04/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

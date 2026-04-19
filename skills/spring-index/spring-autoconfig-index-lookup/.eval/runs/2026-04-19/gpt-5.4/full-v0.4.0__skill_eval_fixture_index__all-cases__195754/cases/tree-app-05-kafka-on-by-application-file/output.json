@@ -1,0 +1,15 @@
+{
+  "id": "tree-app-05-kafka-on-by-application-file",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.KafkaProducerAutoConfiguration has status pass. OnProperty check matched acme.kafka.enabled; runtime property acme.kafka.enabled=true. Active profiles are empty. Runtime source includes project config app05 application.yaml and external config tree treeapp05/config kafka/application.yaml.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app05 -maxdepth 3 -type f -print",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp05/config -maxdepth 4 -type f -print",
+    "rg -n \"KafkaProducerAutoConfiguration|kafkaProducer|acme\\.kafka\\.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app05 skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp05/config",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли kafkaProducer в этом окружении?\" --bean-regex \"kafkaProducer\" --property-name \"acme.kafka.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app05 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp05/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

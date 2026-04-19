@@ -1,0 +1,25 @@
+{
+  "id": "case-01-datasource-discovery",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "regex": "DataSourceAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases.json",
+  "evidence": {
+    "commands_log": "./cases/case-01-datasource-discovery/commands.log",
+    "output": "./cases/case-01-datasource-discovery/output.md"
+  }
+}

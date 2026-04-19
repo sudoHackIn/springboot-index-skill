@@ -1,0 +1,14 @@
+{
+  "id": "grp-09-jpa-on-via-group",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.JpaTxAutoConfiguration"
+  ],
+  "reasoning_summary": "JpaTxAutoConfiguration matched bean regex transactionManager and property_name spring.jpa.enabled. Helper reported status=pass with on_property_checks=[\"matched spring.jpa.enabled\"]. Runtime trace shows spring.jpa.enabled=true, active_profiles=[\"local\", \"local-jpa\"], properties loaded from external config group09-jpa-on/application.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group09-jpa-on -maxdepth 3 -type f -print",
+    "rg -n \"JpaTxAutoConfiguration|transactionManager|spring\\.jpa\\.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group09-jpa-on",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли transactionManager?\" --bean-regex \"transactionManager\" --property-name \"spring.jpa.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group09-jpa-on --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

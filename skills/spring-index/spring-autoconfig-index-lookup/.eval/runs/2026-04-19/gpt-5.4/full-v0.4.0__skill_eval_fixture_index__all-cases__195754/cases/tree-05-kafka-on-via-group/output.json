@@ -1,0 +1,14 @@
+{
+  "id": "tree-05-kafka-on-via-group",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "diagnose-autoconfig вернул focused_verdict=likely_yes: KafkaProducerAutoConfiguration status=pass, on_property_checks=[\"matched acme.kafka.enabled\"]. Runtime property acme.kafka.enabled=true; active_profiles=[\"local\",\"local-kafka\"]. Runtime source: external config root skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree05-kafka-on-group/config with application.yaml and kafka/application.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree05-kafka-on-group/config",
+    "jq '. | keys' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли kafkaProducer в этом окружении?\" --bean-regex \"kafkaProducer\" --property-name \"acme.kafka.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree05-kafka-on-group/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

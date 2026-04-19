@@ -1,0 +1,14 @@
+{
+  "id": "tree-03-redis-on-with-my-application",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper found focused candidate com.acme.autoconfigure.RedisClientAutoConfiguration with status=pass for bean redisClient. OnProperty check matched acme.redis.enabled, and trace reports runtime property acme.redis.enabled=true. Runtime source included the provided external config tree; active_profiles=[].",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree03-redis-on/config",
+    "rg -n \"RedisClientAutoConfiguration|redisClient|acme.redis.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree03-redis-on/config",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли redisClient из автоконфигурации?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree03-redis-on/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

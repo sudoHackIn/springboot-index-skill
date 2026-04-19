@@ -1,0 +1,13 @@
+{
+  "id": "case-03-kafka-from-which-autoconfig",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "Найден кандидат по bean_name kafkaProducer: com.acme.autoconfigure.KafkaProducerAutoConfiguration. Его статус blocked: acme.kafka.enabled missing and matchIfMissing=false. Runtime properties пустые, active_profiles пустой список, runtime_source: project_roots=[/Users/vladislav/projects/springboot-index-skill/src/main/resources] [].",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && wc -c skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Из какой автоконфигурации ждать kafkaProducer?\" --bean-regex \"kafkaProducer\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

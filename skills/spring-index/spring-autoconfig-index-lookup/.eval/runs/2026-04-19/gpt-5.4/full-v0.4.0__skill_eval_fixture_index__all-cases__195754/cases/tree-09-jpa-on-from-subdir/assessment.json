@@ -1,0 +1,25 @@
+{
+  "id": "tree-09-jpa-on-from-subdir",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "regex": "JpaTxAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-09-jpa-on-from-subdir/commands.log",
+    "output": "./cases/tree-09-jpa-on-from-subdir/output.md"
+  }
+}

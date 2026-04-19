@@ -1,0 +1,14 @@
+{
+  "id": "grp-10-mail-off-via-group",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.MailSenderAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.MailSenderAutoConfiguration is blocked: acme.mail.enabled=false, expected true. Runtime properties available: 4. Runtime source includes external application.yaml from skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group10-mail-off. Active profiles: local, local-mail.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group10-mail-off -maxdepth 3 -type f -print",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && wc -c skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему mailSender может быть отключен?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group10-mail-off --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

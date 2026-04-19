@@ -1,0 +1,3 @@
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md"
+/bin/zsh -lc 'rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case01-ds-enabled skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes'
+/bin/zsh -lc 'node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question "Ожидается ли DataSource в этом окружении?" --bean-regex "dataSource" --property-name "spring.datasource.enabled" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case01-ds-enabled --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'

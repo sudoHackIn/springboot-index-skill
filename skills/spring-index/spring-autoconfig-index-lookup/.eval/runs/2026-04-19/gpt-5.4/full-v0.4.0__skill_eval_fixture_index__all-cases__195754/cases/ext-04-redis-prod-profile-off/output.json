@@ -1,0 +1,13 @@
+{
+  "id": "ext-04-redis-prod-profile-off",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Для active_profiles=[\"prod\"] helper загрузил external config-tree case04-redis-prod и увидел runtime property acme.redis.enabled=false. Кандидат com.acme.autoconfigure.RedisClientAutoConfiguration найден по redisClient/property_name, но заблокирован OnProperty-проверкой: acme.redis.enabled=false, expected true. Поэтому redisClient скорее всего не создастся.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case04-redis-prod skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient может не создаться?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case04-redis-prod --active-profile prod --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

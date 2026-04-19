@@ -162,6 +162,8 @@ function diagnose({ index, query, question, runtimeProps, propertyName, strictPr
   }
   const focusedVerdict = focus.focused_candidates.length > 0 ? (focusedWinner ? "likely_yes" : "likely_no") : null;
   const verdict = focusedVerdict ?? overallVerdict;
+  const discoveryVerdict = candidateEntries.length > 0 ? "likely_yes" : "likely_no";
+  const discoveryCandidates = candidateEntries.map((c) => ({ fqcn: c.fqcn, status: c.status }));
 
   if (propertyName) {
     trace.push(`Property of interest: ${propertyName}.`);
@@ -178,6 +180,8 @@ function diagnose({ index, query, question, runtimeProps, propertyName, strictPr
     verdict,
     overall_verdict: overallVerdict,
     focused_verdict: focusedVerdict,
+    discovery_verdict: discoveryVerdict,
+    discovery_candidates: discoveryCandidates,
     focus,
     candidates: candidateEntries,
     predicted_sources: predictedSources,
@@ -937,6 +941,8 @@ function compactResult(result) {
     verdict: result.verdict,
     overall_verdict: result.overall_verdict,
     focused_verdict: result.focused_verdict,
+    discovery_verdict: result.discovery_verdict,
+    discovery_candidates: result.discovery_candidates,
     focus: result.focus,
     winner_summary,
     trace: result.trace,

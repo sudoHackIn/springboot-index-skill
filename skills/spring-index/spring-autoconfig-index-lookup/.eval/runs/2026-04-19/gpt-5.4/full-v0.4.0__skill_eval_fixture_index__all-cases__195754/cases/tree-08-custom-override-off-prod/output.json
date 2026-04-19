@@ -1,0 +1,14 @@
+{
+  "id": "tree-08-custom-override-off-prod",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper loaded 6 autoconfigurations and 4 runtime properties from the external config tree. Active profile is prod. Runtime property acme.datasource.override.enabled=false, so the external/custom override is disabled. The focused candidate org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration passed with on_property_checks: matched spring.datasource.enabled, and winner_summary selects it for bean dataSource.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -la skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree08-custom-override-off/config",
+    "ls -lh skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли стандартный DataSource без внешнего override?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree08-custom-override-off/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

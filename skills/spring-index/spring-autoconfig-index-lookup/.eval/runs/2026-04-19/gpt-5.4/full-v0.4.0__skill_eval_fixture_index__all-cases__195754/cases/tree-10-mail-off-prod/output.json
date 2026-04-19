@@ -1,0 +1,12 @@
+{
+  "id": "tree-10-mail-off-prod",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.MailSenderAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper diagnosed focused candidate com.acme.autoconfigure.MailSenderAutoConfiguration as blocked because acme.mail.enabled=false while expected true. Runtime properties were loaded from the external config tree, active profile is prod, and the property of interest acme.mail.enabled was observed as false.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && printf '\\n--- index head ---\\n' && sed -n '1,80p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && printf '\\n--- config files ---\\n' && rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree10-mail-off-prod/config",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему mailSender может быть отключен?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree10-mail-off-prod/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "tree-02-ds-off-in-prod",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper matched org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration for bean regex dataSource and property spring.datasource.enabled. The focused candidate is blocked because spring.datasource.enabled=false while the condition expected true. Runtime properties were loaded from the external config tree; active_profiles=[\"prod\"].",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree02-ds-off-prod/config -maxdepth 3 -type f -print",
+    "ls -l skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему DataSource может быть отключен?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree02-ds-off-prod/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

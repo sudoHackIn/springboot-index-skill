@@ -1,0 +1,12 @@
+{
+  "id": "grp-06-redis-off-no-group-target",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.RedisClientAutoConfiguration is blocked by OnProperty: acme.redis.enabled missing and matchIfMissing=false. Runtime property acme.redis.enabled is not set. Active profiles resolved by helper: local, local-metrics. No winner_summary entry for redisClient.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios | sort | sed -n '1,160p'",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient может быть недоступен?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group06-redis-off --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

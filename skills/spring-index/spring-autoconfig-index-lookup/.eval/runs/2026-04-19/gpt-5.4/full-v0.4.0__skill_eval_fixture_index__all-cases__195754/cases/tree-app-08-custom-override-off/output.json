@@ -1,0 +1,14 @@
+{
+  "id": "tree-app-08-custom-override-off",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration is blocked because acme.datasource.override.enabled=false while the condition expects true. No active profiles are set. Runtime properties were loaded from project application.yaml and external config tree; the normal dataSource winner is org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, not the external override.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app08 skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp08/config",
+    "rg -n \"CustomDataSourceOverrideAutoConfiguration|dataSource|acme.datasource.override.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Будет ли активен внешний DataSource override?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app08 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp08/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

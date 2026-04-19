@@ -1,0 +1,25 @@
+{
+  "id": "ext-04-redis-prod-profile-off",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "regex": "RedisClientAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases_external_10.json",
+  "evidence": {
+    "commands_log": "./cases/ext-04-redis-prod-profile-off/commands.log",
+    "output": "./cases/ext-04-redis-prod-profile-off/output.md"
+  }
+}

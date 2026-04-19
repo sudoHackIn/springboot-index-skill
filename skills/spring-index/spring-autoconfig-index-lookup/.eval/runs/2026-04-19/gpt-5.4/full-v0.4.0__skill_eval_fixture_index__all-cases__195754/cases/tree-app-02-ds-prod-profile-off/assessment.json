@@ -1,0 +1,25 @@
+{
+  "id": "tree-app-02-ds-prod-profile-off",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_no",
+    "regex": "DataSourceAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_no"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_appname_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-app-02-ds-prod-profile-off/commands.log",
+    "output": "./cases/tree-app-02-ds-prod-profile-off/output.md"
+  }
+}

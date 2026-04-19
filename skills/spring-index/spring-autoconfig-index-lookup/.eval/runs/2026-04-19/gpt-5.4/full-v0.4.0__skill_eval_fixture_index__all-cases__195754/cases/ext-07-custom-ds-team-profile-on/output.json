@@ -1,0 +1,14 @@
+{
+  "id": "ext-07-custom-ds-team-profile-on",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration"
+  ],
+  "reasoning_summary": "При active_profiles=[\"team\"] helper загрузил external config application.yaml из case07-custom-ds-team и нашел runtime property acme.datasource.override.enabled=true. Focused candidate com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration имеет status=pass, on_property_checks=[\"matched acme.datasource.override.enabled\"]. Winner для bean_name=dataSource: com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case07-custom-ds-team",
+    "rg -n \"CustomDataSourceOverrideAutoConfiguration|dataSource|acme\\.datasource\\.override\\.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case07-custom-ds-team",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Какой DataSource ожидается: базовый или из внешней либы?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case07-custom-ds-team --active-profile team --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "ext-02-ds-disabled-prod-yaml",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Для active_profiles=[\"prod\"] helper загрузил runtime properties из external config-dir и обнаружил spring.datasource.enabled=false. Релевантный кандидат org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration имеет OnProperty-проверку: spring.datasource.enabled=false, expected true, поэтому статус кандидата blocked и focused_verdict=likely_no.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case02-ds-prod-disabled skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему DataSource может быть отключен?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case02-ds-prod-disabled --active-profile prod --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

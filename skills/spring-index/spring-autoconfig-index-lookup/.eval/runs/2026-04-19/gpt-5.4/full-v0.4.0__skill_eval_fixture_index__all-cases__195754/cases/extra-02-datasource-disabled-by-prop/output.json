@@ -1,0 +1,15 @@
+{
+  "id": "extra-02-datasource-disabled-by-prop",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Для DataSourceAutoConfiguration найден focused candidate со статусом blocked. Проверка property показала: spring.datasource.enabled=false, expected true. Runtime properties доступны: 1; runtime property spring.datasource.enabled=false; active_profiles пустой список.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg -n \"DataSourceAutoConfiguration|spring.datasource.enabled|dataSource\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему DataSource мог не подняться?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --runtime-property \"spring.datasource.enabled=false\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/references/cli.md",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему DataSource мог не подняться?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --runtime-prop \"spring.datasource.enabled=false\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

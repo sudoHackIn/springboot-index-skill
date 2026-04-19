@@ -1,0 +1,14 @@
+{
+  "id": "tree-app-10-runtime-prop-highest-priority",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.MailSenderAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper found one focused candidate for bean regex mailSender: com.acme.autoconfigure.MailSenderAutoConfiguration. Its OnProperty check passed: matched acme.mail.enabled. Runtime property acme.mail.enabled=true was supplied via --runtime-prop, which has highest priority. Active profiles resolved to [prod]. Runtime sources included project config app10/application.yaml and external config-tree mail/notify-service-prod.yaml.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && pwd && rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios | sed -n '1,120p'",
+    "rg \"runtime\" skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs",
+    "sed -n '1,180p' skills/spring-index/spring-autoconfig-index-lookup/references/cli.md",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли mailSender в текущем окружении?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app10 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp10/config --runtime-prop acme.mail.enabled=true --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

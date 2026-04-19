@@ -1,0 +1,15 @@
+{
+  "id": "extra-10-mail-disabled-by-prop",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.MailSenderAutoConfiguration"
+  ],
+  "reasoning_summary": "Кандидат com.acme.autoconfigure.MailSenderAutoConfiguration найден по bean regex mailSender и property focus acme.mail.enabled. Он заблокирован OnProperty-проверкой: acme.mail.enabled=false, expected true. Runtime properties available: 1; active_profiles: []; winner_summary пустой, поэтому mailSender не ожидается.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли mailSender в текущем окружении?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --runtime-property acme.mail.enabled=false --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/references/cli.md",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли mailSender в текущем окружении?\" --bean-regex \"mailSender\" --property-name \"acme.mail.enabled\" --runtime-prop acme.mail.enabled=false --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

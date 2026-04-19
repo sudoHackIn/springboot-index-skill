@@ -1,0 +1,25 @@
+{
+  "id": "extra-01-datasource-enabled",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "regex": "DataSourceAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases_extra_10.json",
+  "evidence": {
+    "commands_log": "./cases/extra-01-datasource-enabled/commands.log",
+    "output": "./cases/extra-01-datasource-enabled/output.md"
+  }
+}

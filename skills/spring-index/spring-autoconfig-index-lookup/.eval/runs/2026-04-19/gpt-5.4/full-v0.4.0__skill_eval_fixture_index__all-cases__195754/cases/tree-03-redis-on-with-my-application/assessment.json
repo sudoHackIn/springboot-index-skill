@@ -1,0 +1,25 @@
+{
+  "id": "tree-03-redis-on-with-my-application",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "regex": "RedisClientAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-03-redis-on-with-my-application/commands.log",
+    "output": "./cases/tree-03-redis-on-with-my-application/output.md"
+  }
+}

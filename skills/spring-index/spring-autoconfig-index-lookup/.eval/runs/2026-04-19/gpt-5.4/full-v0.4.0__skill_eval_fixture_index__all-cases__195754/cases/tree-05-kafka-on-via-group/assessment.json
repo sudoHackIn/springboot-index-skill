@@ -1,0 +1,25 @@
+{
+  "id": "tree-05-kafka-on-via-group",
+  "pass": true,
+  "score": 1.0,
+  "checks": {
+    "correctness": "pass",
+    "completeness": "pass",
+    "hallucination": "pass"
+  },
+  "notes": [
+    ""
+  ],
+  "expected": {
+    "verdict": "likely_yes",
+    "regex": "KafkaProducerAutoConfiguration"
+  },
+  "actual": {
+    "verdict": "likely_yes"
+  },
+  "source_case_file": "skill_eval_cases_config_tree_10.json",
+  "evidence": {
+    "commands_log": "./cases/tree-05-kafka-on-via-group/commands.log",
+    "output": "./cases/tree-05-kafka-on-via-group/output.md"
+  }
+}

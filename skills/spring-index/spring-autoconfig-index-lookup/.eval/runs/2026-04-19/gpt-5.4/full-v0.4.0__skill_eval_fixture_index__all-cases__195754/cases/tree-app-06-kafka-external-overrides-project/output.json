@@ -1,0 +1,13 @@
+{
+  "id": "tree-app-06-kafka-external-overrides-project",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper found focused candidate com.acme.autoconfigure.KafkaProducerAutoConfiguration for bean kafkaProducer. The OnProperty check passed: matched acme.kafka.enabled. Runtime property acme.kafka.enabled=true was loaded from project config app06 and external config-tree treeapp06/config/kafka/order-service.yaml. No active profiles were set.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg --files skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Из какой автоконфигурации должен прийти kafkaProducer?\" --bean-regex \"kafkaProducer\" --property-name \"acme.kafka.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app06 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp06/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

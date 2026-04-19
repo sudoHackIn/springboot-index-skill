@@ -29,9 +29,11 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 Типичная структура:
 - `question`: исходный вопрос.
 - `query`: чем искали кандидатов.
-- `verdict`: финальный ответ для текущего фокуса вопроса.
+- `verdict`: финальный ответ для текущего фокуса вопроса (evaluation — создастся ли бин под текущим runtime).
 - `overall_verdict`: общий ответ по всем найденным кандидатам.
 - `focused_verdict`: ответ по “фокусной” группе кандидатов (если фокус определен).
+- `discovery_verdict`: `likely_yes`, если хоть один matched candidate найден (discovery — есть ли источник, вне зависимости от гейтов).
+- `discovery_candidates`: компактный список `[{fqcn, status}]` по всем matched кандидатам (любой `status`).
 - `focus`: какие кандидаты признаны фокусными и почему.
 - `winner_summary`: краткий итог “какой автоконфиг победил” по каждому bean.
 - `trace`: короткий пошаговый след.
@@ -56,6 +58,8 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 Важно:
 - `overall_verdict` может быть `likely_yes`, а `focused_verdict` — `likely_no`.
 - В таком случае `verdict` ориентируется на фокус вопроса (например, вопрос был именно про override-конфиг).
+- `verdict` / `focused_verdict` отвечают на **evaluation**-вопрос: «создастся ли бин под текущим runtime?».
+- `discovery_verdict` отвечает на **discovery**-вопрос: «есть ли автоконфиг, способный дать этот бин?» — возвращает `likely_yes`, даже если matched candidate `blocked`. Используй его, когда вопрос формата «из какой АК ждать X?» и runtime-контекста нет.
 
 ## 5) Как диагностировать “почему не сработало”
 

@@ -1,0 +1,14 @@
+{
+  "id": "extra-06-redis-disabled",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "RedisClientAutoConfiguration matched bean redisClient, but its OnProperty check is blocked: acme.redis.enabled=false, expected true. active_profiles=[]; runtime_source=project_roots=[/Users/vladislav/projects/springboot-index-skill/src/main/resources] []",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/references/cli.md",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient может быть выключен?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --runtime-prop \"acme.redis.enabled=false\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

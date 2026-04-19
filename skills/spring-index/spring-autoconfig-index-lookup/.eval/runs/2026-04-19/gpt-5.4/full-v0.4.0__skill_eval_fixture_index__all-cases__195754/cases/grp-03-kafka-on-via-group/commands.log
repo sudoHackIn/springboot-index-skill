@@ -1,0 +1,4 @@
+/bin/zsh -lc 'find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group03-kafka-on -maxdepth 3 -type f -print'
+/bin/zsh -lc "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md"
+/bin/zsh -lc "python3 -m json.tool skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json | sed -n '1,260p'"
+/bin/zsh -lc 'node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question "Ожидается ли kafkaProducer в этом окружении?" --bean-regex "kafkaProducer" --property-name "acme.kafka.enabled" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group03-kafka-on --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'

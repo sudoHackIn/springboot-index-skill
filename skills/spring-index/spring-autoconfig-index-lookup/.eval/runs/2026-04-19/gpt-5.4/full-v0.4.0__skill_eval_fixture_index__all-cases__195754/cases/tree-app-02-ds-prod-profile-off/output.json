@@ -1,0 +1,13 @@
+{
+  "id": "tree-app-02-ds-prod-profile-off",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper вернул focused_verdict=likely_no. Кандидат org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration найден по bean regex dataSource и property spring.datasource.enabled, но заблокирован проверкой OnProperty: spring.datasource.enabled=false, expected true. Активный профиль определен как prod. Runtime source включает project config app02 и external config tree treeapp02/config, где учтен common/datasource/billing-service-prod.yaml.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios -maxdepth 5 -type f | sort",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему DataSource может быть отключен?\" --bean-regex \"dataSource\" --property-name \"spring.datasource.enabled\" --project-config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/project-configs/app02 --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/treeapp02/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

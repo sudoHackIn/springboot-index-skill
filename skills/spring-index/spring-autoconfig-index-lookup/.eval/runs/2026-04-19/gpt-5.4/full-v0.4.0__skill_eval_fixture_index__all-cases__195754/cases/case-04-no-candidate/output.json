@@ -1,0 +1,13 @@
+{
+  "id": "case-04-no-candidate",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.MailSenderAutoConfiguration"
+  ],
+  "reasoning_summary": "Кандидат com.acme.autoconfigure.MailSenderAutoConfiguration найден по bean_regex=mailSender, но имеет status=blocked: acme.mail.enabled missing and matchIfMissing=false. Runtime properties available: 0; active_profiles: []; runtime_source=project_roots=[/Users/vladislav/projects/springboot-index-skill/src/main/resources] [].",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "test -f skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && wc -c skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json && rg -n \"mailSender|MailSender|JavaMailSender|Mail\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли mailSender из автоконфигурации?\" --bean-regex \"mailSender\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

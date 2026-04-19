@@ -1,0 +1,15 @@
+{
+  "id": "case-02-redis-disabled-by-prop",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "redisClient найден в com.acme.autoconfigure.RedisClientAutoConfiguration. Автоконфигурация заблокирована OnProperty-условием: acme.redis.enabled=false, expected true. Активные профили не заданы; runtime_source: project_roots=[/Users/vladislav/projects/springboot-index-skill/src/main/resources] [].",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "sed -n '1,260p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient не поднялся?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --runtime-property \"acme.redis.enabled=false\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/references/cli.md",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему redisClient не поднялся?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --runtime-prop \"acme.redis.enabled=false\" --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

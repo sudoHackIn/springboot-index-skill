@@ -1,0 +1,14 @@
+{
+  "id": "grp-05-redis-on-via-group",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.RedisClientAutoConfiguration"
+  ],
+  "reasoning_summary": "Helper loaded the fixture index, found one focused candidate for bean regex redisClient, and RedisClientAutoConfiguration passed. Runtime property acme.redis.enabled=true was available from the external config directory, so the OnProperty check matched acme.redis.enabled. Active profiles resolved to local and local-redis.",
+  "commands": [
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "rg -n \"redisClient|RedisClientAutoConfiguration|acme\\\\.redis\\\\.enabled|group05\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios -S",
+    "find skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group05-redis-on -maxdepth 3 -type f -print",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли redisClient в этом окружении?\" --bean-regex \"redisClient\" --property-name \"acme.redis.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group05-redis-on --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

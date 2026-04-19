@@ -1,0 +1,4 @@
+/bin/zsh -lc 'ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree06-kafka-missing/config'
+/bin/zsh -lc "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md"
+/bin/zsh -lc "rg -n \"kafkaProducer|KafkaProducerAutoConfiguration|acme\\.kafka\\.enabled\" skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree06-kafka-missing/config"
+/bin/zsh -lc 'node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question "Почему kafkaProducer может не создаться?" --bean-regex "kafkaProducer" --property-name "acme.kafka.enabled" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/tree06-kafka-missing/config --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json'

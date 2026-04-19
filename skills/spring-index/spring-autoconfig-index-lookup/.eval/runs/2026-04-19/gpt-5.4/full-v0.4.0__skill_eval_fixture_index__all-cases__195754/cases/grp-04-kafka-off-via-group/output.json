@@ -1,0 +1,14 @@
+{
+  "id": "grp-04-kafka-off-via-group",
+  "verdict": "likely_no",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.KafkaProducerAutoConfiguration"
+  ],
+  "reasoning_summary": "Focused candidate com.acme.autoconfigure.KafkaProducerAutoConfiguration is blocked: acme.kafka.enabled=false, expected true. Runtime source is the external config application.yaml under group04-kafka-off. Active profiles resolved by the helper are local and local-kafka.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group04-kafka-off",
+    "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Почему kafkaProducer может не создаться?\" --bean-regex \"kafkaProducer\" --property-name \"acme.kafka.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/group04-kafka-off --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

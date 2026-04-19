@@ -1,0 +1,15 @@
+{
+  "id": "ext-08-custom-ds-prod-profile-off",
+  "verdict": "likely_yes",
+  "matched_autoconfigs": [
+    "com.acme.autoconfigure.CustomDataSourceOverrideAutoConfiguration",
+    "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+  ],
+  "reasoning_summary": "При active_profiles=[prod] runtime property acme.datasource.override.enabled=false. CustomDataSourceOverrideAutoConfiguration заблокирована проверкой OnProperty: expected true. Для bean_name=dataSource winner_summary указывает org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration, поэтому ожидается fallback на стандартный DataSource.",
+  "commands": [
+    "sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md",
+    "ls -R skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case08-custom-ds-prod-off",
+    "jq '.autoConfigurations[] | select(.name|test(\"CustomDataSourceOverrideAutoConfiguration|DataSourceAutoConfiguration\"))' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json",
+    "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question \"Ожидается ли fallback на стандартный DataSource?\" --bean-regex \"dataSource\" --property-name \"acme.datasource.override.enabled\" --config-dir skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case08-custom-ds-prod-off --active-profile prod --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+  ]
+}

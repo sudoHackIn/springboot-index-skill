@@ -155,22 +155,34 @@
 
 ## 10) Итоговые verdict
 
-Вычисляются три уровня:
-- `overall_verdict`:
-  - `likely_no`, если кандидатов нет или нет winner,
+Скрипт различает **evaluation** (создастся ли бин под текущим runtime) и **discovery** (есть ли автоконфиг, способный его дать). Для этого возвращается четыре вердикта:
+
+- `overall_verdict` (evaluation):
+  - `likely_no`, если кандидатов нет или нет winner (нет `pass` в `predicted_sources`);
   - `likely_yes`, если есть winner.
-- `focused_verdict`:
+- `focused_verdict` (evaluation, узкий):
   - если есть focused candidates:
     - `likely_yes`, если среди них есть `pass`,
-    - иначе `likely_no`.
-- `verdict`:
+    - иначе `likely_no`;
+  - `null`, если focus пустой.
+- `verdict` (evaluation, финальный):
   - `focused_verdict`, если он есть;
   - иначе `overall_verdict`.
+- `discovery_verdict`:
+  - `likely_yes`, если `candidateEntries.length > 0` — т.е. хоть один matched candidate найден по `bean_regex` / `return_type_regex` **вне зависимости от `status`** (даже `blocked`);
+  - `likely_no`, если кандидатов нет.
+
+Ключевая разница: matched candidate может быть `blocked` из-за `OnProperty` с `matchIfMissing=false` и отсутствующего runtime-контекста. Для discovery-вопроса («из какой АК ждать X?») это не значит «нет источника» — автоконфиг существует и в другом окружении сработает. `discovery_verdict` отражает именно это.
+
+Сопутствующее поле:
+- `discovery_candidates`: компактный `[{fqcn, status}]` по всем matched кандидатам — позволяет агенту сразу получить список источников вместе с их текущим статусом.
 
 ## 11) Формат вывода
 
 Default:
-- `question`, `query`, `verdict`, `overall_verdict`, `focused_verdict`,
+- `question`, `query`,
+- `verdict`, `overall_verdict`, `focused_verdict`, `discovery_verdict`,
+- `discovery_candidates`,
 - `focus`, `winner_summary`, `trace`,
 - `runtime_source`, `active_profiles`.
 

@@ -1,0 +1,3 @@
+/bin/zsh -lc "sed -n '1,220p' skills/spring-index/spring-autoconfig-index-lookup/SKILL.md && sed -n '1,240p' skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"
+/bin/zsh -lc 'node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --help'
+/bin/zsh -lc "node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --question 'Будет ли активен внешний DataSource override?' --bean-regex 'dataSource' --property-name 'acme.datasource.override.enabled' --runtime-prop acme.datasource.override.enabled=false --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json"

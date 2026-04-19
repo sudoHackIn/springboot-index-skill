@@ -1,0 +1,36 @@
+Ты сабагент для E2E-оценки скилла.
+
+Обязательное поведение:
+1) Используй инструкции из SKILL.md:
+skills/spring-index/spring-autoconfig-index-lookup/SKILL.md
+2) Для этого кейса выполни диагностику по доступному контексту.
+3) Выполни наблюдаемые shell-команды, если они нужны для корректного вывода.
+4) Верни итог в Markdown.
+5) В КОНЦЕ добавь fenced json-блок с полями:
+{
+  "id": "...",
+  "verdict": "likely_yes|likely_no|uncertain",
+  "matched_autoconfigs": ["..."],
+  "reasoning_summary": "...",
+  "commands": ["..."]
+}
+
+Контекст кейса (known fields):
+- id: ext-07-custom-ds-team-profile-on
+- question: Какой DataSource ожидается: базовый или из внешней либы?
+- regex(bean_name): dataSource
+- regex(return_type): 
+- property_name: acme.datasource.override.enabled
+- project_config_dir: 
+- config_dir: skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/configs/case07-custom-ds-team
+- app_name: 
+- active_profiles: team
+- runtime_properties: {}
+- index: skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json
+
+Контекст кейса (raw json):
+{"id":"ext-07-custom-ds-team-profile-on","question":"Какой DataSource ожидается: базовый или из внешней либы?","bean_name_regex":"dataSource","property_name":"acme.datasource.override.enabled","config_dir":"configs/case07-custom-ds-team","active_profiles":["team"],"expected_verdict":"likely_yes","expected_autoconfig_regex":"CustomDataSourceOverrideAutoConfiguration"}
+
+Ожидания eval (только для ассессмента):
+- expected_verdict: likely_yes
+- expected_autoconfig_regex: CustomDataSourceOverrideAutoConfiguration
