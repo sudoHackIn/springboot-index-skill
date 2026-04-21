@@ -1,0 +1,74 @@
+import groovy.json.JsonOutput
+
+gradle.projectsEvaluated {
+    def root = gradle.rootProject
+    root.tasks.register('exportResolvedArtifacts') {
+        group = 'help'
+        description = 'Export resolved classpath artifacts into JSON for indexing and fingerprinting'
+
+        doLast {
+            def outPath = (
+                root.findProperty('autoconfigIndexOutput')
+                    ?: root.findProperty('propsIndexOutput')
+                    ?: new File(root.projectDir, '.cache/spring-index/resolved-artifacts.json').absolutePath
+            ).toString()
+            def outFile = new File(outPath)
+            outFile.parentFile.mkdirs()
+
+            def rows = []
+            def skipped = []
+
+            root.allprojects.each { p ->
+                def resolvable = p.configurations.findAll { cfg ->
+                    cfg.canBeResolved && (
+                        cfg.name.toLowerCase().contains('runtimeclasspath') ||
+                        cfg.name.toLowerCase().contains('compileclasspath')
+                    )
+                }
+
+                resolvable.each { cfg ->
+                    try {
+                        cfg.resolvedConfiguration.resolvedArtifacts.each { art ->
+                            def file = art.file
+                            if (file != null && file.name.endsWith('.jar')) {
+                                def id = art.moduleVersion?.id
+                                rows << [
+                                    project      : p.path,
+                                    configuration: cfg.name,
+                                    gav          : id ? "${id.group}:${id.name}:${id.version}" : null,
+                                    group        : id?.group,
+                                    name         : id?.name,
+                                    version      : id?.version,
+                                    file         : file.absolutePath
+                                ]
+                            }
+                        }
+                    } catch (Throwable ex) {
+                        skipped << [project: p.path, configuration: cfg.name, reason: ex.class.simpleName]
+                    }
+                }
+            }
+
+            def uniq = new LinkedHashMap<String, Map>()
+            rows.each { r ->
+                def key = "${r.project}|${r.configuration}|${r.gav}|${r.file}"
+                uniq.put(key, r)
+            }
+
+            def payload = [
+                generated_at     : new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX"),
+                root_project     : root.name,
+                artifacts_count  : uniq.size(),
+                artifacts        : uniq.values().toList().sort { a, b ->
+                    def ak = "${a.project}|${a.configuration}|${a.gav ?: ''}|${a.file ?: ''}"
+                    def bk = "${b.project}|${b.configuration}|${b.gav ?: ''}|${b.file ?: ''}"
+                    ak <=> bk
+                },
+                skipped_configs  : skipped
+            ]
+
+            outFile.text = JsonOutput.prettyPrint(JsonOutput.toJson(payload)) + '\n'
+            println "exportResolvedArtifacts: wrote ${payload.artifacts_count} artifacts to ${outFile.absolutePath}"
+        }
+    }
+}

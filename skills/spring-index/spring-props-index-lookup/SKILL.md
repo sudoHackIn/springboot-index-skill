@@ -32,12 +32,12 @@ description: Используй этот скилл для поиска Spring/�
 
 ```bash
 INDEX=.qwen/spring-properties-index/spring_properties_index.json
-test -f "$INDEX" || ./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-props-index.sh
+test -f "$INDEX" || ./skills/spring-index/spring-props-index-lookup/scripts/rebuild-props-index.sh
 ```
 
 Принудительная пересборка (если подозрение на устаревший индекс):
 ```bash
-./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-props-index.sh --force
+./skills/spring-index/spring-props-index-lookup/scripts/rebuild-props-index.sh --force
 ```
 
 Отдельная `{generated_at, stats}`-проверка не нужна — `generated_at` уже приходит в one-shot рецептах ниже.
