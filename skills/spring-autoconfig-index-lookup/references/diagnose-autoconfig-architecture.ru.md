@@ -1,7 +1,7 @@
 # diagnose-autoconfig.mjs: как это работает (технический разбор)
 
 Файл:
-- `skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs`
+- `skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs`
 
 Цель:
 - По индексу автоконфигураций и runtime-контексту построить объяснимый прогноз:

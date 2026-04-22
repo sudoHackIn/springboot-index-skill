@@ -10,14 +10,14 @@
 ## Подготовка
 
 ```bash
-cd skills/spring-index/spring-autoconfig-index-lookup/analyzer
+cd skills/spring-autoconfig-index-lookup/analyzer
 npm install
 ```
 
 ## Запуск анализатора напрямую
 
 ```bash
-cd skills/spring-index/spring-autoconfig-index-lookup/analyzer
+cd skills/spring-autoconfig-index-lookup/analyzer
 npm run build:index -- \
   --boot-repo /abs/path/to/spring-boot \
   --project-root /abs/path/to/current-project \
@@ -30,11 +30,11 @@ npm run build:index -- \
 Из корня проекта:
 
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/build-autoconfig-index.mjs ...
+node skills/spring-autoconfig-index-lookup/scripts/build-autoconfig-index.mjs ...
 ```
 
 или
 
 ```bash
-./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh
+./skills/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh
 ```

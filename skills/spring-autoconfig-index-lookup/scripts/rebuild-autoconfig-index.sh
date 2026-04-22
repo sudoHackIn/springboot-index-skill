@@ -33,7 +33,7 @@ fi
 
 if [[ ! -d "$ANALYZER_DIR/node_modules/tree-sitter" && ! -d "$ROOT_DIR/node_modules/tree-sitter" ]]; then
   echo "[autoconfig-index] tree-sitter dependencies are missing." >&2
-  echo "[autoconfig-index] run: (cd skills/spring-index/spring-autoconfig-index-lookup/analyzer && npm install)" >&2
+  echo "[autoconfig-index] run: (cd skills/spring-autoconfig-index-lookup/analyzer && npm install)" >&2
   exit 1
 fi
 

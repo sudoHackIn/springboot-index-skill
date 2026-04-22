@@ -1520,13 +1520,13 @@ function parseArgs(argv) {
 
 function printHelpAndExit() {
   console.log(`Usage:
-  node skills/spring-index/spring-autoconfig-index-lookup/scripts/build-autoconfig-index.mjs \\
+  node skills/spring-autoconfig-index-lookup/scripts/build-autoconfig-index.mjs \\
     --boot-repo /path/to/spring-boot \\
     --project-root /path/to/current-project \\
     --extra-root /path/to/your-lib-1 \\
     --extra-root /path/to/your-lib-2 \\
     --resolved-artifacts ./.qwen/spring-autoconfig-index/cache/resolved-artifacts.json \\
-    --base-index ./skills/spring-index/spring-autoconfig-index-lookup/assets/spring_boot_autoconfig_index.base.json \\
+    --base-index ./skills/spring-autoconfig-index-lookup/assets/spring_boot_autoconfig_index.base.json \\
     --version 3.4.4 \\
     --out ./generated/spring_boot_autoconfig_index.json
 

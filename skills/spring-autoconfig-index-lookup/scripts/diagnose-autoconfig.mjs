@@ -27,7 +27,7 @@ async function main() {
       throw new DiagnoseError(
         "IndexNotFound",
         `Index file not found: ${indexPath}`,
-        { path: indexPath, hint: "Run skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh" }
+        { path: indexPath, hint: "Run skills/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh" }
       );
     }
     if (e instanceof SyntaxError) {
@@ -889,7 +889,7 @@ function parseArgs(argv) {
 function printUsage() {
   const usage = [
     "Usage:",
-    "  node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs [options]",
+    "  node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs [options]",
     "",
     "Input selectors:",
     "  --bean-regex <regex>           Bean name pattern (case-insensitive)",
@@ -912,15 +912,15 @@ function printUsage() {
     "  -h, --help                     Show this help and exit",
     "",
     "Examples:",
-    "  node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \\",
+    "  node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \\",
     "    --question \"Ожидается ли DataSource?\" \\",
     "    --bean-regex \"dataSource|datasource\" \\",
     "    --property-name \"spring.datasource.enabled\" \\",
     "    --config-dir ./src/main/resources",
     "",
-    "  node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \\",
+    "  node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \\",
     "    --question \"Ожидается ли redisClient?\" \\",
-    "    --index skills/spring-index/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json \\",
+    "    --index skills/spring-autoconfig-index-lookup/.eval/scenarios/indexes/skill_eval_fixture_index.json \\",
     "    --runtime-prop acme.redis.enabled=true"
   ].join("\n");
 

@@ -8,11 +8,11 @@
 
 Базовый путь:
 
-`/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/runs/<date>/<model>/<run_id>/`
+`/Users/vladislav/projects/springboot-index-skill/skills/spring-autoconfig-index-lookup/.eval/runs/<date>/<model>/<run_id>/`
 
 Пример:
 
-`/Users/vladislav/projects/springboot-index-skill/skills/spring-index/spring-autoconfig-index-lookup/.eval/runs/2026-04-17/gpt-5.4/full-1__skill_eval_fixture_index__all-cases__221312/`
+`/Users/vladislav/projects/springboot-index-skill/skills/spring-autoconfig-index-lookup/.eval/runs/2026-04-17/gpt-5.4/full-1__skill_eval_fixture_index__all-cases__221312/`
 
 ## 2. Структура run и назначение файлов
 

@@ -3,7 +3,7 @@
 ## Example 0: Helper diagnosis (structured facts)
 
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли DataSource в этом окружении?" \
   --bean-regex "dataSource|datasource" \
   --property-name "spring.datasource.enabled" \
@@ -17,7 +17,7 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 ## Example 0.1: Question-only mode (heuristic inference)
 
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли transaction manager?" \
   --index .qwen/spring-autoconfig-index/spring_boot_autoconfig_index.json
 ```
@@ -25,7 +25,7 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 ## Example 0.2: External config tree (nested dirs + app-name files)
 
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли DataSource в этом окружении?" \
   --bean-regex "dataSource" \
   --property-name "spring.datasource.enabled" \
@@ -38,7 +38,7 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 ## Example 0.3: Priority check (project < external < runtime-prop)
 
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли mailSender?" \
   --bean-regex "mailSender" \
   --property-name "acme.mail.enabled" \

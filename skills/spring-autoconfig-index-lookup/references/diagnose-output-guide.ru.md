@@ -7,12 +7,12 @@
 
 Команда по умолчанию:
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs ...
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs ...
 ```
 
 Детальный режим:
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --debug ...
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs --debug ...
 ```
 
 Разница:

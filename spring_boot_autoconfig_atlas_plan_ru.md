@@ -232,9 +232,9 @@ MVP строится поверх него:
 Снижение: версионирование индекса и автоматический diff.
 
 ## Первые Практические Задачи (Backlog)
-1. Создать `skills/spring-index/spring-autoconfig-index-lookup/scripts/build-autoconfig-index.mjs`.
+1. Создать `skills/spring-autoconfig-index-lookup/scripts/build-autoconfig-index.mjs`.
 2. Добавить schema файл `spring_boot_autoconfig_index.schema.json`.
-3. Добавить `skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh`.
+3. Добавить `skills/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh`.
 4. Сгенерировать первый fixture для `spring-boot-autoconfigure`.
 5. Подготовить `SPRING_AUTOCONFIG_INDEX_USAGE_RU.md` с `jq`-рецептами.
 

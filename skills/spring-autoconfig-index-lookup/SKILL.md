@@ -13,7 +13,7 @@ description: "Используй этот скилл, когда нужно ди
 Один helper-вызов → один JSON → один ответ. Не превьюй `jq`, не читай `application*.yml`, не запускай helper дважды.
 
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "<вопрос пользователя>" \
   --bean-regex "<имя бина или regex>" \
   --property-name "<spring.xxx.enabled>" \
@@ -64,7 +64,7 @@ Extract из компактного JSON — см. таблицу маппинг
 
 1. **Init.** Не проверяй индекс заранее — просто запусти helper. Если индекса нет, helper вернёт `verdict: "error"` с `error.kind: "IndexNotFound"` — тогда пересобери:
    ```bash
-   ./skills/spring-index/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh
+   ./skills/spring-autoconfig-index-lookup/scripts/rebuild-autoconfig-index.sh
    # --force — принудительно; RUNTIME_CONFIG_ROOTS="$EXTERNAL_CONFIG_ROOTS" — учесть production config-tree в fingerprint.
    ```
 
@@ -85,8 +85,8 @@ Extract из компактного JSON — см. таблицу маппинг
 
 Node.js, `jq`, собранный индекс, установленный tree-sitter-анализатор:
 ```bash
-test -d skills/spring-index/spring-autoconfig-index-lookup/analyzer/node_modules \
-  || (cd skills/spring-index/spring-autoconfig-index-lookup/analyzer && npm install)
+test -d skills/spring-autoconfig-index-lookup/analyzer/node_modules \
+  || (cd skills/spring-autoconfig-index-lookup/analyzer && npm install)
 ```
 
 ## Output Example

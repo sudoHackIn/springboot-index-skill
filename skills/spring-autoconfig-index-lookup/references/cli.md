@@ -5,7 +5,7 @@
 ## Запуск
 
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs [flags]
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs [flags]
 ```
 
 Обязателен хотя бы один селектор (`--bean-regex` / `--return-type-regex` / `--question`).
@@ -43,13 +43,13 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 
 ### Минимальный (только question, эвристический inference)
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли DataSource?"
 ```
 
 ### Надёжный (рекомендуется)
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли DataSource?" \
   --bean-regex "dataSource|datasource" \
   --property-name "spring.datasource.enabled" \
@@ -59,7 +59,7 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 
 ### Несколько внешних config-tree roots
 ```bash
-node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли DataSource?" \
   --bean-regex "dataSource|datasource" \
   --project-config-dir ./src/main/resources \
@@ -71,7 +71,7 @@ node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autocon
 ### Из списка в переменной (Bash)
 ```bash
 IFS=',' read -r -a _roots <<< "$EXTERNAL_CONFIG_ROOTS"
-CMD=(node skills/spring-index/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
+CMD=(node skills/spring-autoconfig-index-lookup/scripts/diagnose-autoconfig.mjs \
   --question "Ожидается ли DataSource?" \
   --bean-regex "dataSource|datasource" \
   --project-config-dir ./src/main/resources)
